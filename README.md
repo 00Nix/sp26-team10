@@ -1,1 +1,1 @@
-# sp26-project-template
+# csc340-project
