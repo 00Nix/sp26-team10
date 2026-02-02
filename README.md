@@ -18,7 +18,7 @@
     3. Subscribe to available services - Choosing a meal plan and selecting a subscription option (e.g., weekly, monthly, or yearly).  
     4. Write reviews for subscribed services - Customers will be able to leave reviews on meals they have tried.
 2. Provider (the user with the provider role):
-    1. Create/modify/remove provider profile - Register as a meal prep provider
-    2. Create services - Adding pricing, delivery options and schedules, meal plans.
-    3. View customer statistics - Can view customer analytics.
-    4. Reply to reviews - Reply to reviews directly from the app \.
+    1. Create/modify/remove provider profile -
+    2. Create services - 
+    3. View customer statistics - 
+    4. Reply to reviews - 
