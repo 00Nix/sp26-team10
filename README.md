@@ -15,7 +15,7 @@
 1. Customer:
     1. Create/modify customer profile - Register an account with their email or number.
     2. View available services - Browse meals, see prices, and an option for filters based on meal type and dietary needs.
-    3. Create a meal plan - Favorite meals and the ability to edit the list. Add and edit meals in cart, submit payment information and order. Order confirmation page and the ability to view past orders.
+    3. Create or select a pre-built a meal plan - Favorite meals and the ability to edit the list. Add and edit meals in cart, submit payment information and order. Order confirmation page and the ability to view past orders.
     4. Subscribe to available services - Select a subscription option (e.g., weekly, monthly, or yearly).  
     5. Write reviews for subscribed services - Customers will be able to leave reviews on meals they have tried.
 2. Provider:
