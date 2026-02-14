@@ -1,13 +1,8 @@
 
-# Requirements – Starter Template
+# Requirements 
 
-<<<<<<< HEAD
 **Project Name:** Balanced Bite\
 **Team:** Caleb Nix - Customer, Jasmine Butts - Provider\
-=======
-**Project Name:** Balanced Bite \
-**Team:** Names and roles \
->>>>>>> 20763e7a3891e9241af5966d382cefc511f938bb
 **Course:** CSC 340\
 **Version:** 1.0\
 **Date:** 2026-02-13
@@ -27,13 +22,8 @@
 - **Meal / Meal Plan:** A curated set of items that is created or selected by the customer.
 
 **Primary Users / Roles.**
-<<<<<<< HEAD
 - **Customer (creator / consumer of the meal plan)** — create or select a meal plan; manage subscription and orders; review experience.
 - **Provider (meal distributor / site admin)** — publish & update item listings; view orders and update status; respond to reviews; view engagement statistics.
-=======
-- **Customer (e.g., Student/Patient/Pet Owner/etc. )** — 1 line goal statement.
-- **Provider (e.g., Teacher/Doctor/Pet Sitter/etc. )** — 1 line goal statement.
->>>>>>> 20763e7a3891e9241af5966d382cefc511f938bb
 
 **Scope (this semester).**
 - Create & manage a user profile.
