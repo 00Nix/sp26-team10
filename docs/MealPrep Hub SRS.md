@@ -47,8 +47,8 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
     Then  <Profile for customer is created and shown>
   ```
 
-- **US‑CUST‑002 — <View Mealplan information>**  
-  _Story:_ As a customer, I want to view the information of the mealplan so that I can understand what it is before deciding.
+- **US‑CUST‑002 — <View Meal Plan information>**  
+  _Story:_ As a customer, I want to view the information of the meal plan so that I can understand what it is before deciding.
   _Acceptance:_
   ```gherkin
   Scenario: <View meal plan details>
@@ -57,7 +57,7 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
     Then  <it displays the meal plan information>
   ```
 
-- **US‑CUST‑003 — <Browse Mealplan Options>**  
+- **US‑CUST‑003 — <Browse Meal Plan Options>**  
   _Story:_ As a customer, I want to browse meal plan options to pick the best option for me.
   _Acceptance:_
   ```gherkin
@@ -67,7 +67,7 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
     Then  <I choose or save that specific meal plan>
   ```
 
-- **US‑CUST‑004 — <Filter Mealplans>**  
+- **US‑CUST‑004 — <Filter meal plans>**  
   _Story:_ As a customer, I want to sort or filter the meal plans, so that I can find the most suitable option for me.
   _Acceptance:_
   ```gherkin
@@ -94,16 +94,16 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
   Scenario: <Canceling my subscription>
     Given <No longer need or want to be subscribed>
     When  <I choose the option of unsubscribing>
-    Then  <I am no longer subscribed to the mealplan app>
+    Then  <I am no longer subscribed to the meal plan app>
   ```
 
   - **US‑CUST‑006 — <Write Reviews>**  
-  _Story:_ As a customer, I want to write a review on a mealplan I purchased to leave feedback for the provider, and future customers.
+  _Story:_ As a customer, I want to write a review on a meal plan I purchased to leave feedback for the provider, and future customers.
   _Acceptance:_
   ```gherkin
   Scenario: <Leaving a review>
-    Given <I recieved a mealplan that I enjoy>
-    When  <I write a review that describes my enjoymeny with the mealplan >
+    Given <I recieved a meal plan that I enjoy>
+    When  <I write a review that describes my enjoymeny with the meal plan >
     Then  <the review is submitted to view for future customers>
   ```
 
@@ -111,7 +111,7 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
   _Story:_ As a customer, I want to be able to view reviews so that I make a decision.
   _Acceptance:_
   ```gherkin
-  Scenario: <I see a mealplan that interests me>
+  Scenario: <I see a meal plan that interests me>
     Given <I decide to read the reviews to make a decision.>
     When  <I open the review section>
     Then  <I see the customer reviews>
