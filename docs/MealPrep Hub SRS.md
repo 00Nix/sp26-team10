@@ -1,8 +1,13 @@
 
 # Requirements – Starter Template
 
+<<<<<<< HEAD
 **Project Name:** Balanced Bite\
 **Team:** Caleb Nix - Customer, Jasmine Butts - Provider\
+=======
+**Project Name:** Balanced Bite \
+**Team:** Names and roles \
+>>>>>>> 20763e7a3891e9241af5966d382cefc511f938bb
 **Course:** CSC 340\
 **Version:** 1.0\
 **Date:** 2026-02-13
@@ -22,8 +27,13 @@
 - **Meal / Meal Plan:** A curated set of items that is created or selected by the customer.
 
 **Primary Users / Roles.**
+<<<<<<< HEAD
 - **Customer (creator / consumer of the meal plan)** — create or select a meal plan; manage subscription and orders; review experience.
 - **Provider (meal distributor / site admin)** — publish & update item listings; view orders and update status; respond to reviews; view engagement statistics.
+=======
+- **Customer (e.g., Student/Patient/Pet Owner/etc. )** — 1 line goal statement.
+- **Provider (e.g., Teacher/Doctor/Pet Sitter/etc. )** — 1 line goal statement.
+>>>>>>> 20763e7a3891e9241af5966d382cefc511f938bb
 
 **Scope (this semester).**
 - Create & manage a user profile.
@@ -51,24 +61,94 @@
 Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`.** Each story includes at least one **Given/When/Then** scenario.
 
 ### 2.1 Customer Stories
-- **US‑CUST‑001 — <short title>**  
-  _Story:_ As a customer, I want … so that …  
+- **US‑CUST‑001 — <Registering & managing profile>**  
+  _Story:_ As a customer, I want to register or manage my profile so that so that I can make and recieve my orders. 
   _Acceptance:_
   ```gherkin
-  Scenario: <happy path>
-    Given <preconditions>
-    When  <action>
-    Then  <observable outcome>
+  Scenario: <Register with correct user details>
+    Given <Am not registered>
+    When  <Register with information>
+    Then  <Profile for customer is created and shown>
   ```
 
-- **US‑CUST‑002 — <short title>**  
-  _Story:_ As a customer, I want … so that …  
+- **US‑CUST‑002 — <View Meal Plan information>**  
+  _Story:_ As a customer, I want to view the information of the meal plan so that I can understand what it is before deciding.
   _Acceptance:_
   ```gherkin
-  Scenario: <happy path>
-    Given <preconditions>
-    When  <action>
-    Then  <observable outcome>
+  Scenario: <View meal plan details>
+    Given <I am on the meal plans page>
+    When  <I select a specific meal plan>
+    Then  <it displays the meal plan information>
+  ```
+
+- **US‑CUST‑003 — <Browse Meal Plan Options>**  
+  _Story:_ As a customer, I want to browse meal plan options to pick the best option for me.
+  _Acceptance:_
+  ```gherkin
+  Scenario: <Browsing a meal plan option>
+    Given <Many different meal plan options>
+    When  <I find the most suitable plan for me>
+    Then  <I choose or save that specific meal plan>
+  ```
+
+- **US‑CUST‑004 — <Filter meal plans>**  
+  _Story:_ As a customer, I want to sort or filter the meal plans, so that I can find the most suitable option for me.
+  _Acceptance:_
+  ```gherkin
+  Scenario: <Filter by price range, type/category, rating, sort by newest/oldest, price (low to high/high to low), relevance.>
+    Given <there are products for certain needs >
+    When  <I use the filtering and sort options>
+    Then  <I see the meal plans I specifically filtered for>
+  ```
+
+  - **US‑CUST‑002 — <Subscribing (Weekly, Monthly, Yearly)>**  
+  _Story:_ As a customer, I want to subscribe for my preffered time period to receive fresh goods.
+  _Acceptance:_
+  ```gherkin
+  Scenario: <Begin a subscription>
+    Given <I am not subscribed>
+    When  <I choose a subscription option ie., weekly, monthly, yearly>
+    Then  <I am subscribed to the meal plan app>
+  ```  
+
+  - **US‑CUST‑005 — <Managing Subscription>**  
+  _Story:_ As a customer, I want to manage my subscription, such as canceling, pausing or changing, to fit my needs.
+  _Acceptance:_
+  ```gherkin
+  Scenario: <Canceling my subscription>
+    Given <No longer need or want to be subscribed>
+    When  <I choose the option of unsubscribing>
+    Then  <I am no longer subscribed to the meal plan app>
+  ```
+
+  - **US‑CUST‑006 — <Write Reviews>**  
+  _Story:_ As a customer, I want to write a review on a meal plan I purchased to leave feedback for the provider, and future customers.
+  _Acceptance:_
+  ```gherkin
+  Scenario: <Leaving a review>
+    Given <I recieved a meal plan that I enjoy>
+    When  <I write a review that describes my enjoymeny with the meal plan >
+    Then  <the review is submitted to view for future customers>
+  ```
+
+  - **US‑CUST‑002 — <Read Reviews>**  
+  _Story:_ As a customer, I want to be able to view reviews so that I make a decision.
+  _Acceptance:_
+  ```gherkin
+  Scenario: <I see a meal plan that interests me>
+    Given <I decide to read the reviews to make a decision.>
+    When  <I open the review section>
+    Then  <I see the customer reviews>
+  ```
+
+  - **US‑CUST‑002 — <Filtering/Sort Reviews>**  
+  _Story:_ As a customer, I want to be able to filter and sort reviews to narrow down opinions that fit my needs and preferences
+  _Acceptance:_
+  ```gherkin
+  Scenario: <Filtering reviews>
+    Given <I am on the reviews section>
+    When  <I filter reviews by 4 star rating and above and sort by newest >
+    Then  <Only newer reviews with 4 star rating and above are displayed>
   ```
 
 ### 2.2 Provider Stories
@@ -127,16 +207,20 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
 ---
 
 ## 3. Non‑Functional Requirements (make them measurable)
-- **Performance:** description 
-- **Availability/Reliability:** description
-- **Security/Privacy:** description
-- **Usability:** description
+- **Performance:** The app will load to the main screen within 2 seconds under normal load. API responses will return within 1.5 seconds, and the system will support up to 15,000 concurrent users without issue.  
+- **Availability/Reliability:** The app will maintain 99.5% uptime per month.
+- **Security/Privacy:** Secure authentication, passwords being stored using hashing, and data protection.
+- **Usability:** The app will support many browsers/devices. A new user will be able to subscribe within 4 minutes.
 
 ---
 
 ## 4. Assumptions, Constraints, and Policies
-- list any rules, policies, assumptions, etc.
-
+- Stable internet connection
+- Users provide accurate personal information
+- Modern Browsers/devices 
+- Third-party payment options 
+- Terms and conditions
+- Protection of user data
 ---
 
 ## 5. Milestones (course‑aligned)
