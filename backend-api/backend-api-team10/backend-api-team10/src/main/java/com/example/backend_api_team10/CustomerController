@@ -1,0 +1,22 @@
+package com.backend-api-team10
+
+import com.backend_api_team10.Customer;
+import com.backend_api_team10.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/customers")
+public class CustomerController {
+	@Autowired
+	private CustomerService customerService;
+
+	@GetMapping
+	public ResponseEntity<List<Customer>> getAllCustomers() {
+		List<Customer> customers = customerService.getAllCustomers();
+		return new ResponseEntity<>(customers, HttpStatus.OK);
+	}
+}
