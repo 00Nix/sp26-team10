@@ -7,7 +7,7 @@ import java.util.concurrent.Flow.Subscription;
 
 
 public interface CustomerSubscriptionRepo extends JpaRepository<CustomerSubscription, Long> {
-    Optional<CustomerSubscription> findByCustomerId(Long customerId);
+    Optional<CustomerSubscription> findByCustomerId(Long customer_id);
 
-    Optional<CustomerSubscription> findBySubscriptionPlanId(Long subscriptionPlanId);
+    Optional<CustomerSubscription> findBySubscriptionPlanId(Long plan_id);
 }

@@ -28,7 +28,7 @@ public class SubscriptionPlan {
     @Column(nullable = false)
     private int duration_weeks;
 
-    @OneToMany(mappedBy = "subscriptionPlan", cascade = cascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "subscriptionPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"subscriptionPlan"})
     private List<CustomerSubscription> customerSubscriptions = new ArrayList<>();
 

@@ -29,7 +29,6 @@ public class MealPlanMealService {
         MealPlanMeal existing = mealPlanMealRepo.findById(id).orElse(null);
         if (existing != null) {
             existing.setMeal(updated.getMeal());
-            existing.setDayOfWeek(updated.getDayOfWeek());
             return mealPlanMealRepo.save(existing);
         } else {
             return null;

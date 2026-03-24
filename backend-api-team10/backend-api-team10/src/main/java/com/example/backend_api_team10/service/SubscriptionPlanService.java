@@ -1,7 +1,7 @@
 package com.example.backend_api_team10.service;
 
 import com.example.backend_api_team10.entity.SubscriptionPlan;
-import com.example.backend_api_team10.repository.SubscriptionPlanRepository;
+import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
 
 import java.util.concurrent.Flow.Subscription;
 

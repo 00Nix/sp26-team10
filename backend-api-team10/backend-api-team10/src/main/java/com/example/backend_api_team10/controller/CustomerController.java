@@ -1,4 +1,4 @@
-package com.backend-api-team10
+package com.backend-api-team10;
 
 import com.backend_api_team10.Customer;
 import com.backend_api_team10.CustomerService;

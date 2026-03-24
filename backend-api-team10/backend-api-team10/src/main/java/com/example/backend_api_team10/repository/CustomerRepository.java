@@ -1,4 +1,4 @@
-package com.backend_api_team10
+package com.backend_api_team10;
 
 import com.backend_api_team10.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;

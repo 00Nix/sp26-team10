@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
 @Table(name = "provider")
 public class Provider {
     @Id
