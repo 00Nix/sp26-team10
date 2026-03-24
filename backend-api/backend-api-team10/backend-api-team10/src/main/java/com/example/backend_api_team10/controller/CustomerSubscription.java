@@ -1,12 +1,9 @@
 package com.example.backend_api_team10.controller;
 
-import com.example.backend_api_team10.entity.SubscriptionPlan;
-import com.example.backend_api_team10.service.SubscriptionPlanService;
+import com.example.backend_api_team10.entity.CustomerSubscription;
+import com.example.backend_api_team10.service.CustomerSubscriptionService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/customer-subscriptions")
