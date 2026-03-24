@@ -1,0 +1,11 @@
+package com.example.backend_api_team10.repository;
+
+import com.example.backend_api_team10.entity.Provider;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+public interface ProviderRepo extends JpaRepository<Provider, Long> {
+    List<Provider>findByProviderId(Long provider_id);
+
+    List<Provider> findByEmail(String email);
+}
