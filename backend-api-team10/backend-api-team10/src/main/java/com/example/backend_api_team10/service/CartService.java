@@ -14,35 +14,35 @@ import com.example.backend_api_team10.repository.CartRepo;
 public class CartService {
     
     @Autowired
-    private CartRepo cartRepo;
+    private CartRepo cartRepository;
 
     public Cart createCart(Cart cart) {
-        return cartRepo.save(cart);
+        return cartRepository.save(cart);
     }
 
     public List<Cart> getAllCarts() {
-        return cartRepo.findAll();
+        return cartRepository.findAll();
     }
 
     public Optional<Cart> getCartById(Long id) {
-        return cartRepo.findById(id);
+        return cartRepository.findById(id);
     }
 
     public Optional<Cart> getCartByCustomer(Long customerId) {
-        return cartRepo.findByCustomer_CustomerId(customerId);
+        return cartRepository.findByCustomer_CustomerId(customerId);
     }
 
     public Cart updateCart(Long id, Cart updatedCart) {
-        return cartRepo.findById(id)
+        return cartRepository.findById(id)
                 .map(cart -> {
                     cart.setSubtotal(updatedCart.getSubtotal());
                     cart.setCustomer(updatedCart.getCustomer());
-                    return cartRepo.save(cart);
+                    return cartRepository.save(cart);
                 })
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
     }
 
     public void deleteCart(Long id) {
-        cartRepo.deleteById(id);
+        cartRepository.deleteById(id);
     }
 }
