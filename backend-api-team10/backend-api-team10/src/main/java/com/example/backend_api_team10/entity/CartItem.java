@@ -48,6 +48,12 @@ public class CartItem {
     public Meal getMeal() {
         return meal;
     }
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
+    public MealPlan getMealPlan() {
+        return mealPlan;
+    }
     public void setMealPlan(MealPlan mealPlan) {
         this.mealPlan = mealPlan;
     }

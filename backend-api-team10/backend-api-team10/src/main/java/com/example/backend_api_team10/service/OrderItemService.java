@@ -8,7 +8,7 @@ import com.example.backend_api_team10.entity.OrderItem;
 import com.example.backend_api_team10.repository.OrderItemRepo;
 
 @Service
-public class OderItemService {
+public class OrderItemService {
 
     @Autowired
     private OrderItemRepo orderItemRepository;

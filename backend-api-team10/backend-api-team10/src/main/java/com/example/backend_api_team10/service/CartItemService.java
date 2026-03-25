@@ -24,7 +24,21 @@ public class CartItemService {
     public List<CartItem> getByCart(Long cartId) {
         return cartItemRepository.findByCart_CartId(cartId);
     }
-    pu
-
-    
-}
+    public List<CartItem> getAllItems() {
+        return cartItemRepository.findAll();
+    }
+    public CartItem updateItem(Long id, CartItem updatedItem) {
+        return cartItemRepository.findById(id)
+            .map(item -> {
+                item.setQuantity(updatedItem.getQuantity());
+                item.setCart(updatedItem.getCart());
+                item.setMeal(updatedItem.getMeal());
+                item.setMealPlan(updatedItem.getMealPlan());
+                return cartItemRepository.save(item);
+            })
+            .orElseThrow(() -> new RuntimeException("CartItem not found"));
+    }
+        public void deleteItem(long id) {
+            cartItemRepository.deleteById(id);
+        }
+    }

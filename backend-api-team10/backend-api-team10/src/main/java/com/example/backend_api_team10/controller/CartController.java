@@ -16,7 +16,7 @@ import com.example.backend_api_team10.entity.Cart;
 import com.example.backend_api_team10.service.CartService;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api/carts")
 
 public class CartController {
     
