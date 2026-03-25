@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import com.example.backend_api_team10.entity.OrderItem;
-import com.example.backend_api_team10.service.CartItemService;
 import com.example.backend_api_team10.service.OrderItemService;
 
 @RestController
