@@ -1,6 +1,7 @@
 package com.example.backend_api_team10.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend_api_team10.entity.Customer;
 import com.example.backend_api_team10.entity.Order;
 import com.example.backend_api_team10.service.OrderService;
 
@@ -35,12 +35,12 @@ public class OrderController {
     }
  
     @GetMapping
-    public List<Customer> getAllOrders() {
+    public List<Order> getAllOrders() {
         return orderService.getAllOrders();
     }
  
     @GetMapping("/{id}")
-    public Customer getOrderById(@PathVariable Long id) {
+    public Optional<Order> getOrderById(@PathVariable Long id) {
         return orderService.getOrderById(id);
     }
  
@@ -50,7 +50,7 @@ public class OrderController {
     }
  
     @PutMapping("/{id}")
-    public Customer updateOrder(@PathVariable Long id, @RequestBody Order order) {
+    public Order updateOrder(@PathVariable Long id, @RequestBody Order order) {
         return orderService.updateOrder(id, order);
     }
  
