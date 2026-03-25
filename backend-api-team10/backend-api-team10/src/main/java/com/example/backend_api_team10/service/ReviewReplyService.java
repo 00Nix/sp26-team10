@@ -1,7 +1,7 @@
 package com.example.backend_api_team10.service;
 
-import com.example.backend_api_team10.entity.ReplyReview;
-import com.example.backend_api_team10.repository.ReplyReviewRepo;
+import com.example.backend_api_team10.entity.ReviewReply;
+import com.example.backend_api_team10.repository.ReviewReplyRepo;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ public class ReviewReplyService {
         this.reviewReplyRepo = reviewReplyRepo;
     }
 
-    public ReplyReview createReviewReply(ReplyReview reviewReply) {
+    public ReviewReply createReviewReply(ReviewReply reviewReply) {
         return reviewReplyRepo.save(reviewReply);
     }
 
-    public List<ReplyReview> getAllReviewReplies() {
+    public List<ReviewReply> getAllReviewReplies() {
         return reviewReplyRepo.findAll();
     }
 
@@ -28,7 +28,7 @@ public class ReviewReplyService {
         return reviewReplyRepo.findById(reply_id).orElse(null);
     }
 
-    public ReviewReply updateReviewReply(Long reply_id, ReplyReview updatedReply) {
+    public ReviewReply updateReviewReply(Long reply_id, ReviewReply updatedReply) {
         ReviewReply existing = reviewReplyRepo.findById(reply_id).orElse(null);
         if (existing != null) {
             existing.setContent(updatedReply.getContent());

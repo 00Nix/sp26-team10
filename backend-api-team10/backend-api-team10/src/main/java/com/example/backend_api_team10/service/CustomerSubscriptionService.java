@@ -1,10 +1,12 @@
 package com.example.backend_api_team10.service;
 
-import com.example.backend_api_team10.entity.CustomerSubscription;
-import com.example.backend_api_team10.repository.CustomerSubscriptionRepo;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.backend_api_team10.entity.CustomerSubscription;
+import com.example.backend_api_team10.repository.CustomerSubscriptionRepo;
 
 @Service
 public class CustomerSubscriptionService {
@@ -25,6 +27,9 @@ public class CustomerSubscriptionService {
 
     public CustomerSubscription getCustomerSubscriptionById(Long customer_sub_id){
         return customerSubscriptionRepo.findById(customer_sub_id).orElse(null);
+    }
+    public Optional<CustomerSubscription> getByCustomerId(Long customerId) {
+        return customerSubscriptionRepo.findByCustomerId(customerId);
     }
 
     public CustomerSubscription updateCustomerSubscription(Long customer_sub_id, CustomerSubscription updatedSub){

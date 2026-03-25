@@ -1,8 +1,17 @@
 package com.example.backend_api_team10.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "customer_subscription")
@@ -78,7 +87,7 @@ public class CustomerSubscription {
         this.end_date = end_date;
     }
 
-    public LocalDate getEnDate(){
+    public LocalDate getEndDate(){
         return end_date;
     }
 

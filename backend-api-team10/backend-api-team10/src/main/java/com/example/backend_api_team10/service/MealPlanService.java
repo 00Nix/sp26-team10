@@ -1,7 +1,10 @@
 package com.example.backend_api_team10.service;
 
+import java.util.List;
+
 import com.example.backend_api_team10.entity.MealPlan;
 import com.example.backend_api_team10.repository.MealPlanRepo;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +24,7 @@ public class MealPlanService {
         return mealPlanRepo.findAll();
     }
 
-    public MealPlan getMealPlanByName(String name){
+    public List<MealPlan> getMealPlanByName(String name){
         return mealPlanRepo.findByName(name);
     }
 
