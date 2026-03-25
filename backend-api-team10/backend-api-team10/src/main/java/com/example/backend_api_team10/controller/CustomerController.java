@@ -1,7 +1,7 @@
 package com.example.backend_api_team10.controller;
 
 import java.util.List;
-import java.util.concurrent.Flow.Subscription;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend_api_team10.entity.Customer;
-import com.example.backend_api_team10.entity.Review;
 import com.example.backend_api_team10.entity.CustomerSubscription;
+import com.example.backend_api_team10.entity.Review;
 import com.example.backend_api_team10.service.CustomerService;
-import com.example.backend_api_team10.service.ReviewService;
 import com.example.backend_api_team10.service.CustomerSubscriptionService;
+import com.example.backend_api_team10.service.ReviewService;
 
 
 
@@ -42,7 +42,7 @@ public class CustomerController {
         return customerService.createCustomer(customer);
     }
  
-    /** Modify customer profile: PUT /api/customers/{id} */
+    //Modify customer profile
     @PutMapping("/{id}")
     public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         return customerService.updateCustomer(id, customer);
@@ -65,14 +65,16 @@ public class CustomerController {
     }
  
     @PostMapping("/{customerId}/subscriptions")
-    public Subscription subscribe(@PathVariable Long customerId,
-                                  @RequestBody Subscription subscription) {
-        return customerSubscriptionService.createForCustomer(customerId, subscription);
+    public CustomerSubscription subscribe(@PathVariable Long customerId,
+                                  @RequestBody CustomerSubscription subscription) {
+            subscription.setCustomer(customerService.getCustomerById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not foun")));
+        return customerSubscriptionService.createCustomerSubscription(subscription);
     }
  
     @GetMapping("/{customerId}/subscriptions")
-    public List<Subscription> getSubscriptions(@PathVariable Long customerId) {
-        return customerSubscriptionService.getByCustomer(customerId);
+    public Optional<CustomerSubscription> getSubscriptions(@PathVariable Long customerId) {
+        return customerSubscriptionService.getByCustomerId(customerId);
     }
  
     
