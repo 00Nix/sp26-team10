@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.example.backend_api_team10.entity.Meal;
 
-public interface MealRepo extends JpaRepository<MealPlan, Long> {
+public interface MealRepo extends JpaRepository<Meal, Long> {
     List<Meal> findByMealId(Long meal_id);
 
     List<Meal> findByName(String name);

@@ -28,25 +28,25 @@ public class MealPlanService {
         return mealPlanRepo.findByName(name);
     }
 
-    public MealPlan getMealPlanById(Long meal_plan_id){
-        return mealPlanRepo.findById(meal_plan_id).orElse(null);
+    public MealPlan getMealPlanById(Long plan_id){
+        return mealPlanRepo.findById(plan_id).orElse(null);
     }
 
-    public MealPlan updateMealPlan(Long meal_plan_id, MealPlan updatedMealPlan){
-        MealPlan existing = mealPlanRepo.findById(meal_plan_id).orElse(null);
+    public MealPlan updateMealPlan(Long plan_id, MealPlan updatedMealPlan){
+        MealPlan existing = mealPlanRepo.findById(plan_id).orElse(null);
         if (existing != null) {
             existing.setName(updatedMealPlan.getName());
             existing.setDescription(updatedMealPlan.getDescription());
             existing.setPrice(updatedMealPlan.getPrice());
-            existing.setMeals(updatedMealPlan.getMeals());
+            existing.setMealPlanMeal(updatedMealPlan.getMealPlanMeal());
             return mealPlanRepo.save(existing);
         } else {
             return null;
         }
     }
 
-    public void deleteMealPlan(Long meal_plan_id){
-        mealPlanRepo.deleteById(meal_plan_id);
+    public void deleteMealPlan(Long plan_id){
+        mealPlanRepo.deleteById(plan_id);
     }
 
 }

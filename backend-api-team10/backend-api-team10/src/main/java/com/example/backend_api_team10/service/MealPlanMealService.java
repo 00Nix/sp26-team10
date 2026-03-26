@@ -24,14 +24,14 @@ public class MealPlanMealService {
         return mealPlanMealRepo.findAll();
     }
 
-    public MealPlanMeal getMealPlanMealById(Long id){
-        return mealPlanMealRepo.findById(id).orElse(null);
+    public MealPlanMeal getMealPlanMealById(Long mealPlan_mealId){
+        return mealPlanMealRepo.findById(mealPlan_mealId).orElse(null);
     }
 
-    public MealPlanMeal updateMealPlanMeal(Long id, MealPlanMeal updated){
-        MealPlanMeal existing = mealPlanMealRepo.findById(id).orElse(null);
+    public MealPlanMeal updateMealPlanMeal(Long mealPlan_mealId, MealPlanMeal updated){
+        MealPlanMeal existing = mealPlanMealRepo.findById(mealPlan_mealId).orElse(null);
         if (existing != null) {
-            existing.setMeal(updated.getMeal());
+            existing.setMealPlanMealId(updated.getMeanPlanMealId());
             return mealPlanMealRepo.save(existing);
         } else {
             return null;

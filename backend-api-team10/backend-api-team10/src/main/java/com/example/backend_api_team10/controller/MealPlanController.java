@@ -26,7 +26,7 @@ public class MealPlanController {
 
     @GetMapping("/{name}")
     public List<MealPlan> getMealPlansByName(@PathVariable String name) {
-        return mealPlanService.getMealPlansByName(name);
+        return mealPlanService.getMealPlanByName(name);
     }
 
     @PostMapping

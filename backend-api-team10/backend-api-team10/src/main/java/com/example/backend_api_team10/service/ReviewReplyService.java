@@ -31,7 +31,7 @@ public class ReviewReplyService {
     public ReviewReply updateReviewReply(Long reply_id, ReviewReply updatedReply) {
         ReviewReply existing = reviewReplyRepo.findById(reply_id).orElse(null);
         if (existing != null) {
-            existing.setContent(updatedReply.getContent());
+            existing.setMessage(updatedReply.getMessage());
             existing.setReview(updatedReply.getReview());
             return reviewReplyRepo.save(existing);
         } else {
