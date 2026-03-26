@@ -4,7 +4,6 @@ import com.example.backend_api_team10.entity.SubscriptionPlan;
 import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
 
 import java.util.List;
-import java.util.concurrent.Flow.Subscription;
 
 import org.springframework.stereotype.Service;
 
@@ -29,18 +28,19 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.findById(plan_id).orElse(null);
     }
 
-    public SubscriptionPlan getSubscriptionPlanByName(String name){
+    public List<SubscriptionPlan> getSubscriptionPlanByName(String name){
         return subscriptionPlanRepo.findByName(name);
     }
 
     public SubscriptionPlan updateSubscriptionPlan(String name, SubscriptionPlan updatedPlan){
-        SubscriptionPlan existing = subscriptionPlanRepo.findByName(updatedPlan.getName());
-        if (existing != null) {
-            existing.setPrice(updatedPlan.getPrice());
-            existing.setDescription(updatedPlan.getDescription());
-            existing.setFeatures(updatedPlan.getFeatures());
-            existing.setDuration_weeks(updatedPlan.getDuration_weeks());
-            return subscriptionPlanRepo.save(existing);
+        List<SubscriptionPlan> existing = subscriptionPlanRepo.findByName(updatedPlan.getName());
+        if (existing != null && !existing.isEmpty()) {
+            SubscriptionPlan plan = existing.get(0);
+            plan.setPrice(updatedPlan.getPrice());
+            plan.setDescription(updatedPlan.getDescription());
+            plan.setFeatures(updatedPlan.getFeatures());
+            plan.setDurationWeeks(updatedPlan.getDurationWeeks());
+            return subscriptionPlanRepo.save(plan);
         } else {
             return null;
         }

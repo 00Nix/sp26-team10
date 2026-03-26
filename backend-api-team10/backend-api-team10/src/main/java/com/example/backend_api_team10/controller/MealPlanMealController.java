@@ -25,11 +25,6 @@ public class MealPlanMealController {
         return mealPlanMealService.getMealPlanMealById(mealPlan_mealId);
     }
 
-    @GetMapping("/plan/{planId}")
-    public List<MealPlanMeal> getMealsByPlanId(@PathVariable Long planId) {
-        return mealPlanMealService.getMealsByPlanId(planId);
-    }
-
     @PostMapping
     public MealPlanMeal createMealPlanMeal(@RequestBody MealPlanMeal mealPlanMeal) {
         return mealPlanMealService.createMealPlanMeal(mealPlanMeal);

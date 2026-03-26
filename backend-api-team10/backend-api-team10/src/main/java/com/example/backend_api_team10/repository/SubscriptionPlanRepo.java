@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface SubscriptionPlanRepo extends JpaRepository<SubscriptionPlan, Long> {
     
+    List<SubscriptionPlan> findByName(String name);
+
 }

@@ -18,22 +18,22 @@ public class SubscriptionPlanController {
 
     @GetMapping
     public List<SubscriptionPlan> getAllSubscriptionPlans(){
-        return subscriptionPlanService.getAllSubscriptionPlans();
+        return subscriptionPlanService.getAllSubscriptionPlan();
     }
 
     @GetMapping("/{name}")
-    public SubscriptionPlan getSubscriptionPlanByName(){
-        return subscriptionPlanService.getSubscriptionPlanByName();
+    public List<SubscriptionPlan> getSubscriptionPlanByName(@PathVariable String name){
+        return subscriptionPlanService.getSubscriptionPlanByName(name);
     }
 
     @PostMapping
-    public SubscriptionPlan createSubscriptionPlan(){
-        return subscriptionPlanService.createSubscriptionPlan();
+    public SubscriptionPlan createSubscriptionPlan(SubscriptionPlan subscriptionPlan){
+        return subscriptionPlanService.createSubscriptionPlan(subscriptionPlan);
     }
 
     @PutMapping("/{name}")
-    public SubscriptionPlan updateSubscriptionPlan(){
-        return subscriptionPlanService.updateSubscriptionPlan();
+    public SubscriptionPlan updateSubscriptionPlan(@PathVariable String name, SubscriptionPlan updatedPlan){
+        return subscriptionPlanService.updateSubscriptionPlan(name, updatedPlan);
     }
 
     @DeleteMapping("/{name}")

@@ -24,7 +24,7 @@ public class MealService {
         return mealRepo.findAll();
     }
 
-    public Meal getMealByName(String name){
+    public List<Meal> getMealByName(String name){
         return mealRepo.findByName(name);
     }
 
@@ -33,12 +33,13 @@ public class MealService {
     }
 
     public Meal updateMeal(String name, Meal updatedMeal){
-        Meal existing = mealRepo.findByName(name);
-        if (existing != null) {
-            existing.setDescription(updatedMeal.getDescription());
-            existing.setPrice(updatedMeal.getPrice());
-            existing.setImageUrl(updatedMeal.getImageUrl());
-            return mealRepo.save(existing);
+       List <Meal> existing = mealRepo.findByName(name);
+        if (existing != null && !existing.isEmpty()) {
+            Meal meal = existing.get(0);
+            meal.setDescription(updatedMeal.getDescription());
+            meal.setPrice(updatedMeal.getPrice());
+            meal.setImageUrl(updatedMeal.getImageUrl());
+            return mealRepo.save(meal);
         } else {
             return null;
         }

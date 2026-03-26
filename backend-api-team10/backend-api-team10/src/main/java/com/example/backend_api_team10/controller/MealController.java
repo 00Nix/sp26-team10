@@ -21,7 +21,7 @@ public class MealController {
     }
 
     @GetMapping("/{name}")
-    public Meal getMealByName(String name){
+    public List<Meal> getMealByName(String name){
         return mealService.getMealByName(name);
     }
 
@@ -31,10 +31,10 @@ public class MealController {
     }
 
     @PutMapping("/{meal_id}")
-    public Meal updateMeal(@PathVariable Long meal_id, @RequestBody Meal meal){
-        return mealService.updateMeal(meal_id, meal);
+    public Meal updateMeal(@PathVariable String name, @RequestBody Meal meal){
+        return mealService.updateMeal(name, meal);
     }
-
+    
     @DeleteMapping("/{meal_id}")
     public void deleteMeal(@PathVariable Long meal_id){
         mealService.deleteMeal(meal_id);

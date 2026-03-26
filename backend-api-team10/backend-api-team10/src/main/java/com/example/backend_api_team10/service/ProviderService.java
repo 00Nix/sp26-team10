@@ -1,5 +1,6 @@
 package com.example.backend_api_team10.service;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import com.example.backend_api_team10.entity.Provider;
 import com.example.backend_api_team10.repository.ProviderRepo;
@@ -26,7 +27,7 @@ public class ProviderService {
         return providerRepo.findById(provider_id).orElse(null);
     }
 
-    public Provider updatProvider(Long provider_id, java.security.Provider updatedProvider){
+    public Provider updateProvider(Long provider_id, Provider updatedProvider){
         Provider existing = providerRepo.findById(provider_id).orElse(null);
         if (existing != null){
             existing.setName(updatedProvider.getName());
@@ -40,7 +41,7 @@ public class ProviderService {
         return null;
     }
 
-    public boolean deleteProvider(Long provider_id){
+    public void deleteProvider(Long provider_id){
         providerRepo.deleteById(provider_id);
     }
 }

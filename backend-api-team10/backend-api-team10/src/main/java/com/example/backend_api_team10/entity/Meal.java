@@ -23,6 +23,9 @@ public class Meal {
     @Column(nullable = false, length = 1000)
     private String description;
 
+    @Column(nullable = false)
+    private String image_url;
+
     private String diet;
     private String portion_size;
 
@@ -38,10 +41,11 @@ public class Meal {
     public Meal(){
     }
 
-    public Meal(String name, BigDecimal price, String description, String diet, String portion_size, Provider provider, List<MealPlanMeal> mealPlanMeal){
+    public Meal(String name, BigDecimal price, String description, String image_url,String diet, String portion_size, Provider provider, List<MealPlanMeal> mealPlanMeal){
         this.name = name;
         this.price = price;
         this.description = description;
+        this.image_url = image_url;
         this.diet = diet;
         this.portion_size = portion_size;
         this.provider = provider;
@@ -81,6 +85,14 @@ public class Meal {
 
     public String getDescription(){
         return description;
+    }
+
+    public void setImageUrl(String image_url){
+        this.image_url = image_url;
+    }
+
+    public String getImageUrl(){
+        return image_url;
     }
 
     public void setDiet(String diet){
