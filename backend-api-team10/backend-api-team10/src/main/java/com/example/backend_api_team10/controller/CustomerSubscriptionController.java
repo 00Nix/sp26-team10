@@ -33,11 +33,7 @@ public class CustomerSubscriptionController {
     public CustomerSubscription getCustomerSubscriptionById(@PathVariable Long customer_sub_id) {
         return customerSubscriptionService.getCustomerSubscriptionById(customer_sub_id);
     }
-
-    @PostMapping
-    public CustomerSubscription createCustomerSubscription(@RequestBody CustomerSubscription customerSubscription){
-        return customerSubscriptionService.createCustomerSubscription(customerSubscription);
-    }
+    
 
     @PutMapping("/{customer_sub_id}")
     public CustomerSubscription updateCustomerSubscription(@PathVariable Long customer_sub_id, @RequestBody CustomerSubscription customerSubscription){

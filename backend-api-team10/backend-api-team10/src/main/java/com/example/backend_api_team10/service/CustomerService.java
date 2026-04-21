@@ -23,12 +23,12 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Optional<Customer> getCustomerById(Long id) {
-        return customerRepository.findById(id);
+    public Optional<Customer> getCustomerById(Long customer_id) {
+        return customerRepository.findById(customer_id);
     }
 
-    public Customer updateCustomer(Long id, Customer updatedCustomer) {
-        return customerRepository.findById(id)
+    public Customer updateCustomer(Long customer_id, Customer updatedCustomer) {
+        return customerRepository.findById(customer_id)
                 .map(customer -> {
                     customer.setName(updatedCustomer.getName());
                     customer.setEmail(updatedCustomer.getEmail());
@@ -41,8 +41,8 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
-    public void deleteCustomer(Long id) {
-        customerRepository.deleteById(id);
+    public void deleteCustomer(Long customer_id) {
+        customerRepository.deleteById(customer_id);
     }
 }
  

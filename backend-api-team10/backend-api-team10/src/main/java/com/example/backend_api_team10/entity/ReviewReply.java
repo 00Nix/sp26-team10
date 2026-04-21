@@ -3,7 +3,6 @@ package com.example.backend_api_team10.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.security.Provider;
 import java.time.LocalDate;
 
 @Entity

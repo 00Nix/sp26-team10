@@ -26,11 +26,11 @@ public class OrderItemService {
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
         return orderItemRepository.findByOrderId(orderId);
     }
-    public List<OrderItem> getOrderItemsByMealId(Long mealId) {
-        return orderItemRepository.findByMeal_MealId(mealId);
+    public List<OrderItem> getOrderItemsByMealId(Long meal_id) {
+        return orderItemRepository.findByMeal_MealId(meal_id);
     }
-    public List<OrderItem> getOrderItemsByPlanId(long planId) {
-        return orderItemRepository.findByPlan_SubscriptionId(planId);
+    public List<OrderItem> getOrderItemsByPlanId(long plan_id) {
+        return orderItemRepository.findByPlan_PlanId(plan_id);
     }
     public OrderItem updateOrderItem(Long orderItemId, OrderItem updatedItem) {
         return orderItemRepository.findById(orderItemId)

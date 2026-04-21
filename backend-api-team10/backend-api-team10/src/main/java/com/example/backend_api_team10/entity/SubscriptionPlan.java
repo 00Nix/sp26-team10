@@ -11,7 +11,7 @@ import java.util.List;
 public class SubscriptionPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long subscription_id;
+    private Long plan_id;
 
     @Column(nullable = false)
     private String name;
@@ -26,7 +26,7 @@ public class SubscriptionPlan {
     private String features;
 
     @Column(nullable = false)
-    private int duration_weeks;
+    private Integer duration_weeks;
 
     @OneToMany(mappedBy = "subscriptionPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties({"subscriptionPlan"})
@@ -45,12 +45,12 @@ public class SubscriptionPlan {
 
     // setters and getters
 
-    public void setSubscriptionId(Long subscription_id){
-        this.subscription_id = subscription_id;
+    public void setPlanId(Long plan_id){
+        this.plan_id = plan_id;
     }
 
-    public Long getSubscriptionId(){
-        return subscription_id;
+    public Long getPlanId(){
+        return plan_id;
     }
 
     public void setName(String name){
@@ -85,11 +85,11 @@ public class SubscriptionPlan {
         return features;
     }
 
-    public void setDurationWeeks(int duration_weeks){
+    public void setDurationWeeks(Integer duration_weeks){
         this.duration_weeks = duration_weeks;
     }
 
-    public int getDurationWeeks(){
+    public Integer getDurationWeeks(){
         return duration_weeks;
     }
 

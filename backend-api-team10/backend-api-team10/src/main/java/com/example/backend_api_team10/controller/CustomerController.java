@@ -63,11 +63,11 @@ public class CustomerController {
     }
  
     @PostMapping("/{customerId}/subscriptions")
-    public CustomerSubscription subscribe(@PathVariable Long customerId,
-                                  @RequestBody CustomerSubscription subscription) {
-            subscription.setCustomer(customerService.getCustomerById(customerId)
-                .orElseThrow(() -> new RuntimeException("Customer not foun")));
-        return customerSubscriptionService.createCustomerSubscription(subscription);
+    public CustomerSubscription subscribe(
+            @PathVariable Long customerId,
+            @RequestBody CustomerSubscription subscription) {
+
+        return customerSubscriptionService.createCustomerSubscription(customerId, subscription);
     }
  
     @GetMapping("/{customerId}/subscriptions")

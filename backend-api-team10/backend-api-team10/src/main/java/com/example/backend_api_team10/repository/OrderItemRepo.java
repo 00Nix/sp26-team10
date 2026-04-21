@@ -11,6 +11,6 @@ public interface OrderItemRepo extends JpaRepository<OrderItem, Long> {
 
     List<OrderItem> findByOrderId(Long orderId);
     List<OrderItem> findByMeal_MealId(Long mealId);
-    List<OrderItem> findByPlan_SubscriptionId(Long planId);
+    List<OrderItem> findByPlan_PlanId(Long planId);
     
 }

@@ -27,16 +27,16 @@ public class SubscriptionPlanController {
     }
 
     @PostMapping
-    public SubscriptionPlan createSubscriptionPlan(SubscriptionPlan subscriptionPlan){
+    public SubscriptionPlan createSubscriptionPlan(@RequestBody SubscriptionPlan subscriptionPlan){
         return subscriptionPlanService.createSubscriptionPlan(subscriptionPlan);
     }
 
     @PutMapping("/{name}")
-    public SubscriptionPlan updateSubscriptionPlan(@PathVariable String name, SubscriptionPlan updatedPlan){
+    public SubscriptionPlan updateSubscriptionPlan(@PathVariable String name, @RequestBody SubscriptionPlan updatedPlan){
         return subscriptionPlanService.updateSubscriptionPlan(name, updatedPlan);
     }
 
-    @DeleteMapping("/{name}")
+    @DeleteMapping("/{plan_id}")
     public void deleteSubscriptionPlan(@PathVariable Long plan_id){
         subscriptionPlanService.deleteSubscriptionPlan(plan_id);
     }

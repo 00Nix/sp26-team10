@@ -7,7 +7,7 @@ import com.example.backend_api_team10.entity.Customer;
 
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
-	Customer findByCustomerId(Long customerId);
+	Customer findByCustomerId(Long customer_id);
 	Customer findByEmail(String email);
 
 }

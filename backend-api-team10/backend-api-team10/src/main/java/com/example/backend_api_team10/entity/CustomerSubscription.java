@@ -22,18 +22,19 @@ public class CustomerSubscription {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
-    @JsonIgnoreProperties({"favorite", "cart", "order"})
+    @JsonIgnoreProperties({"email","password", "phone","favorite", "cart", "order"})
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "subscription_id", nullable = false)
-    @JsonIgnoreProperties("customerSubscriptions")
+    @JoinColumn(name = "plan_id", nullable = false)
+    @JsonIgnoreProperties({"customerSubscriptions", "name","price", "description", "features", "duration_weeks", "durationWeeks"})
     private SubscriptionPlan subscriptionPlan;
 
-    @Column(nullable = false)
-    private LocalDate start_date;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
-    private LocalDate end_date;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Column(nullable = false)
     private String status;
@@ -41,11 +42,11 @@ public class CustomerSubscription {
     public CustomerSubscription(){
     }
 
-    public CustomerSubscription(Customer customer, SubscriptionPlan subscriptionPlan, LocalDate start_date, LocalDate end_date, String status){
+    public CustomerSubscription(Customer customer, SubscriptionPlan subscriptionPlan, LocalDate startDate, LocalDate endDate, String status){
         this.customer = customer;
         this.subscriptionPlan = subscriptionPlan;
-        this.start_date = start_date;
-        this.end_date = end_date;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.status = status;
     }
 
@@ -75,20 +76,20 @@ public class CustomerSubscription {
         return subscriptionPlan;
     }
 
-    public void setStartDate(LocalDate start_date){
-        this.start_date = start_date;
+    public void setStartDate(LocalDate startDate){
+        this.startDate = startDate;
     }
 
     public LocalDate getStartDate(){
-        return start_date;
+        return startDate;
     }
 
-    public void setEndDate(LocalDate end_date){
-        this.end_date = end_date;
+    public void setEndDate(LocalDate endDate){
+        this.endDate = endDate;
     }
 
     public LocalDate getEndDate(){
-        return end_date;
+        return endDate;
     }
 
     public void setStatus(String status){

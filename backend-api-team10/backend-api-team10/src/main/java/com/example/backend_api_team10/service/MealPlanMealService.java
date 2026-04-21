@@ -38,8 +38,8 @@ public class MealPlanMealService {
         }
     }
 
-    public void deleteMealPlanMeal(Long id){
-        mealPlanMealRepo.deleteById(id);
+    public void deleteMealPlanMeal(Long mealPlan_mealId){
+        mealPlanMealRepo.deleteById(mealPlan_mealId);
     }
 
 }

@@ -24,16 +24,16 @@ public class CartService {
         return cartRepository.findAll();
     }
 
-    public Optional<Cart> getCartById(Long id) {
-        return cartRepository.findById(id);
+    public Optional<Cart> getCartById(Long cartId) {
+        return cartRepository.findById(cartId);
     }
 
-    public Optional<Cart> getCartByCustomer(Long customerId) {
-        return cartRepository.findByCustomer_CustomerId(customerId);
+    public Optional<Cart> getCartByCustomer(Long customer_id) {
+        return cartRepository.findByCustomer_CustomerId(customer_id);
     }
 
-    public Cart updateCart(Long id, Cart updatedCart) {
-        return cartRepository.findById(id)
+    public Cart updateCart(Long cartId, Cart updatedCart) {
+        return cartRepository.findById(cartId)
                 .map(cart -> {
                     cart.setSubtotal(updatedCart.getSubtotal());
                     cart.setCustomer(updatedCart.getCustomer());
@@ -42,7 +42,7 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
     }
 
-    public void deleteCart(Long id) {
-        cartRepository.deleteById(id);
+    public void deleteCart(Long cartId) {
+        cartRepository.deleteById(cartId);
     }
 }

@@ -22,17 +22,17 @@ public class FavoriteService {
     public List<Favorite> getAllFavorites() {
         return favoriteRepository.findAll();
     }
-    public List<Favorite> getByCustomer(Long customerId) {
-        return favoriteRepository.findByCustomer_CustomerId(customerId);
+    public List<Favorite> getByCustomer(Long customer_id) {
+        return favoriteRepository.findByCustomer_CustomerId(customer_id);
     }
-    public List<Favorite> getByMeal(Long mealId) {
-        return favoriteRepository.findByMeal_MealId(mealId);
+    public List<Favorite> getByMeal(Long meal_id) {
+        return favoriteRepository.findByMeal_MealId(meal_id);
     }
-    public void removeFavorite(Long id) {
-        favoriteRepository.deleteById(id);
+    public void removeFavorite(Long favoriteId) {
+        favoriteRepository.deleteById(favoriteId);
     }
-    public Optional<Favorite> findSpecific(Long customerId, Long mealId) {
-        return favoriteRepository.findByCustomer_CustomerIdAndMeal_MealId(customerId, mealId);
+    public Optional<Favorite> findSpecific(Long customer_id, Long meal_id) {
+        return favoriteRepository.findByCustomer_CustomerIdAndMeal_MealId(customer_id, meal_id);
     }
     
     

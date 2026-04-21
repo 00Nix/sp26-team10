@@ -3,7 +3,6 @@ package com.example.backend_api_team10.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.security.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class Meal {
 
     @ManyToOne
     @JoinColumn(name = "provider_id", nullable = false)
-    @JsonIgnoreProperties({"meal", "mealPlan", "reviewReply"})
+    @JsonIgnoreProperties({"meals", "mealPlans", "reviewReplies"})
     private Provider provider;
 
     @OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -103,11 +102,11 @@ public class Meal {
         return diet;
     }
 
-    public void setPortion(String portion_size){
+    public void setPortionSize(String portion_size){
         this.portion_size = portion_size;
     }
 
-    public String getPortion(){
+    public String getPortionSize(){
         return portion_size;
     }
 

@@ -33,28 +33,28 @@ public class ReviewController {
     }
 
     @GetMapping("/{id}")
-    public Review getReviewById(@PathVariable Long id) {
-        return reviewService.getReviewById(id)
+    public Review getReviewById(@PathVariable("id") Long reviewId) {
+        return reviewService.getReviewById(reviewId)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
     }
 
     @PutMapping("/{id}")
-    public Review updateReview(@PathVariable Long id, @RequestBody Review review) {
-        return reviewService.updateReview(id, review);
+    public Review updateReview(@PathVariable("id") Long reviewId, @RequestBody Review review) {
+        return reviewService.updateReview(reviewId, review);
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteReview(@PathVariable Long id) {
-        return reviewService.deleteReview(id);
+    public boolean deleteReview(@PathVariable("id") Long reviewId) {
+        return reviewService.deleteReview(reviewId );
     }
  
     @GetMapping("/order/{orderId}")
-    public List<Review> getReviewsByOrderId(@PathVariable Long orderId) {
+    public List<Review> getReviewsByOrderId(@PathVariable("orderId") Long orderId) {
         return reviewService.getReviewsByOrderId(orderId);
     }
  
     @GetMapping("/rating/{rating}")
-    public List<Review> getReviewsByRating(@PathVariable Integer rating) {
+    public List<Review> getReviewsByRating(@PathVariable("rating") Integer rating) {
         return reviewService.getReviewsByRating(rating);
     }
 }

@@ -35,14 +35,14 @@ public class OrderItemController {
         return orderItemService.getOrderItemsByOrderId(orderId);
     }
     @GetMapping("/meal/{mealId}")
-    public List<OrderItem> getByMealId(@PathVariable Long mealId) {
-        return orderItemService.getOrderItemsByMealId(mealId);
+    public List<OrderItem> getByMealId(@PathVariable Long meal_id) {
+        return orderItemService.getOrderItemsByMealId(meal_id);
     }
-    @GetMapping("/plan/{planId")
-    public List<OrderItem> getByPlanId(@PathVariable Long planId) {
-        return orderItemService.getOrderItemsByPlanId(planId);
+    @GetMapping("/plan/{planId}")
+    public List<OrderItem> getByPlanId(@PathVariable Long plan_id) {
+        return orderItemService.getOrderItemsByPlanId(plan_id);
     }
-    @PutMapping("/{orderItemId")
+    @PutMapping("/{orderItemId}")
     public OrderItem updateOrderItem(@PathVariable Long orderItemId, @RequestBody OrderItem orderItem) {
         return orderItemService.updateOrderItem(orderItemId, orderItem);
     }

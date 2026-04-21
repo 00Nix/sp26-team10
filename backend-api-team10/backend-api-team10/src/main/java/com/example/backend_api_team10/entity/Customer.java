@@ -13,7 +13,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
+    private Long customer_id;
 
     private String name;
 
@@ -24,14 +24,14 @@ public class Customer {
 
     private String phone;
 
-    private boolean subscribed;
+    private Boolean subscribed;
 
     private String status;
 
     // Constructors
     public Customer() {}
 
-    public Customer(String name, String email, String password, String phone, boolean subscribed, String status) {
+    public Customer(String name, String email, String password, String phone, Boolean subscribed, String status) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -41,7 +41,7 @@ public class Customer {
     }
 
     // Getters & Setters
-    public Long getCustomerId() { return customerId; }
+    public Long getCustomerId() { return customer_id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -55,7 +55,7 @@ public class Customer {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
-    public boolean isSubscribed() { return subscribed; }
+    public Boolean isSubscribed() { return subscribed; }
     public void setSubscribed(boolean subscribed) { this.subscribed = subscribed; }
 
     public String getStatus() { return status; }

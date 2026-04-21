@@ -6,6 +6,8 @@ import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class SubscriptionPlanService {
@@ -32,7 +34,7 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.findByName(name);
     }
 
-    public SubscriptionPlan updateSubscriptionPlan(String name, SubscriptionPlan updatedPlan){
+    public SubscriptionPlan updateSubscriptionPlan(@PathVariable String name, @RequestBody SubscriptionPlan updatedPlan){
         List<SubscriptionPlan> existing = subscriptionPlanRepo.findByName(updatedPlan.getName());
         if (existing != null && !existing.isEmpty()) {
             SubscriptionPlan plan = existing.get(0);

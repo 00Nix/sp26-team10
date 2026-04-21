@@ -34,11 +34,11 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
  
-    public Review createForSubscribedCustomer(Long customerId, Review review) {
-        Customer customer = customerRepository.findById(customerId)
+    public Review createForSubscribedCustomer(Long customer_id, Review review) {
+        Customer customer = customerRepository.findById(customer_id)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
  
-        boolean isSubscribed = !customerSubscriptionRepo.findByCustomerId(customerId).isEmpty();
+        boolean isSubscribed = !customerSubscriptionRepo.findByCustomerId(customer_id).isEmpty();
         if (!isSubscribed) {
             throw new RuntimeException("Customer has no active subscriptions and cannot post a review");
         }
@@ -63,12 +63,12 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
  
-    public Optional<Review> getReviewById(Long id) {
-        return reviewRepository.findById(id);
+    public Optional<Review> getReviewById(Long reviewId) {
+        return reviewRepository.findById(reviewId);
     }
  
-    public Review updateReview(Long id, Review updatedReview) {
-        return reviewRepository.findById(id)
+    public Review updateReview(Long reviewId, Review updatedReview) {
+        return reviewRepository.findById(reviewId)
                 .map(review -> {
                     review.setRating(updatedReview.getRating());
                     review.setDescription(updatedReview.getDescription());
@@ -79,8 +79,8 @@ public class ReviewService {
                 .orElseThrow(() -> new RuntimeException("Review not found"));
     }
  
-    public boolean deleteReview(Long id) {
-        Optional<Review> optionalReview = reviewRepository.findById(id);
+    public boolean deleteReview(Long reviewId) {
+        Optional<Review> optionalReview = reviewRepository.findById(reviewId);
         if (!optionalReview.isPresent()) {
             return false;
         }

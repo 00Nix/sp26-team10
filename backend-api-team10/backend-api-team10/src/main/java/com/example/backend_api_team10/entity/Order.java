@@ -38,9 +38,9 @@ public class Order {
 
     public Order() {}
 
-    public Order(Long customerId, Long cartId, LocalDateTime timestamp, 
+    public Order(Long customer_id, Long cartId, LocalDateTime timestamp, 
         Double totalPrice, String status, String address) {
-            this.customerId = customerId;
+            this.customerId = customer_id;
             this.cartId = cartId;
             this.timestamp = timestamp;
             this.totalPrice = totalPrice;
@@ -57,8 +57,8 @@ public class Order {
     public Long getCustomerId() {
         return customerId;
     }
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setCustomerId(Long customer_id) {
+        this.customerId = customer_id;
     }
     public Long getCartId() {
         return cartId;
