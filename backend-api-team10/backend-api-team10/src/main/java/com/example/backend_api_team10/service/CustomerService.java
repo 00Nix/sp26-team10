@@ -22,6 +22,9 @@ public class CustomerService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Customer createCustomer(Customer customer) {
 
         User user = customer.getUser();
