@@ -23,7 +23,7 @@ public class ProviderService {
         User user = provider.getUser();
 
         if (user == null){
-            user = new User();
+            throw new RuntimeException("User details are required!")
         }
 
         user.setRole(Role.PROVIDER);
