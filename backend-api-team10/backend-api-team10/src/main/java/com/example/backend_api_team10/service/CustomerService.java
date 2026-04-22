@@ -27,8 +27,9 @@ public class CustomerService {
         User user = customer.getUser();
 
         if (user == null){
-            user = new User();
+            throw new RuntimeException("User details are required!")
         }
+        
         user.setRole(Role.CUSTOMER);
         User savedUser = userRepo.save(user);
 
