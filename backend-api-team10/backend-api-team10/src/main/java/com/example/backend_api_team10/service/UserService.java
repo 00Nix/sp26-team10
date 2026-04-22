@@ -34,7 +34,7 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public User updatUser(Long user_id, User updatedUser){
+    public User updateUser(Long user_id, User updatedUser){
         return userRepo.findUserById(user_id)
                 .map(existingUser -> {
                     existingUser.setEmail(updatedUser.getEmail());
