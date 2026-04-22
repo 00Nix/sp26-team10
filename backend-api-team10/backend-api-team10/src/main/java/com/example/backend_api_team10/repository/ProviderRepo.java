@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface ProviderRepo extends JpaRepository<Provider, Long> {
     List<Provider>findByProviderId(Long provider_id);
-
-    List<Provider> findByEmail(String email);
 }
