@@ -5,6 +5,8 @@ import com.example.backend_api_team10.entity.Role;
 import com.example.backend_api_team10.entity.User;
 import com.example.backend_api_team10.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.List;
 import java.util.Optional;

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties.Apiversion.Use;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.backend_api_team10.entity.Customer;
@@ -30,7 +31,7 @@ public class CustomerService {
         User user = customer.getUser();
 
         if (user == null){
-            throw new RuntimeException("User details are required!")
+            throw new RuntimeException("User details are required!");
         }
         
         user.setRole(Role.CUSTOMER);

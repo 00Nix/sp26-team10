@@ -9,6 +9,7 @@ import com.example.backend_api_team10.repository.ProviderRepo;
 import com.example.backend_api_team10.repository.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Service
@@ -26,7 +27,7 @@ public class ProviderService {
         User user = provider.getUser();
 
         if (user == null){
-            throw new RuntimeException("User details are required!")
+            throw new RuntimeException("User details are required!");
         }
 
         user.setRole(Role.PROVIDER);
