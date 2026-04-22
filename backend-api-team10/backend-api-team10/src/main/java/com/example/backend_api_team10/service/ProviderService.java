@@ -19,6 +19,9 @@ public class ProviderService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Provider createProvider(Provider provider) {
         User user = provider.getUser();
 
@@ -58,7 +61,7 @@ public class ProviderService {
 
             if (updatedUser != null){
                 existingUser.setEmail(updatedUser.getEmail());
-                existingUser.setPasswordHash(updatedUser.getPasswordHash());
+                existingUser.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
             }
 
             existingUser.setRole(Role.PROVIDER);
