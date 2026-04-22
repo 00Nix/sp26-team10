@@ -15,6 +15,9 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public User createUser(User user){
         if (user.getEmail() == null || user.getPasswordHash() == null || user.getRole() == null){
             throw new RuntimeException("User must have an email, password, and role.");
@@ -38,7 +41,7 @@ public class UserService {
         return userRepo.findUserById(user_id)
                 .map(existingUser -> {
                     existingUser.setEmail(updatedUser.getEmail());
-                    existingUser.setPasswordHash(updatedUser.getPasswordHash());
+                    existingUser.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
                     existingUser.setRole(updatedUser.getRole());
                     return userRepo.save(existingUser);
                 })
