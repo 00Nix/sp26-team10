@@ -24,6 +24,8 @@ public class UserService {
         if (user.getEmail() == null || user.getPasswordHash() == null || user.getRole() == null){
             throw new RuntimeException("User must have an email, password, and role.");
         }
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+
         return userRepo.save(user);
     }
 
@@ -43,7 +45,11 @@ public class UserService {
         return userRepo.findUserById(user_id)
                 .map(existingUser -> {
                     existingUser.setEmail(updatedUser.getEmail());
+
+                    if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isBlank()) {
                     existingUser.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
+
+                    }   
                     existingUser.setRole(updatedUser.getRole());
                     return userRepo.save(existingUser);
                 })

@@ -31,6 +31,8 @@ public class ProviderService {
         }
 
         user.setRole(Role.PROVIDER);
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+
         User savedUser = userRepo.save(user);
 
         provider.setUser(savedUser);
@@ -62,7 +64,10 @@ public class ProviderService {
 
             if (updatedUser != null){
                 existingUser.setEmail(updatedUser.getEmail());
-                existingUser.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
+                
+                if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isBlank()) {
+                    existingUser.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
+                }
             }
 
             existingUser.setRole(Role.PROVIDER);

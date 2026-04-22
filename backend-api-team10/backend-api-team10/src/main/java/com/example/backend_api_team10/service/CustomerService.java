@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.autoconfigure.WebMvcProperties.Apiversion.Use;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +34,9 @@ public class CustomerService {
         }
         
         user.setRole(Role.CUSTOMER);
-        User savedUser = userRepo.save(user);
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
 
+        User savedUser = userRepo.save(user);
         customer.setUser(savedUser);
 
         return customerRepository.save(customer);
@@ -67,7 +67,10 @@ public class CustomerService {
 
                     if (updatedUser != null){
                         existingUser.setEmail(updatedUser.getEmail());
-                        existingUser.setPasswordHash(updatedUser.getPasswordHash());
+
+                        if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isBlank()) {
+                            existingUser.setPasswordHash(passwordEncoder.encode((updatedUser.getPasswordHash())));
+                        }
                     }
 
                     existingUser.setRole(Role.CUSTOMER);
