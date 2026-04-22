@@ -15,4 +15,7 @@ public interface MealPlanRepo extends JpaRepository<MealPlan, Long> {
 
     List<MealPlan> findByDiet(String diet);
 
+    @Query("SELECT m.diet, COUNT(m) FROM MealPlan m GROUP BY m.diet")
+    List<Object[]> countMealPlansByDiet();
+
 }
