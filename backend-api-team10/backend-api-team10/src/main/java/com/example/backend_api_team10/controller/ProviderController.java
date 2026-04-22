@@ -21,7 +21,7 @@ public class ProviderController {
         return providerService.getAllProviders();
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/{provider_id}")
     public Provider getProviderById(@PathVariable Long provider_id){
         return providerService.getProviderById(provider_id);
     }
@@ -31,12 +31,12 @@ public class ProviderController {
         return providerService.createProvider(provider);   
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{provider_id}")
     public Provider updateProvider(@PathVariable Long provider_id, @RequestBody Provider provider){
         return providerService.updateProvider(provider_id, provider);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{provider_id}")
     public void deleteProvider(@PathVariable Long provider_id){
         providerService.deleteProvider(provider_id);
     }

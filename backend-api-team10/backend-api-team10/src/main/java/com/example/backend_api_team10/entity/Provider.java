@@ -12,14 +12,13 @@ public class Provider {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long provider_id;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
     @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password_hash;
 
     private String phone;
 
@@ -41,15 +40,23 @@ public class Provider {
     public Provider() {
     }
 
-    public Provider(String name, String email, String password_hash, String phone, String biography) {
+    public Provider(User user, String name, String phone, String biography) {
+        this.user = user;
         this.name = name;
-        this.email = email;
-        this.password_hash = password_hash;
         this.phone = phone;
         this.biography = biography;
     }
 
     // setters and getters
+
+    public void setUser(User user){
+        this.user = user;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
     public void setProviderId(Long provider_id){
         this.provider_id = provider_id;
     }
@@ -64,22 +71,6 @@ public class Provider {
 
     public String getName(){
         return name;
-    }
-
-    public void setEmail(String email){
-        this.email = email;
-    }
-
-    public String getEmail(){
-        return email;
-    }
-
-    public void setPasswordHash(String password_hash){
-        this.password_hash = password_hash;
-    }
-
-    public String getPasswordHash(){
-        return password_hash;
     }
 
     public void setPhone(String phone){
