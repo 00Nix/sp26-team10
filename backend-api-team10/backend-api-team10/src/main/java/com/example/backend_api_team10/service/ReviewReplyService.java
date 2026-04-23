@@ -1,6 +1,8 @@
 package com.example.backend_api_team10.service;
 
 import com.example.backend_api_team10.entity.ReviewReply;
+import com.example.backend_api_team10.entity.Review;
+import com.example.backend_api_team10.entity.Provider;
 import com.example.backend_api_team10.repository.ReviewReplyRepo;
 
 import java.util.List;
@@ -16,8 +18,13 @@ public class ReviewReplyService {
         this.reviewReplyRepo = reviewReplyRepo;
     }
 
-    public ReviewReply createReviewReply(ReviewReply reviewReply) {
-        return reviewReplyRepo.save(reviewReply);
+    public ReviewReply createReviewReply(Review review, Provider provider, String message) {
+        ReviewReply reply = new ReviewReply();
+        reply.setReview(review);
+        reply.setProvider(provider);
+        reply.setMessage(message);
+        return reviewReplyRepo.save(reply);
+        
     }
 
     public List<ReviewReply> getAllReviewReplies() {

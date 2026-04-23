@@ -4,6 +4,7 @@ import com.example.backend_api_team10.entity.SubscriptionPlan;
 import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.save(subscriptionPlan);
     }
 
-    public List<SubscriptionPlan> getAllSubscriptionPlan(){
+    public List<SubscriptionPlan> getAllSubscriptionPlans(){
         return subscriptionPlanRepo.findAll();
     }
 
@@ -34,10 +35,10 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.findByName(name);
     }
 
-    public SubscriptionPlan updateSubscriptionPlan(@PathVariable String name, @RequestBody SubscriptionPlan updatedPlan){
-        List<SubscriptionPlan> existing = subscriptionPlanRepo.findByName(updatedPlan.getName());
-        if (existing != null && !existing.isEmpty()) {
-            SubscriptionPlan plan = existing.get(0);
+    public SubscriptionPlan updateSubscriptionPlan(@PathVariable Long plan_id, @RequestBody SubscriptionPlan updatedPlan){
+        Optional<SubscriptionPlan> existing = subscriptionPlanRepo.findById(updatedPlan.getPlanId());
+        if (existing.isPresent()) {
+            SubscriptionPlan plan = existing.get();
             plan.setPrice(updatedPlan.getPrice());
             plan.setDescription(updatedPlan.getDescription());
             plan.setFeatures(updatedPlan.getFeatures());

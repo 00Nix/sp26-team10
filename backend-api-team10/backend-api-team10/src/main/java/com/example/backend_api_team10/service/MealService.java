@@ -47,14 +47,13 @@ public class MealService {
         return mealRepo.findById(meal_id).orElse(null);
     }
 
-    public Meal updateMeal(String name, Meal updatedMeal){
-       List <Meal> existing = mealRepo.findByName(name);
-        if (existing != null && !existing.isEmpty()) {
-            Meal meal = existing.get(0);
-            meal.setDescription(updatedMeal.getDescription());
-            meal.setPrice(updatedMeal.getPrice());
-            meal.setImageUrl(updatedMeal.getImageUrl());
-            return mealRepo.save(meal);
+    public Meal updateMeal(Long meal_id, Meal updatedMeal){
+        Meal existingMeal = getMealById(meal_id);
+        if (existingMeal != null) {
+            existingMeal.setDescription(updatedMeal.getDescription());
+            existingMeal.setPrice(updatedMeal.getPrice());
+            existingMeal.setImageUrl(updatedMeal.getImageUrl());
+            return mealRepo.save(existingMeal);
         } else {
             return null;
         }

@@ -31,8 +31,8 @@ public class MealController {
     }
 
     @PutMapping("/{meal_id}")
-    public Meal updateMeal(@PathVariable String name, @RequestBody Meal meal){
-        return mealService.updateMeal(name, meal);
+    public Meal updateMeal(@PathVariable Long meal_id, @RequestBody Meal meal){
+        return mealService.updateMeal(meal_id, meal);
     }
     
     @DeleteMapping("/{meal_id}")

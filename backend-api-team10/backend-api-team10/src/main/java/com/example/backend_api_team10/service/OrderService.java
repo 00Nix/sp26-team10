@@ -33,14 +33,20 @@ public class OrderService {
 		existingOrder.setCartId(orderDetails.getCartId());
 		existingOrder.setTimestamp(orderDetails.getTimestamp());
 		existingOrder.setTotalPrice(orderDetails.getTotalPrice());
-		existingOrder.setStatus(orderDetails.getStatus());
 		existingOrder.setAddress(orderDetails.getAddress());
 		return orderRepo.save(existingOrder);
 	})
 
 	.orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
 	}
-
+	public Order updateOrderStatus(Long orderId, String status) {
+		return orderRepo.findById(orderId)
+		.map(existingOrder -> {
+		existingOrder.setStatus(status);
+		return orderRepo.save(existingOrder);
+	})
+	.orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+	}
 	public void deleteOrder(Long orderId) {
 		orderRepo.deleteById(orderId);		
 	}
