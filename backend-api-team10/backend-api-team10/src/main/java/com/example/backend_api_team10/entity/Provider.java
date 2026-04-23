@@ -13,8 +13,8 @@ public class Provider {
     private Long provider_id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private Users user;
 
 
     @Column(nullable = false)
@@ -40,7 +40,7 @@ public class Provider {
     public Provider() {
     }
 
-    public Provider(User user, String name, String phone, String biography) {
+    public Provider(Users user, String name, String phone, String biography) {
         this.user = user;
         this.name = name;
         this.phone = phone;
@@ -49,11 +49,11 @@ public class Provider {
 
     // setters and getters
 
-    public void setUser(User user){
+    public void setUser(Users user){
         this.user = user;
     }
 
-    public User getUser(){
+    public Users getUser(){
         return user;
     }
 

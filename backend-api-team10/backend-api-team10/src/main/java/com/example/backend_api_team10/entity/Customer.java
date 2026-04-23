@@ -18,8 +18,8 @@ public class Customer {
     private Long customer_id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private Users user;
 
     private String name;
 
@@ -32,7 +32,7 @@ public class Customer {
     // Constructors
     public Customer() {}
 
-    public Customer(User user, String name, String phone, Boolean subscribed, String status) {
+    public Customer(Users user, String name, String phone, Boolean subscribed, String status) {
         this.user = user;
         this.name = name;
         this.phone = phone;
@@ -42,11 +42,11 @@ public class Customer {
 
     // Getters & Setters
 
-    public void setUser(User user){
+    public void setUser(Users user){
         this.user = user;
     }
 
-    public User getUser(){
+    public Users getUser(){
         return user;
     }
 

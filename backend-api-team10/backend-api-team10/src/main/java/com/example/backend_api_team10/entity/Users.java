@@ -2,12 +2,10 @@ package com.example.backend_api_team10.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long user_id;
@@ -23,16 +21,18 @@ public class User {
     protected Role role;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnoreProperties("user")
     private Customer customer;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnoreProperties("user")
     private Provider provider;
 
-    public User(){
+    public Users(){
         
     }
 
-    public User(Long user_id, String email, String password_hash, Role role, Customer customer, Provider provider){
+    public Users(Long user_id, String email, String password_hash, Role role, Customer customer, Provider provider){
         this.user_id = user_id;
         this.email = email;
         this.password_hash = password_hash;
@@ -88,5 +88,6 @@ public class User {
     public Provider getProvider(){
         return provider;
     }
+
 
 }

@@ -1,7 +1,7 @@
 package com.example.backend_api_team10.controller;
 
 import com.example.backend_api_team10.entity.Role;
-import com.example.backend_api_team10.entity.User;
+import com.example.backend_api_team10.entity.Users;
 import com.example.backend_api_team10.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,22 +22,22 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers(){
+    public List<Users> getAllUsers(){
         return userService.getAllUsers();
     }
 
     @GetMapping("/{user_id}")
-    public Optional<User> getUserById(@PathVariable Long user_id){
+    public Optional<Users> getUserById(@PathVariable Long user_id){
         return userService.getUserById(user_id);
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user){
+    public Users createUser(@RequestBody Users user){
         return userService.createUser(user);
     }
 
     @PutMapping("/{user_id}")
-    public User updateUserRole(@PathVariable Long user_id, @RequestBody Role role) {
+    public Users updateUserRole(@PathVariable Long user_id, @RequestBody Role role) {
         return userService.updateUserRole(user_id, role);
     }
 

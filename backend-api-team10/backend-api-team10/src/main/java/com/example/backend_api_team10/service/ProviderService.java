@@ -3,7 +3,7 @@ package com.example.backend_api_team10.service;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.example.backend_api_team10.entity.Role;
-import com.example.backend_api_team10.entity.User;
+import com.example.backend_api_team10.entity.Users;
 import com.example.backend_api_team10.entity.Provider;
 import com.example.backend_api_team10.repository.ProviderRepo;
 import com.example.backend_api_team10.repository.UserRepo;
@@ -24,7 +24,7 @@ public class ProviderService {
     private PasswordEncoder passwordEncoder;
 
     public Provider createProvider(Provider provider) {
-        User user = provider.getUser();
+        Users user = provider.getUser();
 
         if (user == null){
             throw new RuntimeException("User details are required!");
@@ -33,7 +33,7 @@ public class ProviderService {
         user.setRole(Role.PROVIDER);
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
 
-        User savedUser = userRepo.save(user);
+        Users savedUser = userRepo.save(user);
 
         provider.setUser(savedUser);
 
@@ -55,11 +55,11 @@ public class ProviderService {
             existing.setPhone(updatedProvider.getPhone());
             existing.setBiography(updatedProvider.getBiography());
 
-            User existingUser = existing.getUser();
-            User updatedUser = updatedProvider.getUser();
+            Users existingUser = existing.getUser();
+            Users updatedUser = updatedProvider.getUser();
 
             if (existingUser == null){
-                existingUser = new User();
+                existingUser = new Users();
             }
 
             if (updatedUser != null){
@@ -71,7 +71,7 @@ public class ProviderService {
             }
 
             existingUser.setRole(Role.PROVIDER);
-            User savedUser = userRepo.save(existingUser);
+            Users savedUser = userRepo.save(existingUser);
 
             existing.setUser(savedUser);
 
@@ -84,7 +84,7 @@ public class ProviderService {
         Provider provider = providerRepo.findById(provider_id).orElse(null);
 
         if (provider != null){
-            User user = provider.getUser();
+            Users user = provider.getUser();
             providerRepo.delete(provider);
             
             if (user != null){
