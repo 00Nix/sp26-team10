@@ -2,123 +2,134 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews Dashboard</title>
-    <link rel="stylesheet" href="/static/admin.css">
+    <link rel="stylesheet" href="/styles/admin.css">
 </head>
-<body>
+<body class="admin-body">
 <div class="admin-layout">
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
+
     <aside class="sidebar">
         <div class="sidebar-brand">
             <h1>BALANCED<br>BITE</h1>
-            <p>Admin Portal</p>
+            <p>Provider Admin Portal</p>
         </div>
         <nav class="sidebar-nav">
-            <a href="/provider/dashboard">DASHBOARD</a>
-            <a href="/provider/orders">ORDERS</a>
-            <a href="/provider/reviews" class="active">REVIEWS</a>
-            <a href="/provider/plans">PLANS</a>
-            <a href="/provider/analytics">ANALYTICS</a>
-            <a href="/provider/profile">PROFILE</a>
+            <a class="sidebar-link" href="/provider/dashboard">Dashboard</a>
+            <a class="sidebar-link" href="/provider/orders">Orders</a>
+            <a class="sidebar-link active" href="/provider/reviews">Reviews</a>
+            <a class="sidebar-link" href="/provider/subscriptions">Plans</a>
+            <a class="sidebar-link" href="/provider/mealplans">Meal Plans</a>
+            <a class="sidebar-link" href="/provider/meals">Meals</a>
+            <a class="sidebar-link" href="/provider/analytics">Analytics</a>
+            <a class="sidebar-link" href="/provider/profile">Profile</a>
         </nav>
         <div class="sidebar-bottom">
-            <a href="/">BACK TO HOME</a>
-            <a href="/logout">LOG OUT</a>
+            <a href="/">Back to Home</a>
+            <a href="/logout">Log Out</a>
         </div>
     </aside>
 
-    <main class="main-content">
-        <div class="page-header">
-            <h1 class="page-title">Reviews Dashboard</h1>
-            <hr class="page-divider">
-        </div>
+    <label for="sidebar-toggle" class="sidebar-overlay"></label>
 
-        <div class="reviews-top">
-            <div>
-                <div class="stats-row" style="grid-template-columns: repeat(3, 1fr); margin-top:0;">
+    <div class="main-shell">
+        <header class="topbar">
+            <div class="topbar-left">
+                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
+                <div>
+                    <h1 class="topbar-title">Reviews</h1>
+                    <p class="topbar-subtitle">Read customer feedback and respond quickly.</p>
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <div class="search-bar">
+                    <span>⌕</span>
+                    <input type="text" placeholder="Search reviews">
+                </div>
+                <div class="avatar-badge">BB</div>
+            </div>
+        </header>
+
+        <main class="page-content section-stack">
+            <section class="reviews-top">
+                <div class="stats-row">
                     <div class="stat-card">
                         <div class="stat-label">New Reviews</div>
                         <div class="stat-value">${newReviews!8}</div>
-                        <div class="stat-change">+20% month over month</div>
+                        <div class="stat-change">Recent customer submissions</div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-label">Replied</div>
                         <div class="stat-value">${repliedReviews!28}</div>
-                        <div class="stat-change">+33% month over month</div>
+                        <div class="stat-change">Provider responses posted</div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-label">Total Reviews</div>
                         <div class="stat-value">${totalReviews!36}</div>
-                        <div class="stat-change">-8% month over month</div>
+                        <div class="stat-change">All review records</div>
                     </div>
                 </div>
-            </div>
 
-            <div class="rating-summary">
-                <h3>Average Rating</h3>
-                <hr class="page-divider" style="margin: 10px auto; width: 70%;">
-                <div class="big-rating">${avgRating!'4 stars'}</div>
-                <hr class="page-divider" style="margin: 10px auto; width: 55%;">
-                <div style="font-size: 44px; color: #ccb57c;">★★★★☆</div>
-            </div>
-        </div>
+                <div class="rating-summary">
+                    <h3>Average Rating</h3>
+                    <div class="big-rating">${avgRating!'4.0'}</div>
+                    <div class="rating-stars">★★★★☆</div>
+                </div>
+            </section>
 
-        <div class="search-filter-row">
-            <div class="search-box">
-                <span style="font-size: 26px; color:#888;">⌕</span>
-                <input type="text" placeholder="Search">
-            </div>
+            <section class="panel">
+                <div class="page-content">
+                    <div class="search-filter-row">
+                        <div class="filter-group">
+                            <button class="btn btn-pill-dark" type="button">All</button>
+                            <button class="btn btn-pill-light" type="button">5</button>
+                            <button class="btn btn-pill-light" type="button">4</button>
+                            <button class="btn btn-pill-light" type="button">3</button>
+                            <button class="btn btn-pill-light" type="button">2</button>
+                            <button class="btn btn-pill-light" type="button">1</button>
+                        </div>
 
-            <div class="filter-group">
-                <button class="btn btn-pill-dark">All</button>
-                <button class="btn btn-pill-light">5</button>
-                <button class="btn btn-pill-light">4</button>
-                <button class="btn btn-pill-light">3</button>
-                <button class="btn btn-pill-light">2</button>
-                <button class="btn btn-pill-light">1</button>
-                <button class="btn btn-pill-light">None</button>
-            </div>
-
-            <div class="filter-group">
-                <button class="btn btn-pill-dark">Date Range</button>
-                <button class="btn btn-pill-light">Status</button>
-            </div>
-        </div>
-
-        <div class="review-list">
-            <#list reviews as review>
-                <div class="review-row">
-                    <div class="review-meta">
-                        <div>${review.date!}</div>
-                        <div style="font-weight:600; margin-top:4px;">${review.customerName!'User'}</div>
-                    </div>
-
-                    <div class="review-main">
-                        <div class="review-title">${review.title!'Review Title'}</div>
-                        <div class="review-snippet">
-                            ${(review.description!'Description...')?truncate(95)}
+                        <div class="filter-group">
+                            <button class="btn btn-pill-light" type="button">Date Range</button>
+                            <button class="btn btn-pill-light" type="button">Status</button>
                         </div>
                     </div>
 
-                    <div class="review-stars">
-                        <#assign r = review.rating!0>
-                        <#list 1..5 as i>
-                            <#if i <= r>★<#else>☆</#if>
+                    <div class="review-list">
+                        <#list reviews as review>
+                            <div class="review-row">
+                                <div class="review-meta">
+                                    <div>${review.date!''}</div>
+                                    <div class="review-customer">${review.customerName!'Customer'}</div>
+                                </div>
+
+                                <div class="review-main">
+                                    <div class="review-title">${review.title!'Review Title'}</div>
+                                    <div class="review-snippet">${(review.description!'No description provided.')?truncate(95)}</div>
+                                </div>
+
+                                <div class="review-stars">
+                                    <#assign r = review.rating!0>
+                                    <#list 1..5 as i><#if i <= r>★<#else>☆</#if></#list>
+                                </div>
+
+                                <div class="review-action">
+                                    <a href="/provider/reviews/${review.review_id}">View</a>
+                                </div>
+
+                                <div class="review-action">
+                                    <a href="/provider/reviews/${review.review_id}/reply">Reply</a>
+                                </div>
+                            </div>
                         </#list>
                     </div>
-
-                    <div class="review-action">
-                        <a href="/provider/reviews/${review.review_id}">VIEW</a>
-                    </div>
-
-                    <div class="review-action">
-                        <a href="/provider/reviews/${review.review_id}/reply">REPLY</a>
-                    </div>
                 </div>
-            </#list>
-        </div>
-    </main>
+            </section>
+        </main>
+    </div>
 </div>
 </body>
 </html>

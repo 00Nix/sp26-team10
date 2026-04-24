@@ -4,36 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Plans</title>
-    <link rel="stylesheet" href="/static/admin.css">
+    <link rel="stylesheet" href="/styles/admin.css">
 </head>
-<body>
-    <main class="page-container">
-        <a href="/provider/dashboard">← Back to Dashboard</a>
-        <h1>Meal Plans</h1>
+<body class="admin-body">
+<div class="admin-layout">
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
 
-        <p>
-            <a class="button-link" href="/provider/mealplans/add">Add Meal Plan</a>
-        </p>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <h1>BALANCED<br>BITE</h1>
+            <p>Provider Admin Portal</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="sidebar-link" href="/provider/dashboard">Dashboard</a>
+            <a class="sidebar-link" href="/provider/orders">Orders</a>
+            <a class="sidebar-link" href="/provider/reviews">Reviews</a>
+            <a class="sidebar-link" href="/provider/subscriptions">Plans</a>
+            <a class="sidebar-link active" href="/provider/mealplans">Meal Plans</a>
+            <a class="sidebar-link" href="/provider/meals">Meals</a>
+            <a class="sidebar-link" href="/provider/analytics">Analytics</a>
+            <a class="sidebar-link" href="/provider/profile">Profile</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="/">Back to Home</a>
+            <a href="/logout">Log Out</a>
+        </div>
+    </aside>
 
-        <#if mealPlans?? && (mealPlans?size > 0)>
-            <div class="card-list">
-                <#list mealPlans as mealPlan>
-                    <div class="card">
-                        <h2>${mealPlan.name!""}</h2>
-                        <p><strong>Price:</strong> $${mealPlan.price!0}</p>
-                        <p><strong>Diet:</strong> ${mealPlan.diet!""}</p>
-                        <p><strong>Description:</strong> ${mealPlan.description!""}</p>
-                        <p><strong>Premade:</strong> ${mealPlan.premade?string("Yes", "No")}</p>
+    <label for="sidebar-toggle" class="sidebar-overlay"></label>
 
-                        <a class="button-link" href="/provider/mealplans/${mealPlan.planId}/edit">
-                            Edit Meal Plan
-                        </a>
-                    </div>
-                </#list>
+    <div class="main-shell">
+        <header class="topbar">
+            <div class="topbar-left">
+                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
+                <div>
+                    <h1 class="topbar-title">Meal Plans</h1>
+                    <p class="topbar-subtitle">Create premade and subscription-based plans.</p>
+                </div>
             </div>
-        <#else>
-            <p>No meal plans found.</p>
-        </#if>
-    </main>
+            <div class="topbar-actions">
+                <a class="btn btn-cream" href="/provider/mealplans/add">+ Add Meal Plan</a>
+                <div class="avatar-badge">BB</div>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <#if mealPlans?? && (mealPlans?size > 0)>
+                <div class="card-list">
+                    <#list mealPlans as mealPlan>
+                        <div class="card">
+                            <h2>${mealPlan.name!""}</h2>
+                            <div class="meta-list">
+                                <div><strong>Price:</strong> $${mealPlan.price!0}</div>
+                                <div><strong>Diet:</strong> ${mealPlan.diet!""}</div>
+                                <div><strong>Description:</strong> ${mealPlan.description!""}</div>
+                                <div><strong>Premade:</strong> ${mealPlan.premade?string("Yes", "No")}</div>
+                            </div>
+
+                            <div class="actions-inline">
+                                <a class="btn btn-cream" href="/provider/mealplans/${mealPlan.planId}/edit">Edit Meal Plan</a>
+                            </div>
+                        </div>
+                    </#list>
+                </div>
+            <#else>
+                <div class="empty-state">No meal plans found.</div>
+            </#if>
+        </main>
+    </div>
+</div>
 </body>
 </html>

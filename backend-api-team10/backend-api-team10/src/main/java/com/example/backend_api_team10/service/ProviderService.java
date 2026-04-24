@@ -8,6 +8,7 @@ import com.example.backend_api_team10.entity.Provider;
 import com.example.backend_api_team10.repository.ProviderRepo;
 import com.example.backend_api_team10.repository.UserRepo;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -44,6 +45,11 @@ public class ProviderService {
         return providerRepo.findAll();
     }
 
+    public boolean existsByEmail(String email){
+        return providerRepo.existsByEmail(email);
+    }
+
+
     public Provider getProviderById(Long provider_id){
         return providerRepo.findById(provider_id).orElse(null);
     }
@@ -51,7 +57,6 @@ public class ProviderService {
     public Provider updateProvider(Long provider_id, Provider updatedProvider){
         Provider existing = providerRepo.findById(provider_id).orElse(null);
         if (existing != null){
-            existing.setName(updatedProvider.getName());
             existing.setPhone(updatedProvider.getPhone());
             existing.setBiography(updatedProvider.getBiography());
 

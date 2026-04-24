@@ -4,31 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Meal</title>
-    <link rel="stylesheet" href="/static/admin.css">
+    <link rel="stylesheet" href="/styles/admin.css">
 </head>
-<body>
-    <main class="page-container">
-        <a href="/provider/meals">← Back to Meals</a>
-        <h1>Edit Meal</h1>
+<body class="admin-body">
+<div class="admin-layout">
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
 
-        <form action="/provider/meals/${meal.meal_id}/update" method="post" class="form-card">
-            <label for="name">Meal Name</label>
-            <input type="text" id="name" name="name" value="${meal.name!''}" required>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <h1>BALANCED<br>BITE</h1>
+            <p>Provider Admin Portal</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="sidebar-link" href="/provider/dashboard">Dashboard</a>
+            <a class="sidebar-link" href="/provider/orders">Orders</a>
+            <a class="sidebar-link" href="/provider/reviews">Reviews</a>
+            <a class="sidebar-link" href="/provider/subscriptions">Plans</a>
+            <a class="sidebar-link" href="/provider/mealplans">Meal Plans</a>
+            <a class="sidebar-link active" href="/provider/meals">Meals</a>
+            <a class="sidebar-link" href="/provider/analytics">Analytics</a>
+            <a class="sidebar-link" href="/provider/profile">Profile</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="/">Back to Home</a>
+            <a href="/logout">Log Out</a>
+        </div>
+    </aside>
 
-            <label for="description">Description</label>
-            <textarea id="description" name="description" rows="4">${meal.description!''}</textarea>
+    <label for="sidebar-toggle" class="sidebar-overlay"></label>
 
-            <label for="diet">Diet</label>
-            <input type="text" id="diet" name="diet" value="${meal.diet!''}">
+    <div class="main-shell">
+        <header class="topbar">
+            <div class="topbar-left">
+                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
+                <div>
+                    <h1 class="topbar-title">Edit Meal</h1>
+                    <p class="topbar-subtitle">Update meal details and pricing.</p>
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <div class="avatar-badge">BB</div>
+            </div>
+        </header>
 
-            <label for="portionSize">Portion Size</label>
-            <input type="text" id="portionSize" name="portion_size" value="${meal.portion_size!''}">
+        <main class="page-content">
+            <div class="form-shell">
+                <div class="form-two-col">
+                    <div>
+                        <h2 class="form-title-center">Meal Information</h2>
+                        <hr class="form-divider-small">
 
-            <label for="price">Price</label>
-            <input type="number" id="price" name="price" step="0.01" value="${meal.price!0}" required>
+                        <form action="/provider/meals/${meal.meal_id}/update" method="post">
+                            <div class="form-group">
+                                <label class="form-label" for="name">Meal Name</label>
+                                <input class="form-input" type="text" id="name" name="name" value="${meal.name!''}" required>
+                            </div>
 
-            <button type="submit">Update Meal</button>
-        </form>
-    </main>
+                            <div class="form-group">
+                                <label class="form-label" for="description">Description</label>
+                                <textarea class="form-textarea" id="description" name="description">${meal.description!''}</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="diet">Diet</label>
+                                <input class="form-input" type="text" id="diet" name="diet" value="${meal.diet!''}">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="portionSize">Portion Size</label>
+                                <input class="form-input" type="text" id="portionSize" name="portion_size" value="${meal.portion_size!''}">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="price">Price</label>
+                                <input class="form-input" type="number" id="price" name="price" step="0.01" value="${meal.price!0}" required>
+                            </div>
+
+                            <button class="btn btn-cream" type="submit">Update Meal</button>
+                        </form>
+                    </div>
+
+                    <div class="preview-card">
+                        <img class="preview-image" src="https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=1200&auto=format&fit=crop" alt="Meal preview">
+                        <div class="preview-meta">
+                            <div class="preview-brand">Balanced Bite</div>
+                            <div class="preview-name">${meal.name!'Meal Name'}</div>
+                            <div class="preview-price">$${meal.price!0}</div>
+                            <div class="preview-description">${meal.description!'Meal description preview.'}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 </body>
 </html>

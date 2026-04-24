@@ -16,10 +16,6 @@ public class Provider {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private Users user;
 
-
-    @Column(nullable = false)
-    private String name;
-
     private String phone;
 
     @Column(length = 1000)
@@ -40,9 +36,8 @@ public class Provider {
     public Provider() {
     }
 
-    public Provider(Users user, String name, String phone, String biography) {
+    public Provider(Users user, String phone, String biography) {
         this.user = user;
-        this.name = name;
         this.phone = phone;
         this.biography = biography;
     }
@@ -63,14 +58,6 @@ public class Provider {
 
     public Long getProviderId(){
         return provider_id;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public String getName(){
-        return name;
     }
 
     public void setPhone(String phone){

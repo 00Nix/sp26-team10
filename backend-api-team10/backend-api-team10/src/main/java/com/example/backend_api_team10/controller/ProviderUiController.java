@@ -218,6 +218,11 @@ public class ProviderUiController {
     }
 
     // profile management
+    @GetMapping("/provider/profile")
+    public String providerProfile() {
+        return "provider/profile";
+    }
+
     @GetMapping("/profile/{provider_id}/edit")
     public String showEditProfileForm(@PathVariable Long provider_id, Model model) {
         Provider provider = providerService.getProviderById(provider_id);

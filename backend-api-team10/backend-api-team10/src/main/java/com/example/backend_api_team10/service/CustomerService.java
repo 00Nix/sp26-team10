@@ -50,10 +50,13 @@ public class CustomerService {
         return customerRepository.findById(customer_id);
     }
 
+    public boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
+    }
+
     public Customer updateCustomer(Long customer_id, Customer updatedCustomer) {
         return customerRepository.findById(customer_id)
                 .map(customer -> {
-                    customer.setName(updatedCustomer.getName());
                     customer.setPhone(updatedCustomer.getPhone());
                     customer.setSubscribed(updatedCustomer.isSubscribed());
                     customer.setStatus(updatedCustomer.getStatus());

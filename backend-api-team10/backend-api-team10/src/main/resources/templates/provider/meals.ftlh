@@ -4,36 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meals</title>
-    <link rel="stylesheet" href="/static/admin.css">
+    <link rel="stylesheet" href="/styles/admin.css">
 </head>
-<body>
-    <main class="page-container">
-        <a href="/provider/dashboard">← Back to Dashboard</a>
-        <h1>Meals</h1>
+<body class="admin-body">
+<div class="admin-layout">
+    <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
 
-        <p>
-            <a class="button-link" href="/provider/meals/add">Add Meal</a>
-        </p>
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <h1>BALANCED<br>BITE</h1>
+            <p>Provider Admin Portal</p>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="sidebar-link" href="/provider/dashboard">Dashboard</a>
+            <a class="sidebar-link" href="/provider/orders">Orders</a>
+            <a class="sidebar-link" href="/provider/reviews">Reviews</a>
+            <a class="sidebar-link" href="/provider/subscriptions">Plans</a>
+            <a class="sidebar-link" href="/provider/mealplans">Meal Plans</a>
+            <a class="sidebar-link active" href="/provider/meals">Meals</a>
+            <a class="sidebar-link" href="/provider/analytics">Analytics</a>
+            <a class="sidebar-link" href="/provider/profile">Profile</a>
+        </nav>
+        <div class="sidebar-bottom">
+            <a href="/">Back to Home</a>
+            <a href="/logout">Log Out</a>
+        </div>
+    </aside>
 
-        <#if meals?? && (meals?size > 0)>
-            <div class="card-list">
-                <#list meals as meal>
-                    <div class="card">
-                        <h2>${meal.name!""}</h2>
-                        <p><strong>Price:</strong> $${meal.price!0}</p>
-                        <p><strong>Diet:</strong> ${meal.diet!""}</p>
-                        <p><strong>Portion Size:</strong> ${meal.portion_size!""}</p>
-                        <p><strong>Description:</strong> ${meal.description!""}</p>
+    <label for="sidebar-toggle" class="sidebar-overlay"></label>
 
-                        <a class="button-link" href="/provider/meals/${meal.meal_id}/edit">
-                            Edit Meal
-                        </a>
-                    </div>
-                </#list>
+    <div class="main-shell">
+        <header class="topbar">
+            <div class="topbar-left">
+                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
+                <div>
+                    <h1 class="topbar-title">Meals</h1>
+                    <p class="topbar-subtitle">Keep your menu fresh and organized.</p>
+                </div>
             </div>
-        <#else>
-            <p>No meals found.</p>
-        </#if>
-    </main>
+            <div class="topbar-actions">
+                <a class="btn btn-cream" href="/provider/meals/add">+ Add Meal</a>
+                <div class="avatar-badge">BB</div>
+            </div>
+        </header>
+
+        <main class="page-content">
+            <#if meals?? && (meals?size > 0)>
+                <div class="card-list">
+                    <#list meals as meal>
+                        <div class="card">
+                            <h2>${meal.name!""}</h2>
+                            <div class="meta-list">
+                                <div><strong>Price:</strong> $${meal.price!0}</div>
+                                <div><strong>Diet:</strong> ${meal.diet!""}</div>
+                                <div><strong>Portion Size:</strong> ${meal.portion_size!""}</div>
+                                <div><strong>Description:</strong> ${meal.description!""}</div>
+                            </div>
+
+                            <div class="actions-inline">
+                                <a class="btn btn-cream" href="/provider/meals/${meal.meal_id}/edit">Edit Meal</a>
+                            </div>
+                        </div>
+                    </#list>
+                </div>
+            <#else>
+                <div class="empty-state">No meals found.</div>
+            </#if>
+        </main>
+    </div>
+</div>
 </body>
 </html>

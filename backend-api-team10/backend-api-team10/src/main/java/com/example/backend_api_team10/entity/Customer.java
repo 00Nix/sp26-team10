@@ -21,8 +21,6 @@ public class Customer {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private Users user;
 
-    private String name;
-
     private String phone;
 
     private Boolean subscribed;
@@ -32,9 +30,8 @@ public class Customer {
     // Constructors
     public Customer() {}
 
-    public Customer(Users user, String name, String phone, Boolean subscribed, String status) {
+    public Customer(Users user, String phone, Boolean subscribed, String status) {
         this.user = user;
-        this.name = name;
         this.phone = phone;
         this.subscribed = subscribed;
         this.status = status;
@@ -51,9 +48,7 @@ public class Customer {
     }
 
     public Long getCustomerId() { return customer_id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setCustomerId(Long customer_id) { this.customer_id = customer_id; }
 
 
     public String getPhone() { return phone; }
