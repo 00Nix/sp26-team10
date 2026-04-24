@@ -117,7 +117,7 @@ public class AuthController {
 
             providerService.createProvider(provider);
 
-            return "redirect:/login?registered=true";
+            return "redirect:/provider/profile";
         }
 
         return "redirect:/register?error=true";
