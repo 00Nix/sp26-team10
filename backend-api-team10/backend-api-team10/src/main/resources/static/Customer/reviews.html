@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanced Bite - Reviews</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="meals.html">Meals</a></li>
+    <li><a href="subscription.html">Plans</a></li>
+    <li><a href="orders.html">My Orders</a></li>
+    <li><a href="reviews.html" class="active">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon-btn" onclick="location.href='cart.html'" title="Cart" aria-label="Cart">
+      🛒<span class="badge" id="cart-badge" style="display:none"></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <div class="inner-header" style="text-align:center">
+    <h1 class="page-title" style="text-align:center">Customer Reviews</h1>
+    <p class="page-sub">Read what our customers are saying about us</p>
+  </div>
+
+  <div class="rating-hero">
+    <div class="big-rating" id="avg-rating">—</div>
+    <div class="stars" id="avg-stars"></div>
+    <p style="opacity:.7;margin-top:4px" id="review-count">Loading reviews...</p>
+    <div class="rating-breakdown" id="rating-bars"></div>
+  </div>
+
+  <!-- Leave a review form -->
+  <div id="review-form-section" style="max-width:600px;margin:32px auto;background:var(--card-bg);border-radius:20px;padding:28px;border:1px solid var(--border)">
+    <h3 style="font-family:'Playfair Display',serif;margin-bottom:16px">Leave a Review</h3>
+    <div style="margin-bottom:12px">
+      <label style="font-size:.82rem;font-weight:500;display:block;margin-bottom:6px">Rating</label>
+      <div id="star-input" style="font-size:1.8rem;cursor:pointer;letter-spacing:4px">
+        <span onclick="setRating(1)">☆</span>
+        <span onclick="setRating(2)">☆</span>
+        <span onclick="setRating(3)">☆</span>
+        <span onclick="setRating(4)">☆</span>
+        <span onclick="setRating(5)">☆</span>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="font-size:.82rem;font-weight:500;display:block;margin-bottom:6px">Your Review</label>
+      <textarea id="review-text" rows="3"
+        style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.875rem;resize:vertical;background:var(--cream)"
+        placeholder="Share your experience..."></textarea>
+    </div>
+    <button class="btn-primary" onclick="submitReview()">Submit Review</button>
+    <p id="review-form-msg" style="font-size:.78rem;margin-top:8px;display:none"></p>
+  </div>
+
+  <div class="reviews-grid" id="reviews-grid">
+    <div class="loading" style="grid-column:1/-1">Loading reviews...</div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html">Balance<span style="color:var(--sage)">Bite</span></a>
+      <p>Balanced meals, thoughtfully prepared and delivered to you every week.</p>
+    </div>
+    <div><h4>Explore</h4><ul>
+      <li><a href="meals.html">All Meals</a></li>
+      <li><a href="subscription.html">Plans</a></li>
+      <li><a href="cart.html">Cart</a></li>
+    </ul></div>
+    <div><h4>Account</h4><ul>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul></div>
+    <div><h4>Company</h4><ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Balanced Bite. All rights reserved.</span>
+    <span>Privacy &middot; Terms &middot; Accessibility</span>
+  </div>
+</footer>
+
+<div class="toast" id="_toast"></div>
+
+<script>
+  const customerId = localStorage.getItem('customerId');
+  let selectedRating = 0;
+  const AVATARS = ['🧔🏽‍♂️','👩🏽‍🦰','👩🏻‍🦳','🧔🏻‍♂️','👵🏽','👨🏻‍🦲','👩🏾‍🦱','🧑🏼‍🦰'];
+
+  function starsHtml(rating) {
+    return Array.from({length: 5}, (_, i) => i < rating ? '★' : '☆').join('');
+  }
+
+  function loadReviews() {
+    fetch('/api/reviews')
+      .then(r => r.json())
+      .then(reviews => {
+        if (reviews.length === 0) {
+          document.getElementById('avg-rating').textContent = '—';
+          document.getElementById('review-count').textContent = 'No reviews yet';
+          document.getElementById('reviews-grid').innerHTML =
+            `<div class="empty-state" style="grid-column:1/-1">
+              <div class="empty-icon">💬</div>
+              <h3>No reviews yet</h3>
+              <p>Be the first to leave a review!</p>
+            </div>`;
+          return;
+        }
+
+        // Calculate stats
+        const avg = reviews.reduce((s, r) => s + (r.rating || 0), 0) / reviews.length;
+        document.getElementById('avg-rating').textContent = avg.toFixed(1);
+        document.getElementById('avg-stars').innerHTML = starsHtml(Math.round(avg));
+        document.getElementById('review-count').textContent =
+          `Based on ${reviews.length.toLocaleString()} review${reviews.length !== 1 ? 's' : ''}`;
+
+        // Rating bars
+        const counts = [5,4,3,2,1].map(s => ({
+          stars: s,
+          pct: Math.round((reviews.filter(r => r.rating === s).length / reviews.length) * 100)
+        }));
+        document.getElementById('rating-bars').innerHTML = counts.map(b => `
+          <div class="rating-bar">
+            <span>${b.stars}★</span>
+            <div class="bar"><div class="bar-fill" style="width:${b.pct}%"></div></div>
+            <span>${b.pct}%</span>
+          </div>`).join('');
+
+        // Review cards
+        document.getElementById('reviews-grid').innerHTML = reviews.map((r, i) => `
+          <div class="review-card">
+            <div class="stars">${starsHtml(r.rating || 0)}</div>
+            <p>&ldquo;${r.comment || r.review || r.text || 'Great experience!'}&rdquo;</p>
+            <div class="reviewer">
+              <div class="avatar">${AVATARS[i % AVATARS.length]}</div>
+              <div class="reviewe-info">
+                <div class="name">${r.customer?.name || r.customerName || 'Customer'}</div>
+                <div class="date">${r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) : ''}</div>
+              </div>
+            </div>
+          </div>`).join('');
+      })
+      .catch(() => {
+        document.getElementById('reviews-grid').innerHTML =
+          `<div class="empty-state" style="grid-column:1/-1">
+            <div class="empty-icon">⚠️</div>
+            <h3>Could not load reviews</h3>
+            <p>Please make sure the server is running.</p>
+          </div>`;
+      });
+  }
+
+  function setRating(n) {
+    selectedRating = n;
+    const stars = document.querySelectorAll('#star-input span');
+    stars.forEach((s, i) => s.textContent = i < n ? '★' : '☆');
+  }
+
+  function submitReview() {
+    if (!customerId) { showToast('Please log in to leave a review'); return; }
+    if (selectedRating === 0) { showToast('Please select a rating'); return; }
+    const text = document.getElementById('review-text').value.trim();
+    if (!text) { showToast('Please write a review'); return; }
+
+    // Need an orderId - get most recent order
+    fetch(`/api/carts/customer/${customerId}`)
+      .then(r => r.json())
+      .then(cart => fetch(`/api/orders/cart/${cart.id}`))
+      .then(r => r.json())
+      .then(orders => {
+        const orderId = orders.length > 0 ? orders[orders.length - 1].id : null;
+        return fetch('/api/reviews', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerId: parseInt(customerId),
+            orderId,
+            rating: selectedRating,
+            comment: text
+          })
+        });
+      })
+      .then(r => r.json())
+      .then(() => {
+        const msg = document.getElementById('review-form-msg');
+        msg.textContent = '✓ Review submitted! Thank you.';
+        msg.style.color = 'var(--sage)';
+        msg.style.display = 'block';
+        document.getElementById('review-text').value = '';
+        setRating(0);
+        loadReviews();
+      })
+      .catch(() => showToast('Could not submit review. Please try again.'));
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('_toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  loadReviews();
+</script>
+</body>
+</html>

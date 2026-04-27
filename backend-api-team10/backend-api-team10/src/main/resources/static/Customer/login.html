@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanced Bite - Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="meals.html">Meals</a></li>
+    <li><a href="subscription.html">Plans</a></li>
+    <li><a href="orders.html">My Orders</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="register.html" class="nav-register">Join Free</a>
+  </div>
+</nav>
+
+<main class="page-wrap" style="min-height:80vh;display:flex;align-items:center;justify-content:center;padding:40px 20px">
+  <div class="auth-card">
+
+    <div class="auth-brand">
+      <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+      <p>Welcome back — sign in to continue</p>
+    </div>
+
+    <div id="alert-box" style="display:none" class="auth-alert" role="alert"></div>
+
+    <div class="auth-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com"
+               required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-with-toggle">
+          <input type="password" id="password" placeholder="Enter your password"
+                 required autocomplete="current-password">
+          <button type="button" class="toggle-pw" onclick="togglePw('password')"
+                  aria-label="Show password">&#128065;</button>
+        </div>
+      </div>
+
+      <button class="btn-primary auth-submit" onclick="handleLogin()">Sign In</button>
+    </div>
+
+    <p class="auth-switch">
+      Don&rsquo;t have an account?
+      <a href="register.html">Create one &rarr;</a>
+    </p>
+  </div>
+</main>
+
+<div class="toast" id="_toast"></div>
+
+<style>
+  .auth-card {
+    background: #fff;
+    border: 1px solid rgba(122,158,126,.3);
+    border-radius: 24px;
+    padding: 48px 44px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 8px 40px rgba(30,45,31,.08);
+  }
+  .auth-brand { text-align:center; margin-bottom:32px; }
+  .auth-brand p { font-size:.85rem; color:#7a8b7b; margin-top:6px; }
+  .auth-alert {
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: .82rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .auth-alert.error   { background:#fdecea; color:#c0392b; border:1px solid #f5c6cb; }
+  .auth-alert.success { background:#eafaf1; color:#1e8449; border:1px solid #a9dfbf; }
+  .auth-form { display:flex; flex-direction:column; gap:18px; }
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-group label { font-size:.8rem; font-weight:600; color:#1e2d1f; }
+  .form-group input {
+    padding: 11px 14px;
+    border: 1.5px solid rgba(122,158,126,.3);
+    border-radius: 12px;
+    font-size: .875rem;
+    font-family: 'DM Sans', sans-serif;
+    background: #faf6ef;
+    color: #1e2d1f;
+    transition: border-color .2s;
+    width: 100%;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: #7a9e7e;
+    box-shadow: 0 0 0 3px rgba(122,158,126,.15);
+  }
+  .input-with-toggle { position:relative; }
+  .input-with-toggle input { padding-right:42px; }
+  .toggle-pw {
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer; font-size:1rem;
+    color:#7a8b7b; padding:0; line-height:1;
+  }
+  .auth-submit { width:100%; padding:13px; margin-top:6px; font-size:.9rem; border-radius:50px; }
+  .auth-switch { text-align:center; font-size:.8rem; color:#7a8b7b; margin-top:22px; }
+  .auth-switch a { color:#7a9e7e; font-weight:600; text-decoration:none; }
+  .auth-switch a:hover { text-decoration:underline; }
+  .nav-register {
+    font-size:.78rem; font-weight:600; text-decoration:none;
+    padding:6px 14px; border-radius:50px;
+    background:#7a9e7e; color:#fff; border:1.5px solid #7a9e7e;
+  }
+</style>
+
+<script>
+  function togglePw(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  function showAlert(msg, type) {
+    const box = document.getElementById('alert-box');
+    box.textContent = msg;
+    box.className = 'auth-alert ' + type;
+    box.style.display = 'block';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('_toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Check for messages passed via URL params (e.g. after logout)
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('success')) showAlert(params.get('success'), 'success');
+  if (params.get('error'))   showAlert(params.get('error'),   'error');
+
+  function handleLogin() {
+    const email    = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!email || !password) {
+      showAlert('Please fill in all fields.', 'error');
+      return;
+    }
+
+    // Fetch all customers and match client-side
+    // In production you'd POST to a real /api/login endpoint
+    fetch('/api/customers')
+      .then(r => r.json())
+      .then(customers => {
+        const match = customers.find(c =>
+          c.email.toLowerCase() === email.toLowerCase() &&
+          c.password === password
+        );
+
+        if (match) {
+          // Store customer info in localStorage
+          localStorage.setItem('customerId',   match.customerId  || match.customer_id);
+          localStorage.setItem('customerName', match.name);
+          showToast('Welcome back, ' + match.name + '!');
+          setTimeout(() => location.href = 'index.html', 1000);
+        } else {
+          showAlert('Invalid email or password. Please try again.', 'error');
+        }
+      })
+      .catch(() => showAlert('Could not connect to server. Please try again.', 'error'));
+  }
+
+  // Allow pressing Enter to submit
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleLogin();
+  });
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+</script>
+</body>
+</html>

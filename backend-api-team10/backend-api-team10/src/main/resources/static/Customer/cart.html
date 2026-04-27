@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanced Bite - Cart</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="meals.html">Meals</a></li>
+    <li><a href="subscription.html">Plans</a></li>
+    <li><a href="orders.html">My Orders</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon-btn" onclick="location.href='cart.html'" title="Cart" aria-label="Cart">
+      🛒<span class="badge" id="cart-badge" style="display:none"></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <div class="cart-layout">
+    <div>
+      <h1 class="page-title">Your Cart</h1>
+      <div id="cart-items"><div class="loading">Loading cart...</div></div>
+    </div>
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+      <div class="summary-row"><span>Delivery</span><span style="color:var(--sage)">Free</span></div>
+      <div class="summary-row"><span>Discount</span><span id="discount-display">-</span></div>
+      <div class="summary-row total"><span>Total</span><span id="total">$0.00</span></div>
+      <button class="checkout-btn" onclick="checkout()">Checkout</button>
+      <div class="promo-row">
+        <input type="text" id="promo-input" placeholder="Promo code">
+        <button class="promo-apply" onclick="applyPromo()">Apply</button>
+      </div>
+      <p id="promo-msg" style="font-size:.78rem;margin-top:8px;display:none"></p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html">Balance<span style="color:var(--sage)">Bite</span></a>
+      <p>Balanced meals, thoughtfully prepared and delivered to you every week.</p>
+    </div>
+    <div><h4>Explore</h4><ul>
+      <li><a href="meals.html">All Meals</a></li>
+      <li><a href="subscription.html">Plans</a></li>
+      <li><a href="cart.html">Cart</a></li>
+    </ul></div>
+    <div><h4>Account</h4><ul>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul></div>
+    <div><h4>Company</h4><ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Balanced Bite. All rights reserved.</span>
+    <span>Privacy &middot; Terms &middot; Accessibility</span>
+  </div>
+</footer>
+
+<div class="toast" id="_toast"></div>
+
+<script>
+  const customerId = localStorage.getItem('customerId');
+  let cartId = null;
+  let cartItems = [];
+  let discount = 0;
+
+  const MEAL_EMOJIS = {
+    salad: '🥗', bowl: '🥗', chicken: '🍗', salmon: '🐟', fish: '🐟',
+    beef: '🥩', steak: '🥩', pasta: '🍜', noodle: '🍜', ramen: '🍜',
+    wrap: '🥙', falafel: '🥙', soup: '🍲', burger: '🍔', rice: '🍚'
+  };
+
+  function getMealEmoji(name) {
+    const n = (name || '').toLowerCase();
+    for (const [key, emoji] of Object.entries(MEAL_EMOJIS)) {
+      if (n.includes(key)) return emoji;
+    }
+    return '🍽️';
+  }
+
+  function loadCart() {
+    if (!customerId) {
+      showEmpty('Please log in to view your cart.');
+      return;
+    }
+    fetch(`/api/carts/customer/${customerId}`)
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(cart => {
+        cartId = cart.id;
+        return fetch(`/api/cart-items/cart/${cart.id}`);
+      })
+      .then(r => r.json())
+      .then(items => {
+        cartItems = items;
+        renderCart();
+      })
+      .catch(() => showEmpty('Your cart is empty.'));
+  }
+
+  function showEmpty(msg) {
+    document.getElementById('cart-items').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>${msg}</p>
+        <button class="btn-primary" onclick="location.href='meals.html'">Browse Meals</button>
+      </div>`;
+    document.getElementById('subtotal').textContent = '$0.00';
+    document.getElementById('total').textContent = '$0.00';
+  }
+
+  function renderCart() {
+    if (cartItems.length === 0) { showEmpty('Add a meal to get started.'); return; }
+
+    let subtotal = 0;
+    document.getElementById('cart-items').innerHTML = cartItems.map((item, i) => {
+      const price = parseFloat(item.price || 0);
+      const qty = parseInt(item.quantity || 1);
+      subtotal += price * qty;
+      const mealName = item.meal?.name || item.mealName || 'Meal';
+      return `
+        <div class="cart-item">
+          <div class="cart-item-img">${getMealEmoji(mealName)}</div>
+          <div class="cart-item-info">
+            <h4>${mealName}</h4>
+            <p>$${price.toFixed(2)} each</p>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty(${item.id}, ${qty - 1})">&#8722;</button>
+            <span class="qty">${qty}</span>
+            <button class="qty-btn" onclick="updateQty(${item.id}, ${qty + 1})">+</button>
+          </div>
+          <div class="cart-item-price">$${(price * qty).toFixed(2)}</div>
+        </div>`;
+    }).join('');
+
+    const discountedTotal = Math.max(0, subtotal - discount);
+    document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('total').textContent = `$${discountedTotal.toFixed(2)}`;
+    if (discount > 0) {
+      document.getElementById('discount-display').textContent = `-$${discount.toFixed(2)}`;
+      document.getElementById('discount-display').style.color = 'var(--sage)';
+    }
+
+    // Update badge
+    const count = cartItems.reduce((sum, i) => sum + (i.quantity || 1), 0);
+    const badge = document.getElementById('cart-badge');
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'flex' : 'none';
+  }
+
+  function updateQty(itemId, newQty) {
+    if (newQty <= 0) {
+      // Delete item
+      fetch(`/api/cart-items/${itemId}`, { method: 'DELETE' })
+        .then(() => { cartItems = cartItems.filter(i => i.id !== itemId); renderCart(); })
+        .catch(() => showToast('Could not remove item'));
+    } else {
+      const item = cartItems.find(i => i.id === itemId);
+      fetch(`/api/cart-items/${itemId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...item, quantity: newQty })
+      })
+        .then(r => r.json())
+        .then(updated => {
+          cartItems = cartItems.map(i => i.id === itemId ? updated : i);
+          renderCart();
+        })
+        .catch(() => showToast('Could not update quantity'));
+    }
+  }
+
+  function applyPromo() {
+    const code = document.getElementById('promo-input').value.trim().toUpperCase();
+    const msg = document.getElementById('promo-msg');
+    msg.style.display = 'block';
+    if (code === 'MEAL10') {
+      discount = 10;
+      msg.textContent = '✓ Promo applied! $10 off';
+      msg.style.color = 'var(--sage)';
+      renderCart();
+    } else if (code === 'WELCOME') {
+      discount = 15;
+      msg.textContent = '✓ Welcome discount applied! $15 off';
+      msg.style.color = 'var(--sage)';
+      renderCart();
+    } else {
+      msg.textContent = '✗ Invalid promo code';
+      msg.style.color = '#e05a5a';
+    }
+  }
+
+  function checkout() {
+    if (cartItems.length === 0) { showToast('Your cart is empty'); return; }
+    // Create order from cart
+    fetch(`/api/orders/cart/${cartId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerId: parseInt(customerId), status: 'preparing' })
+    })
+      .then(r => r.json())
+      .then(() => {
+        showToast('Order placed successfully!');
+        setTimeout(() => location.href = 'orders.html', 1500);
+      })
+      .catch(() => showToast('Could not place order. Please try again.'));
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('_toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  loadCart();
+</script>
+</body>
+</html>

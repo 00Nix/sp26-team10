@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanced Bite - Create Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="meals.html">Meals</a></li>
+    <li><a href="subscription.html">Plans</a></li>
+    <li><a href="orders.html">My Orders</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="login.html" class="nav-login">Sign In</a>
+  </div>
+</nav>
+
+<main class="page-wrap" style="min-height:80vh;display:flex;align-items:center;justify-content:center;padding:40px 20px">
+  <div class="auth-card">
+
+    <div class="auth-brand">
+      <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+      <p>Create your account and start eating well</p>
+    </div>
+
+    <div id="alert-box" style="display:none" class="auth-alert" role="alert"></div>
+
+    <div class="auth-form">
+
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Jane Smith"
+               required autocomplete="name">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com"
+               required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone <span style="font-weight:400;color:#7a8b7b">(optional)</span></label>
+        <input type="tel" id="phone" placeholder="+1 555 000 0000"
+               autocomplete="tel">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="password" placeholder="Min. 8 characters"
+                   required autocomplete="new-password" minlength="8">
+            <button type="button" class="toggle-pw" onclick="togglePw('password')"
+                    aria-label="Show password">&#128065;</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-with-toggle">
+            <input type="password" id="confirmPassword" placeholder="Repeat password"
+                   required autocomplete="new-password">
+            <button type="button" class="toggle-pw" onclick="togglePw('confirmPassword')"
+                    aria-label="Show password">&#128065;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password strength indicator -->
+      <div class="pw-strength" id="pw-strength" style="display:none">
+        <div class="pw-strength-bar">
+          <div class="pw-strength-fill" id="pw-fill"></div>
+        </div>
+        <span class="pw-strength-label" id="pw-label"></span>
+      </div>
+
+      <button class="btn-primary auth-submit" onclick="handleRegister()">Create Account</button>
+    </div>
+
+    <p class="auth-switch">
+      Already have an account?
+      <a href="login.html">Sign in &rarr;</a>
+    </p>
+  </div>
+</main>
+
+<div class="toast" id="_toast"></div>
+
+<style>
+  .auth-card {
+    background: #fff;
+    border: 1px solid rgba(122,158,126,.3);
+    border-radius: 24px;
+    padding: 48px 44px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 8px 40px rgba(30,45,31,.08);
+  }
+  .auth-brand { text-align:center; margin-bottom:32px; }
+  .auth-brand p { font-size:.85rem; color:#7a8b7b; margin-top:6px; }
+  .auth-alert {
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: .82rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .auth-alert.error   { background:#fdecea; color:#c0392b; border:1px solid #f5c6cb; }
+  .auth-alert.success { background:#eafaf1; color:#1e8449; border:1px solid #a9dfbf; }
+  .auth-form { display:flex; flex-direction:column; gap:16px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-group label { font-size:.8rem; font-weight:600; color:#1e2d1f; }
+  .form-group input {
+    padding: 11px 14px;
+    border: 1.5px solid rgba(122,158,126,.3);
+    border-radius: 12px;
+    font-size: .875rem;
+    font-family: 'DM Sans', sans-serif;
+    background: #faf6ef;
+    color: #1e2d1f;
+    transition: border-color .2s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: #7a9e7e;
+    box-shadow: 0 0 0 3px rgba(122,158,126,.15);
+  }
+  .form-group input.invalid {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231,76,60,.12);
+  }
+  .input-with-toggle { position:relative; }
+  .input-with-toggle input { padding-right:42px; }
+  .toggle-pw {
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer; font-size:1rem;
+    color:#7a8b7b; padding:0; line-height:1;
+  }
+  .pw-strength { display:flex; align-items:center; gap:10px; margin-top:-4px; }
+  .pw-strength-bar { flex:1; height:5px; background:rgba(122,158,126,.2); border-radius:50px; overflow:hidden; }
+  .pw-strength-fill { height:100%; border-radius:50px; transition:width .3s, background .3s; }
+  .pw-strength-label { font-size:.72rem; font-weight:600; white-space:nowrap; }
+  .auth-submit { width:100%; padding:13px; margin-top:4px; font-size:.9rem; border-radius:50px; }
+  .auth-switch { text-align:center; font-size:.8rem; color:#7a8b7b; margin-top:22px; }
+  .auth-switch a { color:#7a9e7e; font-weight:600; text-decoration:none; }
+  .auth-switch a:hover { text-decoration:underline; }
+  .nav-login {
+    font-size:.78rem; font-weight:600; text-decoration:none;
+    padding:6px 14px; border-radius:50px;
+    color:#1e2d1f; border:1.5px solid rgba(122,158,126,.3);
+  }
+  .nav-login:hover { border-color:#7a9e7e; color:#7a9e7e; }
+  @media (max-width:480px) {
+    .auth-card { padding:32px 24px; }
+    .form-row { grid-template-columns:1fr; }
+  }
+</style>
+
+<script>
+  function togglePw(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  function showAlert(msg, type) {
+    const box = document.getElementById('alert-box');
+    box.textContent = msg;
+    box.className = 'auth-alert ' + type;
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('_toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // Password strength meter
+  document.getElementById('password').addEventListener('input', function () {
+    const val = this.value;
+    const wrap = document.getElementById('pw-strength');
+    if (!val) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'flex';
+
+    let score = 0;
+    if (val.length >= 8)          score++;
+    if (/[A-Z]/.test(val))        score++;
+    if (/[0-9]/.test(val))        score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const levels = [
+      { w:'20%',  bg:'#e74c3c', text:'Weak',   color:'#e74c3c' },
+      { w:'50%',  bg:'#e67e22', text:'Fair',   color:'#e67e22' },
+      { w:'75%',  bg:'#f1c40f', text:'Good',   color:'#b8930a' },
+      { w:'100%', bg:'#27ae60', text:'Strong', color:'#27ae60' },
+    ];
+    const lvl = levels[Math.min(score - 1, 3)] || levels[0];
+    document.getElementById('pw-fill').style.width      = lvl.w;
+    document.getElementById('pw-fill').style.background = lvl.bg;
+    document.getElementById('pw-label').textContent     = lvl.text;
+    document.getElementById('pw-label').style.color     = lvl.color;
+  });
+
+  function handleRegister() {
+    const name            = document.getElementById('name').value.trim();
+    const email           = document.getElementById('email').value.trim();
+    const phone           = document.getElementById('phone').value.trim();
+    const password        = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Client-side validation
+    if (!name || !email || !password || !confirmPassword) {
+      showAlert('Please fill in all required fields.', 'error');
+      return;
+    }
+    if (password.length < 8) {
+      showAlert('Password must be at least 8 characters.', 'error');
+      return;
+    }
+    if (password !== confirmPassword) {
+      document.getElementById('confirmPassword').classList.add('invalid');
+      showAlert('Passwords do not match.', 'error');
+      return;
+    }
+    document.getElementById('confirmPassword').classList.remove('invalid');
+
+    // Check if email already exists then create customer
+    fetch('/api/customers')
+      .then(r => r.json())
+      .then(customers => {
+        const emailTaken = customers.some(c =>
+          c.email.toLowerCase() === email.toLowerCase()
+        );
+        if (emailTaken) {
+          showAlert('An account with that email already exists.', 'error');
+          return;
+        }
+
+        // Create the new customer via POST /api/customers
+        return fetch('/api/customers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            phone: phone || null,
+            subscribed: false,
+            status: 'active'
+          })
+        });
+      })
+      .then(r => {
+        if (!r) return; // email was taken, already handled
+        if (!r.ok) throw new Error('Registration failed');
+        return r.json();
+      })
+      .then(customer => {
+        if (!customer) return;
+        // Store in localStorage and redirect
+        localStorage.setItem('customerId',   customer.customerId || customer.customer_id);
+        localStorage.setItem('customerName', customer.name);
+        showToast('Welcome to Balanced Bite, ' + customer.name + '!');
+        setTimeout(() => location.href = 'index.html', 1200);
+      })
+      .catch(() => showAlert('Could not create account. Please try again.', 'error'));
+  }
+
+  // Allow pressing Enter to submit
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleRegister();
+  });
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+</script>
+</body>
+</html>

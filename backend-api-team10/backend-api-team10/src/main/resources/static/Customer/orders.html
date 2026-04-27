@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanced Bite - My Orders</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="meals.html">Meals</a></li>
+    <li><a href="subscription.html">Plans</a></li>
+    <li><a href="orders.html" class="active">My Orders</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon-btn" onclick="location.href='cart.html'" title="Cart" aria-label="Cart">
+      🛒<span class="badge" id="cart-badge" style="display:none"></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <h1 class="page-title">My Orders</h1>
+
+  <div class="orders-filter">
+    <button class="filter-btn active" onclick="filterOrders(this, 'all')">All Orders</button>
+    <button class="filter-btn" onclick="filterOrders(this, 'delivered')">Delivered</button>
+    <button class="filter-btn" onclick="filterOrders(this, 'transit')">In Transit</button>
+    <button class="filter-btn" onclick="filterOrders(this, 'preparing')">Preparing</button>
+  </div>
+
+  <div id="orders-list"><div class="loading">Loading orders...</div></div>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html">Balance<span style="color:var(--sage)">Bite</span></a>
+      <p>Balanced meals, thoughtfully prepared and delivered to you every week.</p>
+    </div>
+    <div><h4>Explore</h4><ul>
+      <li><a href="meals.html">All Meals</a></li>
+      <li><a href="subscription.html">Plans</a></li>
+      <li><a href="cart.html">Cart</a></li>
+    </ul></div>
+    <div><h4>Account</h4><ul>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul></div>
+    <div><h4>Company</h4><ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Balanced Bite. All rights reserved.</span>
+    <span>Privacy &middot; Terms &middot; Accessibility</span>
+  </div>
+</footer>
+
+<div class="toast" id="_toast"></div>
+
+<script>
+  const customerId = localStorage.getItem('customerId');
+  let allOrders = [];
+
+  function getStatusInfo(status) {
+    const s = (status || '').toLowerCase();
+    if (s === 'delivered') return { label: 'Delivered', cls: 'status-delivered' };
+    if (s === 'transit' || s === 'in transit' || s === 'shipped') return { label: 'In Transit', cls: 'status-transit' };
+    if (s === 'preparing' || s === 'pending') return { label: 'Preparing', cls: 'status-preparing' };
+    return { label: status || 'Processing', cls: 'status-preparing' };
+  }
+
+  function getStatusFilter(status) {
+    const s = (status || '').toLowerCase();
+    if (s === 'delivered') return 'delivered';
+    if (s.includes('transit') || s === 'shipped') return 'transit';
+    return 'preparing';
+  }
+
+  function loadOrders() {
+    if (!customerId) {
+      showEmpty('Please log in to view your orders.');
+      return;
+    }
+    // Fetch orders by cart (get cart first, then orders)
+    fetch(`/api/carts/customer/${customerId}`)
+      .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(cart => fetch(`/api/orders/cart/${cart.id}`))
+      .then(r => r.json())
+      .then(orders => {
+        allOrders = orders;
+        renderOrders('all');
+      })
+      .catch(() => {
+        // Fallback: try getting all orders
+        fetch('/api/orders')
+          .then(r => r.json())
+          .then(orders => {
+            allOrders = orders.filter(o =>
+              String(o.customerId || o.customer?.id) === String(customerId)
+            );
+            renderOrders('all');
+          })
+          .catch(() => showEmpty('Could not load orders.'));
+      });
+  }
+
+  function filterOrders(btn, filter) {
+    document.querySelectorAll('.orders-filter .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderOrders(filter);
+  }
+
+  function renderOrders(filter) {
+    const list = filter === 'all'
+      ? allOrders
+      : allOrders.filter(o => getStatusFilter(o.status) === filter);
+
+    const container = document.getElementById('orders-list');
+    if (list.length === 0) {
+      showEmpty(filter === 'all' ? "You haven't placed any orders yet." : `No ${filter} orders found.`);
+      return;
+    }
+
+    container.innerHTML = list.map(o => {
+      const statusInfo = getStatusInfo(o.status);
+      const date = o.orderDate || o.createdAt
+        ? new Date(o.orderDate || o.createdAt).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' })
+        : 'Unknown date';
+      const total = parseFloat(o.totalPrice || o.total || 0).toFixed(2);
+      return `
+        <div class="order-card">
+          <div class="order-header">
+            <span class="order-id">Order #${o.id} &middot; ${date}</span>
+            <span class="order-status ${statusInfo.cls}">${statusInfo.label}</span>
+          </div>
+          <div class="order-body">
+            <div class="order-items-preview">
+              <div class="order-item-chip">🍽️</div>
+            </div>
+            <div class="order-details">
+              <h4>Order #${o.id}</h4>
+              <p>${statusInfo.label} &middot; ${date}</p>
+            </div>
+            <div class="order-total">$${total}</div>
+            <button class="track-btn" onclick="reorder(${o.id})">Reorder</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function showEmpty(msg) {
+    document.getElementById('orders-list').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h3>No orders found</h3>
+        <p>${msg}</p>
+        <button class="btn-primary" onclick="location.href='meals.html'">Browse Meals</button>
+      </div>`;
+  }
+
+  function reorder(orderId) {
+    showToast(`Reordering order #${orderId}...`);
+    // Fetch order items and add back to cart
+    fetch(`/api/order-items/order/${orderId}`)
+      .then(r => r.json())
+      .then(items => {
+        if (!items.length) { showToast('No items found in that order'); return; }
+        return fetch(`/api/carts/customer/${customerId}`)
+          .then(r => r.ok ? r.json() : fetch('/api/carts', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ customerId: parseInt(customerId) })
+            }).then(r => r.json()))
+          .then(cart => Promise.all(items.map(item =>
+            fetch('/api/cart-items', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ cartId: cart.id, mealId: item.mealId || item.meal?.id, quantity: item.quantity || 1, price: item.price })
+            })
+          )));
+      })
+      .then(() => { showToast('Items added to cart!'); setTimeout(() => location.href = 'cart.html', 1200); })
+      .catch(() => showToast('Could not reorder'));
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('_toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  loadOrders();
+</script>
+</body>
+</html>
