@@ -12,6 +12,7 @@ import com.example.backend_api_team10.entity.MealPlan;
 import com.example.backend_api_team10.entity.Provider;
 import com.example.backend_api_team10.service.*;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -141,7 +142,7 @@ public class ProviderUiController {
     }
 
     // meal plan management
-    @GetMapping("/mealplanss")
+    @GetMapping("/mealplans")
     public String showMealPlanss(Model model) {
         model.addAttribute("mealPlans", mealPlanService.getAllMealPlans());
         
@@ -167,7 +168,7 @@ public class ProviderUiController {
         MealPlan mealPlan = mealPlanService.getMealPlanById(plan_id);
         model.addAttribute("mealPlan", mealPlan);
 
-        return "provider/edit-meal";
+        return "provider/edit-mealplan";
     }
 
     @PostMapping("/mealplans/{plan_id}/update")
@@ -181,13 +182,13 @@ public class ProviderUiController {
     public String deleteMealPlan(@PathVariable Long plan_id) {
         mealPlanService.deleteMealPlan(plan_id);
 
-        return "redirect:/provider/meals";
+        return "redirect:/provider/mealplans";
     }
 
     // subscription plan management
     @GetMapping("/subscriptions")
     public String showSubscriptions(Model model) {
-        model.addAttribute("subscriptions", subscriptionPlanService.getAllSubscriptionPlans());
+        model.addAttribute("plans", subscriptionPlanService.getAllSubscriptionPlans());
         return "provider/subscriptions";
     }
 
@@ -200,7 +201,9 @@ public class ProviderUiController {
     }
 
     @PostMapping("/subscriptions/{plan_id}/update")
-    public String updateSubscription(@PathVariable Long plan_id, @ModelAttribute SubscriptionPlan updatedPlan) {
+    public String updateSubscription(@PathVariable Long plan_id,
+                                    @ModelAttribute SubscriptionPlan updatedPlan) {
+
         subscriptionPlanService.updateSubscriptionPlan(plan_id, updatedPlan);
 
         return "redirect:/provider/subscriptions";
@@ -218,22 +221,34 @@ public class ProviderUiController {
     }
 
     // profile management
-    @GetMapping("/provider/profile")
-    public String providerProfile() {
+    @GetMapping("/profile")
+    public String showProviderProfile(Authentication authentication, Model model) {
+        String email = authentication.getName();
+
+        Provider provider = providerService.getProviderByUserEmail(email);
+
+        model.addAttribute("provider", provider);
         return "provider/profile";
     }
 
-    @GetMapping("/profile/{provider_id}/edit")
-    public String showEditProfileForm(@PathVariable Long provider_id, Model model) {
-        Provider provider = providerService.getProviderById(provider_id);
-        model.addAttribute("provider", provider);
+    @GetMapping("/profile/edit")
+    public String showEditProfileForm(Authentication authentication, Model model) {
+        String email = authentication.getName();
+        Provider provider = providerService.getProviderByUserEmail(email);        model.addAttribute("provider", provider);
 
+        model.addAttribute("provider", provider);
         return "provider/edit-profile";
     }
 
-    @PostMapping("/profile/{provider_id}/update")
-    public String updateProfile(@PathVariable Long provider_id, @ModelAttribute Provider updatedProvider) {
-        providerService.updateProvider(provider_id, updatedProvider);
+    @PostMapping("/profile/update")
+    public String updateProfile(Authentication authentication,
+                            @RequestParam String name,
+                            @RequestParam String email,
+                            @RequestParam String phone,
+                            @RequestParam String biography) {
+
+        Provider provider = providerService.getProviderByUserEmail(authentication.getName());
+        providerService.updateProvider(provider.getProviderId(), name, email, phone, biography);
 
         return "redirect:/provider/dashboard";
     }

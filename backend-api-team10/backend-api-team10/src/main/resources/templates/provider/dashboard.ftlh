@@ -12,7 +12,7 @@
         <p>Manage your profile, plans, meals, orders, reviews, and analytics.</p>
 
         <div class="dashboard-grid">
-            <a class="dashboard-card" href="/provider/profile/{provider_id}/edit">
+            <a class="dashboard-card" href="/provider/profile">
                 <h2>Update Profile</h2>
                 <p>Edit your provider details and biography.</p>
             </a>

@@ -80,12 +80,17 @@
                                 <input class="form-input" type="number" id="price" name="price" step="0.01" value="${meal.price!0}" required>
                             </div>
 
+                            <div class="form-group">
+                                <label for="image_url">Image URL</label>
+                                <input type="text" id="image_url" name="image_url" value="${meal.image_url!''}" placeholder="/images/example.png">
+                            </div>
+
                             <button class="btn btn-cream" type="submit">Update Meal</button>
                         </form>
                     </div>
 
                     <div class="preview-card">
-                        <img class="preview-image" src="https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=1200&auto=format&fit=crop" alt="Meal preview">
+                        <img class="preview-image" src="${meal.image_url!'/images/default-meal.jpg'}" alt="${meal.name!'Meal Image'}">
                         <div class="preview-meta">
                             <div class="preview-brand">Balanced Bite</div>
                             <div class="preview-name">${meal.name!'Meal Name'}</div>

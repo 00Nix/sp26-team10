@@ -57,12 +57,12 @@
                             <div class="meta-list">
                                 <div><strong>Price:</strong> $${meal.price!0}</div>
                                 <div><strong>Diet:</strong> ${meal.diet!""}</div>
-                                <div><strong>Portion Size:</strong> ${meal.portion_size!""}</div>
+                                <div><strong>Portion Size:</strong> ${meal.portionSize!""}</div>
                                 <div><strong>Description:</strong> ${meal.description!""}</div>
                             </div>
 
                             <div class="actions-inline">
-                                <a class="btn btn-cream" href="/provider/meals/${meal.meal_id}/edit">Edit Meal</a>
+                                <a class="btn btn-cream" href="/provider/meals/${meal.mealId}/edit">Edit Meal</a>
                             </div>
                         </div>
                     </#list>

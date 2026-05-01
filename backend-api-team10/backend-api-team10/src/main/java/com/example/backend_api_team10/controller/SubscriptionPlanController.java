@@ -31,7 +31,7 @@ public class SubscriptionPlanController {
         return subscriptionPlanService.createSubscriptionPlan(subscriptionPlan);
     }
 
-    @PutMapping("/{name}")
+    @PutMapping("/{plan_id}")
     public SubscriptionPlan updateSubscriptionPlan(@PathVariable Long plan_id, @RequestBody SubscriptionPlan updatedPlan){
         return subscriptionPlanService.updateSubscriptionPlan(plan_id, updatedPlan);
     }

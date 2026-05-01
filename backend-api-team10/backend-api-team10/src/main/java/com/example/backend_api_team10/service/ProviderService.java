@@ -32,7 +32,6 @@ public class ProviderService {
         }
 
         user.setRole(Role.PROVIDER);
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
 
         Users savedUser = userRepo.save(user);
 
@@ -49,40 +48,46 @@ public class ProviderService {
         return providerRepo.existsByEmail(email);
     }
 
+    public Provider getProviderByUserEmail(String email) {
+    return providerRepo.findByUserEmail(email)
+            .orElseThrow(() -> new RuntimeException("Provider profile not found for email: " + email));
+    }
 
     public Provider getProviderById(Long provider_id){
         return providerRepo.findById(provider_id).orElse(null);
     }
 
-    public Provider updateProvider(Long provider_id, Provider updatedProvider){
+    public Provider updateProvider(Long provider_id,
+                                      String name,
+                                      String email,
+                                      String phone,
+                                      String biography) {
+
         Provider existing = providerRepo.findById(provider_id).orElse(null);
-        if (existing != null){
-            existing.setPhone(updatedProvider.getPhone());
-            existing.setBiography(updatedProvider.getBiography());
 
-            Users existingUser = existing.getUser();
-            Users updatedUser = updatedProvider.getUser();
-
-            if (existingUser == null){
-                existingUser = new Users();
-            }
-
-            if (updatedUser != null){
-                existingUser.setEmail(updatedUser.getEmail());
-                
-                if (updatedUser.getPasswordHash() != null && !updatedUser.getPasswordHash().isBlank()) {
-                    existingUser.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
-                }
-            }
-
-            existingUser.setRole(Role.PROVIDER);
-            Users savedUser = userRepo.save(existingUser);
-
-            existing.setUser(savedUser);
-
-            return providerRepo.save(existing);
+        if (existing == null) {
+            return null;
         }
-        return null;
+
+        existing.setPhone(phone);
+        existing.setBiography(biography);
+
+        Users existingUser = existing.getUser();
+
+        if (existingUser == null) {
+            existingUser = new Users();
+        }
+
+        existingUser.setName(name);
+        existingUser.setEmail(email);
+        existingUser.setRole(Role.PROVIDER);
+
+        Users savedUser = userRepo.save(existingUser);
+
+        existing.setUser(savedUser);
+
+        return providerRepo.save(existing);
+
     }
 
     public void deleteProvider(Long provider_id){

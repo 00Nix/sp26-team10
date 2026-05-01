@@ -58,11 +58,11 @@
                                 <div><strong>Price:</strong> $${mealPlan.price!0}</div>
                                 <div><strong>Diet:</strong> ${mealPlan.diet!""}</div>
                                 <div><strong>Description:</strong> ${mealPlan.description!""}</div>
-                                <div><strong>Premade:</strong> ${mealPlan.premade?string("Yes", "No")}</div>
+                                <div><strong>Premade:</strong> ${mealPlan.isPremade?string("Yes", "No")}</div>
                             </div>
 
                             <div class="actions-inline">
-                                <a class="btn btn-cream" href="/provider/mealplans/${mealPlan.planId}/edit">Edit Meal Plan</a>
+                                <a class="btn btn-cream" href="/provider/mealplans/${mealPlan.plan_id}/edit">Edit Meal Plan</a>
                             </div>
                         </div>
                     </#list>

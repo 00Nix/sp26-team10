@@ -14,7 +14,7 @@
         <h2 class="form-title-center">Edit Subscription Plan</h2>
         <hr class="form-divider-small">
 
-        <form action="/provider/subscriptions/${subscription.plan_id}/update" method="post" class="section-stack">
+        <form action="/provider/subscriptions/${subscription.planId}/update" method="post" class="section-stack">
             <div class="form-group">
                 <label class="form-label" for="name">Plan Name</label>
                 <input class="form-input" type="text" id="name" name="name" value="${subscription.name!''}" required>
@@ -31,8 +31,8 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="duration">Duration</label>
-                <input class="form-input" type="number" id="duration" name="duration" value="${subscription.duration!0}" required>
+                <label class="form-label" for="duration_weeks">Duration</label>
+                <input class="form-input" type="number" id="duration" name="duration_weeks" value="${subscription.duration!0}" required>
             </div>
 
             <div class="form-group">

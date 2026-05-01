@@ -14,15 +14,19 @@
         <h2 class="form-title-center">Edit Profile</h2>
         <hr class="form-divider-small">
 
-        <form action="/provider/profile/${provider.provider_id}/update" method="post" class="section-stack">
+        <form action="/provider/profile/update" method="post">
+            <#if _csrf??>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+            </#if>
+
             <div class="form-group">
                 <label class="form-label" for="name">Name</label>
-                <input class="form-input" type="text" id="name" name="name" value="${provider.name!''}" required>
+                <input class="form-input" type="text" id="name" name="name" value="${provider.user.name!''}" required>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="email">Email</label>
-                <input class="form-input" type="email" id="email" name="email" value="${provider.email!''}" required>
+                <input class="form-input" type="email" id="email" name="email" value="${provider.user.email!''}" required>
             </div>
 
             <div class="form-group">

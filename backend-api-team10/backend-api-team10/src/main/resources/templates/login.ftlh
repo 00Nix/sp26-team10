@@ -13,14 +13,12 @@
         <h1 class="logo">Balanced Bite</h1>
         <p class="subtitle">Sign in to your account</p>
 
-        <#-- Error Message -->
         <#if error??>
             <div class="error-message">
                 Invalid username or password
             </div>
         </#if>
 
-        <#-- Logout Message -->
         <#if logout??>
             <div class="success-message">
                 You have been logged out
@@ -34,11 +32,11 @@
             </#if>
 
             <div class="form-group">
-                <label for="username">Email</label>
+                <label for="email">Email</label>
                 <input
                     type="text"
-                    id="username"
-                    name="username"
+                    id="email"
+                    name="email"
                     placeholder="Enter your email"
                     required
                 >

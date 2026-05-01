@@ -7,7 +7,6 @@ import com.example.backend_api_team10.service.CustomerService;
 import com.example.backend_api_team10.service.ProviderService;
 import com.example.backend_api_team10.repository.UserRepo;
 
-import org.apache.catalina.authenticator.jaspic.PersistentProviderRegistrations.Providers;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="topbar-actions">
-                <a href="/provider/plans/new" class="btn btn-cream">+ Create New Plan</a>
+                <a href="/provider/subscriptions/add" class="btn btn-cream">+ Create New Plan</a>
                 <div class="avatar-badge">BB</div>
             </div>
         </header>
@@ -77,7 +77,7 @@
                             </div>
 
                             <div class="plan-actions">
-                                <a href="/provider/plans/edit/${plan.plan_id}" class="btn btn-cream">Edit</a>
+                                <a href="/provider/subscriptions/${plan.planId}/edit" class="btn btn-cream">Edit</a>
                             </div>
                         </div>
                     </div>
