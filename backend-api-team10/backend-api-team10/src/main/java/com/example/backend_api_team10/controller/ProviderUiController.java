@@ -4,12 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.backend_api_team10.dto.AnalyticsSummaryDTO;
-import com.example.backend_api_team10.entity.SubscriptionPlan;
-import com.example.backend_api_team10.entity.Order;
-import com.example.backend_api_team10.entity.Review;
-import com.example.backend_api_team10.entity.Meal;
-import com.example.backend_api_team10.entity.MealPlan;
-import com.example.backend_api_team10.entity.Provider;
+import com.example.backend_api_team10.entity.*;
 import com.example.backend_api_team10.service.*;
 
 import org.springframework.security.core.Authentication;
@@ -21,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/provider")
 public class ProviderUiController {
     
+    private final MealPlanMealService mealPlanMealService;
     private final AnalyticsService analyticsService;
+    private final CustomerService customerService;
     private final SubscriptionPlanService subscriptionPlanService;
     private final OrderService orderService;
     private final ReviewService reviewService;
@@ -30,8 +27,9 @@ public class ProviderUiController {
     private final MealPlanService mealPlanService;
     private final ProviderService providerService;
 
-    public ProviderUiController(AnalyticsService analyticsService, SubscriptionPlanService subscriptionPlanService, OrderService orderService, ReviewService reviewService, ReviewReplyService reviewReplyService, MealService mealService, MealPlanService mealPlanService, ProviderService providerService) {
+    public ProviderUiController(AnalyticsService analyticsService, CustomerService customerService, SubscriptionPlanService subscriptionPlanService, OrderService orderService, ReviewService reviewService, ReviewReplyService reviewReplyService, MealService mealService, MealPlanService mealPlanService, ProviderService providerService, MealPlanMealService mealPlanMealService) {
         this.analyticsService = analyticsService;
+        this.customerService = customerService;
         this.subscriptionPlanService = subscriptionPlanService;
         this.orderService = orderService;
         this.reviewService = reviewService;
@@ -39,6 +37,7 @@ public class ProviderUiController {
         this.mealService = mealService;
         this.mealPlanService = mealPlanService;
         this.providerService = providerService;
+        this.mealPlanMealService = mealPlanMealService;
     }
 
     // dashboard    
@@ -53,15 +52,33 @@ public class ProviderUiController {
     @GetMapping("/orders")
     public String showOrders(Model model) {
         List<Order> orders = orderService.getAllOrders();
+    
+        long totalOrders = orders.size();
+        long pendingOrders = orders.stream().filter(order -> "PENDING".equalsIgnoreCase(order.getStatus())).count();
+        long preparingOrders = orders.stream().filter(order -> "PREPARING".equalsIgnoreCase(order.getStatus())).count();
+        long inTransitOrders = orders.stream().filter(order -> "IN TRANSIT".equalsIgnoreCase(order.getStatus())).count();
+        long deliveredOrders = orders.stream().filter(order -> "DELIVERED".equalsIgnoreCase(order.getStatus())).count();
+        long cancelledOrders = orders.stream().filter(order -> "CANCELLED".equalsIgnoreCase(order.getStatus())).count();
+
+
         model.addAttribute("orders", orders);
-        
+        model.addAttribute("totalOrders", totalOrders);
+        model.addAttribute("pendingOrders", pendingOrders);
+        model.addAttribute("preparingOrders", preparingOrders);
+        model.addAttribute("inTransitOrders", inTransitOrders);
+        model.addAttribute("deliveredOrders", deliveredOrders);
+        model.addAttribute("cancelledOrders", cancelledOrders);
+
         return "provider/orders";
     }
 
     @GetMapping("/orders/{orderId}/edit")
     public String showEditOrderForm(@PathVariable Long orderId, Model model) {
-        Optional<Order> order = orderService.getOrderById(orderId);
+        Order order = orderService.getOrderById(orderId);
+        Optional<Customer> customer = customerService.getCustomerById(order.getCustomerId());
+
         model.addAttribute("order", order);
+        model.addAttribute("customerName", customer.map(c -> c.getUser().getName()).orElse("Unknown Customer"));
         
         return "provider/edit-order-status";
     }
@@ -99,8 +116,17 @@ public class ProviderUiController {
 
     // meal management
     @GetMapping("/meals")
-    public String showMeals(Model model) {
-        model.addAttribute("meals", mealService.getAllMeals());
+    public String showMeals(@RequestParam(required=false) String diet, Model model) {
+        List<Meal> meals = mealService.getAllMeals();
+
+        if (diet != null && !diet.isBlank() && !diet.equalsIgnoreCase("ALL")) {
+            meals = meals.stream()
+                    .filter(meal -> meal.getDiet() != null && meal.getDiet().equalsIgnoreCase(diet))
+                    .toList();
+        }
+
+        model.addAttribute("meals", meals);
+        model.addAttribute("selectedDiet", diet == null ? "ALL" : diet);
         
         return "provider/meals";
     }
@@ -143,7 +169,7 @@ public class ProviderUiController {
 
     // meal plan management
     @GetMapping("/mealplans")
-    public String showMealPlanss(Model model) {
+    public String showMealPlans(Model model) {
         model.addAttribute("mealPlans", mealPlanService.getAllMealPlans());
         
         return "provider/mealplans";
@@ -152,28 +178,47 @@ public class ProviderUiController {
     @GetMapping("/mealplans/add")
     public String showAddMealPlanForm(Model model) {
         model.addAttribute("mealPlan", new MealPlan());
+        model.addAttribute("meals", mealService.getAllMeals());
 
         return "provider/add-mealplan";
     }
 
     @PostMapping("/mealplans/add")
-    public String addMealPlan(@ModelAttribute MealPlan mealPlan) {
-        mealPlanService.createMealPlan(mealPlan);
+    public String addMealPlan(Authentication authentication, @ModelAttribute MealPlan mealPlan, @RequestParam(required=false) List<Long> mealIds) {
+        Provider provider = providerService.getProviderByUserEmail(authentication.getName());
+        mealPlan.setProvider(provider);
 
+        MealPlan savedMealPlan = mealPlanService.createMealPlanWithMeals(mealPlan, mealIds);
+
+        if (mealIds != null) {
+            for (Long mealId : mealIds) {
+                Meal meal = mealService.getMealById(mealId);
+
+                MealPlanMeal mealPlanMeal = new MealPlanMeal();
+                mealPlanMeal.setMealPlan(savedMealPlan);
+                mealPlanMeal.setMeal(meal);
+                mealPlanMeal.setQuantity(1);
+
+                mealPlanMealService.createMealPlanMeal(mealPlanMeal);
+            }
+        }
+        
         return "redirect:/provider/mealplans";
     }
 
     @GetMapping("/mealplans/{plan_id}/edit")
     public String showEditMealPlanForm(@PathVariable Long plan_id, Model model) {
         MealPlan mealPlan = mealPlanService.getMealPlanById(plan_id);
+        
         model.addAttribute("mealPlan", mealPlan);
+        model.addAttribute("meals", mealService.getAllMeals());
 
         return "provider/edit-mealplan";
     }
 
     @PostMapping("/mealplans/{plan_id}/update")
-    public String updateMealPlan(@PathVariable Long plan_id, @ModelAttribute MealPlan updatedMealPlan) {
-        mealPlanService.updateMealPlan(plan_id, updatedMealPlan);
+    public String updateMealPlan(@PathVariable Long plan_id, @ModelAttribute MealPlan updatedMealPlan, @RequestParam(required=false) List<Long> mealIds) {
+        mealPlanService.updateMealPlanWithMeals(plan_id, updatedMealPlan, mealIds);
 
         return "redirect:/provider/mealplans";
     }

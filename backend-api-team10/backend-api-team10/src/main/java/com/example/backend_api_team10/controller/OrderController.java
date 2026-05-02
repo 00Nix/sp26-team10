@@ -40,7 +40,7 @@ public class OrderController {
     }
  
     @GetMapping("/{id}")
-    public Optional<Order> getOrderById(@PathVariable Long id) {
+    public Order getOrderById(@PathVariable Long id) {
         return orderService.getOrderById(id);
     }
  

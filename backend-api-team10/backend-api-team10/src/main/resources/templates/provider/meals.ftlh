@@ -48,6 +48,21 @@
             </div>
         </header>
 
+        <form action="/provider/meals" method="get" class="filter-bar">
+            <label for="diet">Filter by Diet:</label>
+
+            <select id="diet" name="diet" onchange="this.form.submit()">
+                <option value="ALL" <#if selectedDiet == "ALL">selected</#if>>All</option>
+                <option value="Balanced" <#if selectedDiet == "Balanced">selected</#if>>Balanced</option>
+                <option value="Vegan" <#if selectedDiet == "Vegan">selected</#if>>Vegan</option>
+                <option value="Vegetarian" <#if selectedDiet == "Vegetarian">selected</#if>>Vegetarian</option>
+                <option value="Keto" <#if selectedDiet == "Keto">selected</#if>>Keto</option>
+                <option value="Low Carb" <#if selectedDiet == "Low Carb">selected</#if>>Low Carb</option>
+                <option value="Dairy-Free" <#if selectedDiet == "Dairy-Free">selected</#if>>Dairy-Free</option>
+                <option value="Pescatarian" <#if selectedDiet == "Pescatarian">selected</#if>>Pescatarian</option>
+            </select>
+        </form>
+
         <main class="page-content">
             <#if meals?? && (meals?size > 0)>
                 <div class="card-list">

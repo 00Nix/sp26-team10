@@ -56,26 +56,26 @@
                 <div class="stats-row">
                     <div class="stat-card">
                         <div class="stat-label">New Reviews</div>
-                        <div class="stat-value">${newReviews!8}</div>
+                        <div class="stat-value">${newReviews!''}</div>
                         <div class="stat-change">Recent customer submissions</div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-label">Replied</div>
-                        <div class="stat-value">${repliedReviews!28}</div>
+                        <div class="stat-value">${repliedReviews!''}</div>
                         <div class="stat-change">Provider responses posted</div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-label">Total Reviews</div>
-                        <div class="stat-value">${totalReviews!36}</div>
+                        <div class="stat-value">${totalReviews!''}</div>
                         <div class="stat-change">All review records</div>
                     </div>
                 </div>
 
                 <div class="rating-summary">
                     <h3>Average Rating</h3>
-                    <div class="big-rating">${avgRating!'4.0'}</div>
+                    <div class="big-rating">${avgRating!}</div>
                     <div class="rating-stars">★★★★☆</div>
                 </div>
             </section>

@@ -14,25 +14,28 @@
         <div class="card">
             <h2>Order #${order.orderId}</h2>
             <div class="meta-list">
+                <div><strong>Customer:</strong> ${customerName!''}</div>
+                <div><strong>Date:</strong> ${order.timestamp?string?substring(0, 16)?replace("T", " ")}</div>
                 <div><strong>Current Status:</strong> ${order.status!"N/A"}</div>
                 <div><strong>Total:</strong> $${order.totalPrice!0}</div>
                 <div><strong>Address:</strong> ${order.address!''}</div>
             </div>
         </div>
 
-        <form action="/provider/orders/${order.orderId}/update-status" method="post" class="form-card">
+        <form action="/provider/orders/${order.orderId}/update-status" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
             <div class="form-group">
                 <label class="form-label" for="status">New Status</label>
                 <select class="form-select" name="status" id="status">
                     <option value="Pending" <#if order.status?? && order.status == "Pending">selected</#if>>Pending</option>
                     <option value="Preparing" <#if order.status?? && order.status == "Preparing">selected</#if>>Preparing</option>
-                    <option value="Out for Delivery" <#if order.status?? && order.status == "Out for Delivery">selected</#if>>Out for Delivery</option>
+                    <option value="In Transit" <#if order.status?? && order.status == "In Transit">selected</#if>>In Transit</option>
                     <option value="Delivered" <#if order.status?? && order.status == "Delivered">selected</#if>>Delivered</option>
                     <option value="Cancelled" <#if order.status?? && order.status == "Cancelled">selected</#if>>Cancelled</option>
                 </select>
             </div>
 
-            <button class="btn btn-cream" type="submit">Save Status</button>
+            <button class="btn btn-cream" type="submit">Update Status</button>
         </form>
     </div>
 </main>

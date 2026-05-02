@@ -55,6 +55,8 @@
                         <hr class="form-divider-small">
 
                         <form action="/provider/mealplans/add" method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+
                             <div class="form-group">
                                 <label class="form-label" for="name">Plan Name</label>
                                 <input class="form-input" type="text" id="name" name="name" required>
@@ -66,22 +68,41 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="diet">Diet</label>
-                                <input class="form-input" type="text" id="diet" name="diet">
+                                <label class="form-label" for="diet">Dietary Label</label>
+                                <input class="form-input" type="text" id="diet" name="diet" placeholder="Vegan, Low Carb, Gluten Free">
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="premade">Premade</label>
-                                <select class="form-select" id="premade" name="premade">
+                                <label class="form-label" for="isPremade">Premade</label>
+                                <select class="form-select" id="isPremade" name="isPremade">
                                     <option value="true">Yes</option>
                                     <option value="false">No</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="description">Description</label>
-                                <textarea class="form-textarea" id="description" name="description"></textarea>
+                                <label class="form-label">Select Meals</label>
+
+                                <#if meals?? && meals?size gt 0>
+                                    <div class="checkbox-grid">
+                                        <#list meals as meal>
+                                            <label class="checkbox-card">
+                                                <input type="checkbox" name="mealIds" value="${meal.mealId}">
+                                                <span>${meal.name}</span>
+                                                <small>${meal.price}</small>
+                                            </label>
+                                        </#list>
+                                    </div>
+                                <#else>
+                                    <p>No meals available. Add meals before creating a meal plan.</p>
+                                </#if>
                             </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="description">Description</label>
+                                <textarea class="form-input" id="description" name="description" rows="4"></textarea>
+                            </div>
+
 
                             <button class="btn btn-cream" type="submit">Publish Meal Plan</button>
                         </form>

@@ -47,6 +47,33 @@
             </div>
         </header>
 
+        <section class="orders-analytics">
+            <div class="orders-stat-card">
+                <span>Total Orders</span>
+                <h2>${totalOrders}</h2>
+            </div>
+            <div class="orders-stat-card">
+                <span>Pending</span>
+                <h2>${pendingOrders}</h2>
+            </div>
+            <div class="orders-stat-card">
+                <span>Preparing</span>
+                <h2>${preparingOrders}</h2>
+            </div>
+            <div class="orders-stat-card">
+                <span>In Transit</span>
+                <h2>${inTransitOrders}</h2>
+            </div>
+            <div class="orders-stat-card">
+                <span>Delivered</span>
+                <h2>${deliveredOrders}</h2>
+            </div>
+            <div class="orders-stat-card">
+                <span>Cancelled</span>
+                <h2>${cancelledOrders}</h2>
+            </div>
+        </section>
+
         <main class="page-content">
             <#if orders?? && (orders?size > 0)>
                 <div class="card-list">
@@ -57,7 +84,7 @@
                                 <div><strong>Total:</strong> $${order.totalPrice!0}</div>
                                 <div><strong>Status:</strong> ${order.status!"N/A"}</div>
                                 <div><strong>Address:</strong> ${order.address!""}</div>
-                                <div><strong>Date:</strong> ${order.timestamp!""}</div>
+                                <div><strong>Date:</strong> ${order.timestamp?string?substring(0, 10)}</div>
                             </div>
 
                             <div class="actions-inline">

@@ -30,13 +30,13 @@ public class MealPlanController {
     }
 
     @PostMapping
-    public MealPlan createMealPlan(@RequestBody MealPlan mealPlan) {
-        return mealPlanService.createMealPlan(mealPlan);
+    public MealPlan createMealPlan(@RequestBody MealPlan mealPlan, @RequestParam(required=false) List<Long> mealIds) {
+        return mealPlanService.createMealPlanWithMeals(mealPlan, mealIds);
     }
 
     @PutMapping("/{id}")
-    public MealPlan updateMealPlan(@PathVariable Long id, @RequestBody MealPlan mealPlan) {
-        return mealPlanService.updateMealPlan(id, mealPlan);
+    public MealPlan updateMealPlan(@PathVariable Long plan_id, @RequestBody MealPlan mealPlan, @RequestParam(required=false) List<Long> mealIds) {
+        return mealPlanService.updateMealPlanWithMeals(plan_id, mealPlan, mealIds);
     }
 
     @DeleteMapping("/{id}")

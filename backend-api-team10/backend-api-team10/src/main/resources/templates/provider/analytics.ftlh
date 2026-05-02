@@ -103,7 +103,7 @@
 
                             <div class="analytics-mini-card">
                                 <div class="stat-label">Monthly Revenue</div>
-                                <div class="stat-value">$${analytics.monthlyPlanRevenue!1378.30}</div>
+                                <div class="stat-value">$${analytics.monthlyPlanRevenue!}</div>
                                 <div class="stat-change">Estimated recurring revenue</div>
                             </div>
 
@@ -124,7 +124,7 @@
                             <div class="flex-between">
                                 <div>
                                     <div class="stat-label">Plan Growth</div>
-                                    <div class="stat-value">${analytics.planSubscribers!76}</div>
+                                    <div class="stat-value">${analytics.planSubscribers!}</div>
                                 </div>
 
                                 <div class="toggle-group">

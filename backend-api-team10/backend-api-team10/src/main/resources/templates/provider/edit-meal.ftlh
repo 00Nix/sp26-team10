@@ -54,7 +54,7 @@
                         <h2 class="form-title-center">Meal Information</h2>
                         <hr class="form-divider-small">
 
-                        <form action="/provider/meals/${meal.meal_id}/update" method="post">
+                        <form action="/provider/meals/${meal.mealId}/update" method="post">
                             <div class="form-group">
                                 <label class="form-label" for="name">Meal Name</label>
                                 <input class="form-input" type="text" id="name" name="name" value="${meal.name!''}" required>
@@ -72,7 +72,7 @@
 
                             <div class="form-group">
                                 <label class="form-label" for="portionSize">Portion Size</label>
-                                <input class="form-input" type="text" id="portionSize" name="portion_size" value="${meal.portion_size!''}">
+                                <input class="form-input" type="text" id="portionSize" name="portionSize" value="${meal.portionSize!''}">
                             </div>
 
                             <div class="form-group">
@@ -81,8 +81,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="image_url">Image URL</label>
-                                <input type="text" id="image_url" name="image_url" value="${meal.image_url!''}" placeholder="/images/example.png">
+                                <label for="imageUrl">Image URL</label>
+                                <input type="text" id="imageUrl" name="imageUrl" value="${meal.imageUrl!''}" placeholder="/images/example.png">
                             </div>
 
                             <button class="btn btn-cream" type="submit">Update Meal</button>
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="preview-card">
-                        <img class="preview-image" src="${meal.image_url!'/images/default-meal.jpg'}" alt="${meal.name!'Meal Image'}">
+                        <img class="preview-image" src="${meal.imageUrl!'/images/default-meal.jpg'}" alt="${meal.name!'Meal Name'}">
                         <div class="preview-meta">
                             <div class="preview-brand">Balanced Bite</div>
                             <div class="preview-name">${meal.name!'Meal Name'}</div>

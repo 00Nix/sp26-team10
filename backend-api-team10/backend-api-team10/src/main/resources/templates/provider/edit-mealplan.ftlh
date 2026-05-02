@@ -54,7 +54,7 @@
                         <h2 class="form-title-center">Meal Plan Information</h2>
                         <hr class="form-divider-small">
 
-                        <form action="/provider/mealplans/${mealPlan.planId}/update" method="post">
+                        <form action="/provider/mealplans/${mealPlan.mealPlanId}/update" method="post">
                             <div class="form-group">
                                 <label class="form-label" for="name">Plan Name</label>
                                 <input class="form-input" type="text" id="name" name="name" value="${mealPlan.name!''}" required>
@@ -91,9 +91,9 @@
                         <img class="preview-image" src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop" alt="Meal plan preview">
                         <div class="preview-meta">
                             <div class="preview-brand">Balanced Bite Plans</div>
-                            <div class="preview-name">${mealPlan.name!'Plan Name'}</div>
+                            <div class="preview-name">${mealPlan.name!''}</div>
                             <div class="preview-price">$${mealPlan.price!0}</div>
-                            <div class="preview-description">${mealPlan.description!'Plan description preview.'}</div>
+                            <div class="preview-description">${mealPlan.description!''}</div>
                         </div>
                     </div>
                 </div>

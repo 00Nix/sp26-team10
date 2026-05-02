@@ -620,6 +620,82 @@ img {
 }
 
 /* -----------------------------
+   MEAL PLANS
+----------------------------- */
+.mealplan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.mealplan-card {
+    background: #ffffff;
+    border: 1px solid #e5e2d8;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.mealplan-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.mealplan-card h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.mealplan-price {
+    background: #d2c7a6;
+    color: #111;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.mealplan-diet {
+    display: inline-block;
+    background: #789b70;
+    color: white;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.mealplan-description {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.mealplan-meals h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.mealplan-meals ul {
+    padding-left: 1.25rem;
+    margin: 0;
+}
+
+.mealplan-meals li {
+    margin-bottom: 0.35rem;
+}
+
+.mealplan-meals span {
+    font-weight: 700;
+}
+
+.mealplan-actions {
+    margin-top: 1.25rem;
+}
+
+/* -----------------------------
    REVIEWS PAGE
 ----------------------------- */
 .reviews-top {
@@ -833,5 +909,155 @@ img {
 
     .page-container {
         padding: 28px 18px 40px;
+    }
+}
+
+/* =====================================
+   MEALS / ORDERS CARD LAYOUT FIXES
+===================================== */
+.main-shell {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 34px 40px 12px;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.topbar-actions .btn-cream {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.page-content {
+    padding: 18px 40px 48px;
+}
+
+.card-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    gap: 26px;
+    align-items: stretch;
+    margin-top: 18px;
+}
+
+.card {
+    max-width: none;
+    width: 100%;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-list {
+    flex: 1;
+}
+
+.actions-inline {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.actions-inline .btn-cream {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+}
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 40px;
+    margin: 4px 0 10px;
+}
+
+.filter-bar select {
+    width: 180px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1.5px solid #222;
+    background: #fff;
+}
+
+@media (max-width: 1200px) {
+    .card-list {
+        grid-template-columns: repeat(2, minmax(260px, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .topbar {
+        flex-direction: column;
+        padding: 28px 20px 12px;
+    }
+
+    .page-content,
+    .filter-bar {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .card-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================================
+   ORDER TRACKING BOARD
+===================================== */
+.orders-analytics {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 18px;
+    margin: 24px 0 28px;
+}
+
+.orders-stat-card {
+    background: #ffffff;
+    border: 1px solid #e5e2d8;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+}
+
+.orders-stat-card span {
+    display: block;
+    color: var(--gray);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.orders-stat-card strong {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--black);
+}
+
+@media (max-width: 1100px) {
+    .orders-analytics {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .orders-analytics {
+        grid-template-columns: 1fr;
     }
 }

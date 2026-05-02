@@ -23,8 +23,8 @@ public class OrderService {
 	public List<Order> getAllOrders() {
 		return orderRepo.findAll();
 	}
-	public Optional<Order> getOrderById(Long orderId) {
-		return orderRepo.findById(orderId);
+	public Order getOrderById(Long orderId) {
+		return orderRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
 	}
 	public Order updateOrder(Long orderId, Order orderDetails) {
 		

@@ -31,7 +31,7 @@ public class MealPlanMealService {
     public MealPlanMeal updateMealPlanMeal(Long mealPlan_mealId, MealPlanMeal updated){
         MealPlanMeal existing = mealPlanMealRepo.findById(mealPlan_mealId).orElse(null);
         if (existing != null) {
-            existing.setMealPlanMealId(updated.getMeanPlanMealId());
+            existing.setMealPlanMealId(updated.getMealPlanMealId());
             return mealPlanMealRepo.save(existing);
         } else {
             return null;
