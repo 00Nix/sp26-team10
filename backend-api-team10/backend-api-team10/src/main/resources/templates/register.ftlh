@@ -15,6 +15,7 @@
 
         <form action="/register" method="post" class="auth-form">
 
+<<<<<<< Updated upstream
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
             <h2>Create Account</h2>
@@ -45,6 +46,11 @@
                 <a href="/login">Sign in</a>
             </p>
         </form>
+=======
+    <div class="auth-brand">
+      <a class="nav-logo" href="/index">Balanced<span>Bite</span></a>
+      <p>Create your account and start eating well</p>
+>>>>>>> Stashed changes
     </div>
 </div>
 </body>

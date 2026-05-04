@@ -23,16 +23,16 @@ public class FavoriteService {
         return favoriteRepository.findAll();
     }
     public List<Favorite> getByCustomer(Long customer_id) {
-        return favoriteRepository.findByCustomer_CustomerId(customer_id);
+        return favoriteRepository.findByCustomerId(customer_id);
     }
     public List<Favorite> getByMeal(Long meal_id) {
-        return favoriteRepository.findByMeal_MealId(meal_id);
+        return favoriteRepository.findByMealId(meal_id);
     }
     public void removeFavorite(Long favoriteId) {
         favoriteRepository.deleteById(favoriteId);
     }
     public Optional<Favorite> findSpecific(Long customer_id, Long meal_id) {
-        return favoriteRepository.findByCustomer_CustomerIdAndMeal_MealId(customer_id, meal_id);
+        return favoriteRepository.findByCustomerIdAndMealId(customer_id, meal_id);
     }
     
     

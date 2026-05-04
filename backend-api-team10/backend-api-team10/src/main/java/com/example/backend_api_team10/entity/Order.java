@@ -1,7 +1,7 @@
 package com.example.backend_api_team10.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -90,4 +90,11 @@ public class Order {
     public void setAddress(String address) {
         this.address = address;
     }    
+    public String getFormattedDate() {
+        if (this.timestamp == null) {
+            return "Pending Date";
+        }
+        java.time.format.DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+        return this.timestamp.format(formatter);
+    }
 }

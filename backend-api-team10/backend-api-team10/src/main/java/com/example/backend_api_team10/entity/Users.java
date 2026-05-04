@@ -1,11 +1,27 @@
 package com.example.backend_api_team10.entity;
 
+<<<<<<< Updated upstream:backend-api-team10/backend-api-team10/src/main/java/com/example/backend_api_team10/entity/Users.java
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class Users {
+=======
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "users")
+public class User {
+>>>>>>> Stashed changes:backend-api-team10/backend-api-team10/src/main/java/com/example/backend_api_team10/entity/User.java
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long user_id;
@@ -15,6 +31,8 @@ public class Users {
 
     @Column(nullable = false, unique = true)
     private String email;
+
+    private String name;
 
     @Column(nullable = false)
     private String password_hash;
@@ -35,10 +53,15 @@ public class Users {
         
     }
 
+<<<<<<< Updated upstream:backend-api-team10/backend-api-team10/src/main/java/com/example/backend_api_team10/entity/Users.java
     public Users(Long user_id, String name, String email, String password_hash, Role role, Customer customer, Provider provider){
+=======
+    public User(Long user_id, String email, String name,String password_hash, Role role, Customer customer, Provider provider){
+>>>>>>> Stashed changes:backend-api-team10/backend-api-team10/src/main/java/com/example/backend_api_team10/entity/User.java
         this.user_id = user_id;
         this.name = name;
         this.email = email;
+        this.name = name;
         this.password_hash = password_hash;
         this.role = role;
         this.customer = customer;
@@ -67,6 +90,12 @@ public class Users {
 
     public String getEmail(){
         return email;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+    public String getName(){
+        return name;
     }
 
     public void setPasswordHash(String password_hash){

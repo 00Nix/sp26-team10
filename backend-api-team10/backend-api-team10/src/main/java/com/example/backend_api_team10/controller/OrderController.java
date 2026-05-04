@@ -29,7 +29,7 @@ public class OrderController {
         return orderService.createOrder(order);
     }
  
-    @PostMapping("/cart/{cartId}")
+    @PostMapping("/carts/{cartId}")
     public Order createForCart(@PathVariable Long cartId, @RequestBody Order order) {
         return orderService.createForCart(cartId, order);
     }
@@ -44,7 +44,7 @@ public class OrderController {
         return orderService.getOrderById(id);
     }
  
-    @GetMapping("/cart/{cartId}")
+    @GetMapping("/carts/{cartId}")
     public List<Order> getOrdersByCart(@PathVariable Long cartId) {
         return orderService.getOrdersByCart(cartId);
     }

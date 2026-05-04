@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanced Bite - Subscription Plans</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/backend-api-team10/backend-api-team10/src/main/resources/static/css/styles.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="meals.html">Meals</a></li>
+    <li><a href="subscription.html" class="active">Plans</a></li>
+    <li><a href="orders.html">My Orders</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon-btn" onclick="location.href='cart.html'" title="Cart" aria-label="Cart">
+      🛒<span class="badge" id="cart-badge" style="display:none"></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <div class="inner-header" style="text-align:center">
+    <h1 class="page-title" style="text-align:center">Choose Your Plan</h1>
+    <p class="page-sub">Flexible subscriptions with the best prices for you</p>
+  </div>
+
+  <!-- Current subscription banner -->
+  <div id="current-plan-banner" style="display:none;max-width:700px;margin:0 auto 24px;background:var(--light-sage);border-radius:14px;padding:14px 20px;display:none;align-items:center;justify-content:space-between">
+    <div>
+      <span style="font-size:.78rem;font-weight:600;color:var(--sage)">CURRENT PLAN</span>
+      <p style="font-weight:600;margin-top:2px" id="current-plan-name"></p>
+    </div>
+    <button class="btn-outline" onclick="cancelSubscription()" style="font-size:.78rem;padding:6px 14px">Cancel Plan</button>
+  </div>
+
+  <div class="plans-grid" id="plans-grid">
+    <div class="loading" style="grid-column:1/-1">Loading plans...</div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html">Balance<span style="color:var(--sage)">Bite</span></a>
+      <p>Balanced meals, thoughtfully prepared and delivered to you every week.</p>
+    </div>
+    <div><h4>Explore</h4><ul>
+      <li><a href="meals.html">All Meals</a></li>
+      <li><a href="subscription.html">Plans</a></li>
+      <li><a href="cart.html">Cart</a></li>
+    </ul></div>
+    <div><h4>Account</h4><ul>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul></div>
+    <div><h4>Company</h4><ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Balanced Bite. All rights reserved.</span>
+    <span>Privacy &middot; Terms &middot; Accessibility</span>
+  </div>
+</footer>
+
+<div class="toast" id="_toast"></div>
+
+<script>
+  const customerId = localStorage.getItem('customerId');
+  let currentSubscription = null;
+  let allPlans = [];
+
+  // Default features if the API doesn't return them
+  const DEFAULT_FEATURES = [
+    'Access to full menu',
+    'Free delivery',
+    'Nutrition tracking',
+    'Monthly meal updates'
+  ];
+
+  function loadCurrentSubscription() {
+    if (!customerId) return Promise.resolve();
+    return fetch(`/api/customers/${customerId}/subscriptions`)
+      .then(r => r.ok ? r.json() : null)
+      .then(sub => {
+        if (sub) {
+          currentSubscription = sub;
+          const banner = document.getElementById('current-plan-banner');
+          document.getElementById('current-plan-name').textContent =
+            `${sub.planName || sub.subscriptionPlan?.name || 'Active Plan'} — $${parseFloat(sub.price || sub.subscriptionPlan?.price || 0).toFixed(2)}/month`;
+          banner.style.display = 'flex';
+        }
+      })
+      .catch(() => {});
+  }
+
+  function loadPlans() {
+    fetch('/subscription-plans')
+      .then(r => r.json())
+      .then(plans => {
+        allPlans = plans;
+        renderPlans(plans);
+      })
+      .catch(() => {
+        // Fallback static plans if API unavailable
+        renderPlans([
+          { id: 1, name: 'Basic',    price: 59,  mealsPerMonth: 12 },
+          { id: 2, name: 'Standard', price: 99,  mealsPerMonth: 24, featured: true },
+          { id: 3, name: 'Premium',  price: 125, mealsPerMonth: 36 }
+        ]);
+      });
+  }
+
+  function renderPlans(plans) {
+    // Mark middle plan as featured if none are
+    if (!plans.some(p => p.featured)) {
+      const mid = Math.floor(plans.length / 2);
+      plans[mid] = { ...plans[mid], featured: true };
+    }
+
+    document.getElementById('plans-grid').innerHTML = plans.map(plan => {
+      const isCurrent = currentSubscription &&
+        (currentSubscription.planId === plan.id ||
+         currentSubscription.subscriptionPlan?.id === plan.id);
+      const features = plan.features || [
+        `${plan.mealsPerMonth || '—'} meals per month`,
+        ...DEFAULT_FEATURES
+      ];
+
+      return `
+        <div class="plan-card${plan.featured ? ' featured' : ''}">
+          ${plan.featured ? '<div class="plan-tag">Most Popular</div>' : ''}
+          <div class="plan-name">${plan.name}</div>
+          <div class="plan-price" ${plan.featured ? 'style="color:#fff"' : ''}>
+            $${parseFloat(plan.price || 0).toFixed(0)}
+            <span style="font-size:1rem;font-weight:400">/month</span>
+          </div>
+          <div class="plan-period">${plan.mealsPerMonth || '—'} meals per month</div>
+          <ul class="plan-features">
+            ${features.map(f => `<li>${f}</li>`).join('')}
+          </ul>
+          ${isCurrent
+            ? `<button class="plan-btn ${plan.featured ? '' : 'light'}" disabled style="opacity:.6;cursor:default">Current Plan</button>`
+            : `<button class="plan-btn ${plan.featured ? '' : 'light'}" onclick="selectPlan(${plan.id}, '${plan.name}', ${plan.price})">Get Started</button>`
+          }
+        </div>`;
+    }).join('');
+  }
+
+  function selectPlan(planId, planName, price) {
+    if (!customerId) {
+      showToast('Please log in to subscribe');
+      return;
+    }
+
+    const body = { subscriptionPlanId: planId, planName, price, status: 'active' };
+
+    // If already subscribed, update; otherwise create
+    const url = currentSubscription
+      ? `/customer-subscriptions/${currentSubscription.id}`
+      : `/api/customers/${customerId}/subscriptions`;
+    const method = currentSubscription ? 'PUT' : 'POST';
+
+    fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(r => r.json())
+      .then(() => {
+        showToast(`Subscribed to ${planName} plan! $${parseFloat(price).toFixed(2)}/month`);
+        setTimeout(() => loadCurrentSubscription().then(() => loadPlans()), 1000);
+      })
+      .catch(() => showToast('Could not complete subscription. Please try again.'));
+  }
+
+  function cancelSubscription() {
+    if (!currentSubscription) return;
+    fetch(`/customer-subscriptions/${currentSubscription.id}`, { method: 'DELETE' })
+      .then(() => {
+        currentSubscription = null;
+        document.getElementById('current-plan-banner').style.display = 'none';
+        showToast('Subscription cancelled.');
+        loadPlans();
+      })
+      .catch(() => showToast('Could not cancel subscription.'));
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('_toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  loadCurrentSubscription().then(loadPlans);
+</script>
+</body>
+</html>

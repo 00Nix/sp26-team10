@@ -46,7 +46,7 @@ public class CartController {
     }
 
     @PutMapping("/{id}")
-    public Cart updateCart1(@PathVariable Long id, @RequestBody Cart cart) {
+    public Cart updateCart(@PathVariable Long id, @RequestBody Cart cart) {
         return cartService.updateCart(id, cart);
     }
 

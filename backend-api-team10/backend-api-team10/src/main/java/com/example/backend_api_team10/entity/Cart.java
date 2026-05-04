@@ -2,17 +2,20 @@ package com.example.backend_api_team10.entity;
 
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue; 
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "cart")
+@Table(name = "carts")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +28,9 @@ public class Cart {
 
     private BigDecimal subtotal;
 
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
+
     //constructors
     public Cart() {}
 
@@ -35,10 +41,20 @@ public class Cart {
 
     //getters and setters
     public Long getCartId() { return cartId; }
+    public void setCartId(Long cartId) { this.cartId = cartId; }
 
     public Customer getCustomer() { return customer; }
     public void setCustomer(Customer customer) { this.customer = customer; }
 
-    public BigDecimal getSubtotal() { return subtotal; }
+    public BigDecimal getSubtotal() { 
+        return subtotal; 
+    }
     public void setSubtotal(BigDecimal subtotal) { this.subtotal = subtotal; }
+
+    public List<CartItem> getCartItems() { 
+        return cartItems; 
+    }
+    public void setCartItems(List<CartItem> cartItems) { 
+        this.cartItems = cartItems; 
+    }
 }

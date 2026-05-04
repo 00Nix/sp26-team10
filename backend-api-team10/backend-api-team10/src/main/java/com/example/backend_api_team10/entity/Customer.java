@@ -1,6 +1,5 @@
 package com.example.backend_api_team10.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,16 +46,44 @@ public class Customer {
         return user;
     }
 
+<<<<<<< Updated upstream
     public Long getCustomerId() { return customer_id; }
     public void setCustomerId(Long customer_id) { this.customer_id = customer_id; }
+=======
+    public Long getCustomerId() { 
+        return customer_id; 
+    }
+    public void setCustomerId(Long customer_id) { 
+        this.customer_id = customer_id; 
 
+    }
+>>>>>>> Stashed changes
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public String getName() { 
+        return name; 
+    }
+    public void setName(String name) { 
+        this.name = name; 
+    }
 
-    public Boolean isSubscribed() { return subscribed; }
-    public void setSubscribed(boolean subscribed) { this.subscribed = subscribed; }
+    public String getPhone() { 
+        return phone; 
+    }
+    public void setPhone(String phone) { 
+        this.phone = phone; 
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public Boolean isSubscribed() { 
+        return subscribed; 
+    }
+    public void setSubscribed(boolean subscribed) { 
+        this.subscribed = subscribed; 
+    }
+
+    public String getStatus() { 
+        return status; 
+    }
+    public void setStatus(String status) { 
+        this.status = status; 
+    }
 }
