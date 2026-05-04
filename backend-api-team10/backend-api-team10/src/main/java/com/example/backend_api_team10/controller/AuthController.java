@@ -92,8 +92,10 @@ public class AuthController {
             user.setName(name.trim());
             user.setEmail(normalizedEmail);
             user.setPasswordHash(encodedPassword);
+            user.setRole(com.example.backend_api_team10.entity.Role.CUSTOMER);
 
             Customer customer = new Customer();
+            customer.setName(name.trim());
             customer.setUser(user);
             customer.setPhone(phone);
             customer.setStatus("ACTIVE");
@@ -110,6 +112,7 @@ public class AuthController {
             user.setName(name.trim());
             user.setEmail(normalizedEmail);
             user.setPasswordHash(encodedPassword);
+            user.setRole(com.example.backend_api_team10.entity.Role.PROVIDER);
 
             Provider provider = new Provider();
             provider.setUser(user);

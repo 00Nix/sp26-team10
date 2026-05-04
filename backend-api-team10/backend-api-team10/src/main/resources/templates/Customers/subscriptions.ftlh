@@ -19,7 +19,7 @@
           &mdash; $${(currentSubscription.subscriptionPlan.price!0)?string('0.00')}/month
         </p>
       </div>
-      <form method="post" action="/subscriptions/cancel">
+      <form method="post" action="/customers/subscriptions/cancel">
         <input type="hidden" name="subscriptionId" value="${currentSubscription.customerSubId?c}">
         <button type="submit" class="btn-outline"
                 style="font-size:.78rem;padding:6px 14px">Cancel Plan</button>
@@ -66,7 +66,7 @@
             <button class="plan-btn ${featured?then('','light')}"
                     disabled style="opacity:.6;cursor:default">Current Plan</button>
           <#else>
-            <form method="post" action="/subscriptions/select">
+            <form method="post" action="/customers/subscriptions/select">
               <input type="hidden" name="planName" value="${plan.name}">
               <button type="submit"
                       class="plan-btn ${featured?then('','light')}">Get Started</button>

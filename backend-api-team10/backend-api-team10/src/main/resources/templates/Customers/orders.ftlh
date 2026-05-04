@@ -12,7 +12,7 @@
       {"val":"transit",   "label":"In Transit"},
       {"val":"preparing", "label":"Preparing"}
     ] as f>
-      <a href="/orders<#if f.val != 'all'>?status=${f.val}</#if>"
+      <a href="/customers/orders<#if f.val != 'all'>?status=${f.val}</#if>"
          class="filter-btn <#if (activeFilter!'all') == f.val>active</#if>">
         ${f.label}
       </a>

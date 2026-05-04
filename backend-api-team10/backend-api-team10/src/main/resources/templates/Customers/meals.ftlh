@@ -8,7 +8,7 @@
     <p class="page-sub">${(meals?size)!0} fresh meals &middot; Updated every month</p>
     <div class="filter-bar">
       <#list ["all","vegan","vegetarian","keto","gluten-free"] as f>
-        <a href="/meals<#if f != 'all'>?filter=${f}</#if>"
+        <a href="/customers/meals<#if f != 'all'>?filter=${f}</#if>"
            class="filter-btn <#if (activeFilter!'all') == f>active</#if>">
           ${f?cap_first}
         </a>
