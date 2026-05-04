@@ -25,6 +25,7 @@ public class Customer {
     private Boolean subscribed;
 
     private String status;
+    private String name;
 
     // Constructors
     public Customer() {}

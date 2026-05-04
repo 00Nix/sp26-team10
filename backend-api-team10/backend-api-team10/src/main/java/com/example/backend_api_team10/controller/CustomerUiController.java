@@ -19,7 +19,7 @@ import com.example.backend_api_team10.entity.Meal;
 import com.example.backend_api_team10.entity.Order;
 import com.example.backend_api_team10.entity.Review;
 import com.example.backend_api_team10.entity.SubscriptionPlan;
-import com.example.backend_api_team10.entity.User;
+import com.example.backend_api_team10.entity.Users;
 import com.example.backend_api_team10.service.CartItemService;
 import com.example.backend_api_team10.service.CartService;
 import com.example.backend_api_team10.service.CustomerService;
@@ -79,7 +79,7 @@ public class CustomerUiController {
     public String processLogin(@RequestParam String email,
                                @RequestParam String password, HttpSession session,
                                Model model) {
-        User user = userRepo.findByEmail(email).orElse(null);
+        Users user = userRepo.findByEmail(email).orElse(null);
         if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
             if (user.getCustomer() != null) {
                 session.setAttribute("LoggedInCustomerId", user.getCustomer().getCustomerId());
@@ -141,7 +141,7 @@ public class CustomerUiController {
 
     @GetMapping("/subscriptions")
     public String showSubscriptionPage(Model model, HttpSession session) {
-        List<SubscriptionPlan> plans = subscriptionPlanService.getAllSubscriptionPlan();
+        List<SubscriptionPlan> plans = subscriptionPlanService.getAllSubscriptionPlans();
         model.addAttribute("plans", plans);
 
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
@@ -266,7 +266,7 @@ public class CustomerUiController {
             model.addAttribute("prefilledEmail", email);
             return "register";
         }
-        User newUser = new User();
+        Users newUser = new Users();
         newUser.setEmail(email);
         newUser.setPasswordHash(password);
         newUser.setRole(com.example.backend_api_team10.entity.Role.CUSTOMER);
