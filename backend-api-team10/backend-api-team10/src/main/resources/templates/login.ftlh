@@ -25,7 +25,7 @@
             </div>
         </#if>
 
-        <form action="/customers/login" method="post" class="login-form">
+        <form action="/login" method="post" class="login-form">
 
             <#if _csrf??>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -60,7 +60,7 @@
         </form>
 
         <div class="footer-links">
-            <p>Don't have an account? <a href="/customers/register">Sign up</a></p>
+            <p>Don't have an account? <a href="/register">Sign up</a></p>
         </div>
 
     </div>
