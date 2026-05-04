@@ -18,11 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-<<<<<<< Updated upstream
 @Table(name = "meal_plans")
-=======
-@Table(name = "mealPlans")
->>>>>>> Stashed changes
 public class MealPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

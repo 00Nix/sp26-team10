@@ -29,9 +29,10 @@ public class Customer {
     // Constructors
     public Customer() {}
 
-    public Customer(Users user, String phone, Boolean subscribed, String status) {
+    public Customer(Users user, String phone, String name, Boolean subscribed, String status) {
         this.user = user;
         this.phone = phone;
+        this.name = name;
         this.subscribed = subscribed;
         this.status = status;
     }
@@ -46,10 +47,6 @@ public class Customer {
         return user;
     }
 
-<<<<<<< Updated upstream
-    public Long getCustomerId() { return customer_id; }
-    public void setCustomerId(Long customer_id) { this.customer_id = customer_id; }
-=======
     public Long getCustomerId() { 
         return customer_id; 
     }
@@ -57,7 +54,6 @@ public class Customer {
         this.customer_id = customer_id; 
 
     }
->>>>>>> Stashed changes
 
     public String getName() { 
         return name; 

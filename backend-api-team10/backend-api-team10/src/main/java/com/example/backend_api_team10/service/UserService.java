@@ -1,6 +1,5 @@
 package com.example.backend_api_team10.service;
 
-<<<<<<< Updated upstream
 import org.springframework.stereotype.Service;
 import com.example.backend_api_team10.entity.Role;
 import com.example.backend_api_team10.entity.Users;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-=======
->>>>>>> Stashed changes
 import java.util.List;
 import java.util.Optional;
 
@@ -44,26 +41,16 @@ public class UserService {
         return userRepo.findAll();
     }
 
-<<<<<<< Updated upstream
     public Optional<Users> getUserById(Long user_id){
         return userRepo.findByUserId(user_id);
-=======
-    public Optional<User> getUserById(Long user_id){
-        return userRepo.findById(user_id);
->>>>>>> Stashed changes
     }
 
     public Users saveUser(Users user){
         return userRepo.save(user);
     }
 
-<<<<<<< Updated upstream
     public Users updateUser(Long user_id, Users updatedUser){
         return userRepo.findByUserId(user_id)
-=======
-    public User updateUser(Long user_id, User updatedUser){
-        return userRepo.findById(user_id)
->>>>>>> Stashed changes
                 .map(existingUser -> {
                     existingUser.setEmail(updatedUser.getEmail());
 
@@ -78,13 +65,8 @@ public class UserService {
                 
     }
 
-<<<<<<< Updated upstream
     public Users updateUserRole(Long user_id, Role newRole){
         Optional<Users> optionalUser = userRepo.findByUserId(user_id);
-=======
-    public User updateUserRole(Long user_id, Role newRole){
-        Optional<User> optionalUser = userRepo.findById(user_id);
->>>>>>> Stashed changes
         if (optionalUser.isPresent()) {
             Users user = optionalUser.get();
             user.setRole(newRole);

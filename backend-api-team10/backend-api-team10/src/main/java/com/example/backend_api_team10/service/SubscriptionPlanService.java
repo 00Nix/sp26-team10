@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.backend_api_team10.entity.SubscriptionPlan;
 import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
@@ -33,17 +35,10 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.findByName(name);
     }
 
-<<<<<<< Updated upstream
     public SubscriptionPlan updateSubscriptionPlan(@PathVariable Long plan_id, @RequestBody SubscriptionPlan updatedPlan){
         Optional<SubscriptionPlan> existing = subscriptionPlanRepo.findById(updatedPlan.getPlanId());
         if (existing.isPresent()) {
             SubscriptionPlan plan = existing.get();
-=======
-    public SubscriptionPlan updateSubscriptionPlan(String name, SubscriptionPlan updatedPlan){
-        List<SubscriptionPlan> existing = subscriptionPlanRepo.findByName(updatedPlan.getName());
-        if (existing != null && !existing.isEmpty()) {
-            SubscriptionPlan plan = existing.get(0);
->>>>>>> Stashed changes
             plan.setPrice(updatedPlan.getPrice());
             plan.setDescription(updatedPlan.getDescription());
             plan.setFeatures(updatedPlan.getFeatures());
