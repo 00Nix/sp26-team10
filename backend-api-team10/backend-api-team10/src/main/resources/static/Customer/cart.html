@@ -99,7 +99,7 @@
       showEmpty('Please log in to view your cart.');
       return;
     }
-    fetch(`/api/carts/customer/${customerId}`)
+    fetch(`/api/carts/customers/${customerId}`)
       .then(r => { if (!r.ok) throw new Error(); return r.json(); })
       .then(cart => {
         cartId = cart.id;

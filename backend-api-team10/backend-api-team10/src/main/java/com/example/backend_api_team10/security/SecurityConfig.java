@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                 .requestMatchers("/", "/home", "/index", "/login", "/register", "/styles", "/images", "/403", "/error").permitAll()
                 .requestMatchers("/meals", "/mealplans", "/subscriptions").permitAll()
-                .requestMatchers("/customer/**", "/cart/**", "/orders/**", "/reviews/create/**", "/subscriptions/subscribe/**").hasRole("CUSTOMER")
+                .requestMatchers("/customers/**", "/cart/**", "/orders/**", "/reviews/create/**", "/subscriptions/subscribe/**").hasRole("CUSTOMER")
                 .requestMatchers("/provider/**", "/mealplans/add/**", "/mealplans/edit/**", "/meals/edit/**", "/meals/add/**", "/reviews/reply/**", "/analytics/**").hasRole("PROVIDER")
                 .anyRequest().authenticated()
             )

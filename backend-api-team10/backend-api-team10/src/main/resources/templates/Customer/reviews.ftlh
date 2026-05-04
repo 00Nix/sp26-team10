@@ -40,19 +40,15 @@
       <#list reviews as r>
         <div class="review-card">
           <div class="stars">
-            <#-- Review.getRating() returns int (primitive) confirmed -->
             <#list 1..5 as i>
               <#if i <= r.rating>&#9733;<#else>&#9734;</#if>
             </#list>
           </div>
-          <#-- Review uses 'description' field confirmed from entity -->
           <p>&ldquo;${(r.description!'Great experience!')}&rdquo;</p>
           <div class="reviewer">
             <div class="avatar">&#128100;</div>
             <div class="reviewe-info">
-              <#-- Review.getCustomer().getName() — Customer.getName() confirmed -->
               <div class="name">${(r.customer.name!'Customer')}</div>
-              <#-- Review uses 'date' (LocalDate) confirmed -->
               <#if r.date??>
                 <div class="date">${r.date?string('MMMM d, yyyy')}</div>
               </#if>

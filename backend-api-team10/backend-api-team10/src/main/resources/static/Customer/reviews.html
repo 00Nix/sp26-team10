@@ -174,7 +174,7 @@
     if (!text) { showToast('Please write a review'); return; }
 
     // Need an orderId - get most recent order
-    fetch(`/api/carts/customer/${customerId}`)
+    fetch(`/api/carts/customers/${customerId}`)
       .then(r => r.json())
       .then(cart => fetch(`/api/orders/cart/${cart.id}`))
       .then(r => r.json())

@@ -10,15 +10,8 @@
 <div class="login-container">
     <div class="login-card">
 
-<<<<<<< Updated upstream
         <h1 class="logo">Balanced Bite</h1>
         <p class="subtitle">Sign in to your account</p>
-=======
-    <div class="auth-brand">
-      <a class="nav-logo" href="/index">Balanced<span>Bite</span></a>
-      <p>Welcome back — sign in to continue</p>
-    </div>
->>>>>>> Stashed changes
 
         <#if error??>
             <div class="error-message">
@@ -32,7 +25,7 @@
             </div>
         </#if>
 
-        <form action="/login" method="post" class="login-form">
+        <form action="/customers/login" method="post" class="login-form">
 
             <#if _csrf??>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -67,7 +60,7 @@
         </form>
 
         <div class="footer-links">
-            <p>Don't have an account? <a href="/register">Sign up</a></p>
+            <p>Don't have an account? <a href="/customers/register">Sign up</a></p>
         </div>
 
     </div>

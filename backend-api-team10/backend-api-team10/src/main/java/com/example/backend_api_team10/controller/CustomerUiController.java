@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.backend_api_team10.entity.Cart;
@@ -32,6 +33,7 @@ import com.example.backend_api_team10.service.SubscriptionPlanService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/customers")
 public class CustomerUiController {
 
     @Autowired
@@ -55,6 +57,7 @@ public class CustomerUiController {
     @Autowired
     private com.example.backend_api_team10.repository.UserRepo userRepo;
     
+
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
@@ -68,12 +71,12 @@ public class CustomerUiController {
         List<Review> reviews = reviewService.getAllReviews();
         double avg = reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
         model.addAttribute("averageRating", avg);
-        return "index";
+        return "customer/index";
     }
 
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login";
+        return "customer/login";
     }
     @PostMapping("/login")
     public String processLogin(@RequestParam String email,
@@ -84,27 +87,27 @@ public class CustomerUiController {
             if (user.getCustomer() != null) {
                 session.setAttribute("LoggedInCustomerId", user.getCustomer().getCustomerId());
                 session.setAttribute("LoggedInCustomerName", user.getCustomer().getName());
-                return "redirect:/index";
+                return "redirect:/customers/index";
             } else {
                 model.addAttribute("error", "User is not a customer");
-                return "login";
+                return "customer/login";
             }
         } else {
             model.addAttribute("error", "Invalid email or password");
             model.addAttribute("prefilledEmail", email);
-            return "login";
+            return "customer/login";
         }
 
     }  
     
     @GetMapping("/register")
     public String showRegistrationPage() {
-        return "register";  
+        return "customer/register";  
     }
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/index";
+        return "redirect:/customers/index";
     }
     @GetMapping("/meals")
     public String showMealsPage(@RequestParam(defaultValue = "all") String filter, Model model, HttpSession session) {
@@ -126,17 +129,17 @@ public class CustomerUiController {
                 .collect(Collectors.toList());
             model.addAttribute("favMealIds", favMealIds);
         }
-        return "meals";
+        return "customer/meals";
     }
     @PostMapping("/subscriptions/select")
     public String selectSubscription(@RequestParam("planName") String planName, HttpSession session) {
         
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/login";
+            return "redirect:/customers/login";
         }
         System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
-        return "redirect:/subscriptions";
+        return "redirect:/customers/subscriptions";
     }
 
     @GetMapping("/subscriptions")
@@ -145,13 +148,13 @@ public class CustomerUiController {
         model.addAttribute("plans", plans);
 
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
-        return "subscriptions";
+        return "customer/subscriptions";
     }
     @GetMapping("/orders")
     public String showOrdersPage(@RequestParam(defaultValue = "all") String status, Model model, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/login";
+            return "redirect:/customers/login";
         }
         List<Order> userOrders = orderService.getAllOrders().stream()
             .filter(o -> o.getCustomerId().equals(customerId))
@@ -164,18 +167,18 @@ public class CustomerUiController {
         }
         model.addAttribute("orders", userOrders);
         model.addAttribute("activeFilter", status);
-        return "orders";
+        return "customer/orders";
 
     }
     @PostMapping("/orders/checkout")
     public String processCheckout(HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/login";
+            return "redirect:/customers/login";
         }
         Cart cart = cartService.getCartByCustomer(customerId).orElse(null);
         if (cart == null || cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
-            return "redirect:/carts";
+            return "redirect:/customers/carts";
         }
         Order newOrder = new Order();
         newOrder.setCustomerId(customerId);
@@ -194,7 +197,7 @@ public class CustomerUiController {
         }
         cart.setSubtotal(java.math.BigDecimal.ZERO);
         cartService.updateCart(cart.getCartId(), cart);
-        return "checkout";
+        return "customers/checkout";
     }
 
     @GetMapping("/reviews")
@@ -211,13 +214,13 @@ public class CustomerUiController {
             java.util.Map.of("stars", 2, "pct", 3),
             java.util.Map.of("stars", 1, "pct", 2)        
         ));
-        return "reviews";
+        return "customer/reviews";
     }
     @PostMapping("/favorites/toggle")
     public String toggleFavorite(@RequestParam Long mealId, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/login";
+            return "redirect:/customers/login";
         }
         favoriteService.findSpecific(customerId, mealId).ifPresentOrElse(
             fav -> favoriteService.removeFavorite(fav.getFavoriteId()),
@@ -234,7 +237,7 @@ public class CustomerUiController {
     public String addToCart(@RequestParam Long mealId, @RequestParam int qty, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/login";
+            return "redirect:/customers/login";
         }
         Cart cart = cartService.getCartByCustomer(customerId)
             .orElseGet(() -> {
@@ -248,7 +251,7 @@ public class CustomerUiController {
         item.setMeal(meal);
         item.setQuantity(qty);
         cartItemService.createItem(item);
-        return "redirect:/meals";
+        return "redirect:/customers/meals";
             }
 
         @PostMapping("/register")
@@ -264,7 +267,7 @@ public class CustomerUiController {
             model.addAttribute("error", "Email is already registered");
             model.addAttribute("prefilledName", name);
             model.addAttribute("prefilledEmail", email);
-            return "register";
+            return "customer/register";
         }
         Users newUser = new Users();
         newUser.setEmail(email);
@@ -283,13 +286,13 @@ public class CustomerUiController {
         Customer savedCustomer = customerService.createCustomer(newCustomer);
         session.setAttribute("LoggedInCustomerId", savedCustomer.getCustomerId());
         session.setAttribute("LoggedInCustomerName", savedCustomer.getName());
-        return "redirect:/index";
+        return "redirect:/customers/index";
     }
     @GetMapping("/carts")
     public String showCartPage(Model model, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/login";
+            return "redirect:/customers/login";
         }
         Cart cart = cartService.getCartByCustomer(customerId).orElse(null);
         if (cart != null && cart.getCartItems() != null) {
@@ -309,7 +312,7 @@ public class CustomerUiController {
                 model.addAttribute("discount", 0);
                 model.addAttribute("total", 0);
             }
-            return "cart";
+            return "customer/cart";
        
     }
     @PostMapping("/carts/update")
@@ -324,7 +327,7 @@ public class CustomerUiController {
                 cartItemService.createItem(item);
             }
         }
-        return "redirect:/carts";
+        return "redirect:/customers/carts";
     }
 
 }

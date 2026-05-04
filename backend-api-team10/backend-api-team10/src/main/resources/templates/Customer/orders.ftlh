@@ -53,7 +53,7 @@
             </div>
             <#-- Order.getTotalPrice() returns Double confirmed -->
             <div class="order-total">$${(o.totalPrice!0)?string('0.00')}</div>
-            <form method="post" action="/orders/reorder" style="display:inline">
+            <form method="post" action="/customers/orders/reorder" style="display:inline">
               <input type="hidden" name="orderId" value="${o.orderId?c}">
               <button type="submit" class="track-btn">Reorder</button>
             </form>
@@ -65,7 +65,7 @@
         <div class="empty-icon">&#128230;</div>
         <h3>No orders found</h3>
         <p>Looks like you haven't placed any orders yet.</p>
-        <a href="/meals" class="btn-primary">Browse Meals</a>
+        <a href="/customers/meals" class="btn-primary">Browse Meals</a>
       </div>
     </#if>
   </div>

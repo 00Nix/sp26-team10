@@ -39,7 +39,7 @@ public class CartController {
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
     }
 
-    @GetMapping("/customer/{customerId}")
+    @GetMapping("/customers/{customerId}")
     public Cart getCartByCustomer(@PathVariable Long customerId) {
         return cartService.getCartByCustomer(customerId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));

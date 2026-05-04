@@ -6,7 +6,7 @@
     <div style="text-align: center; padding: 50px;">
         <h1>🎉 Checkout Successful! 🎉</h1>
         <p>Your order has been placed successfully.</p>
-        <a href="/meals" class="btn-primary">Back to Menu</a>
+        <a href="/customers/meals" class="btn-primary">Back to Menu</a>
     </div>
 </main>
 <@footer />

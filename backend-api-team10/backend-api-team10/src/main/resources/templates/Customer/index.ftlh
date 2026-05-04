@@ -9,8 +9,8 @@
       <h1>Eat <em>well</em>,<br>live better.</h1>
       <p>Meals designed by professionals. Fresh ingredients delivered to you.</p>
       <div class="hero-ctas">
-        <button class="btn-primary"  onclick="location.href='/meals'">Explore Meals</button>
-        <button class="btn-outline"  onclick="location.href='/subscriptions'">View Subscription Plans</button>
+        <button class="btn-primary"  onclick="location.href='/customers/meals'">Explore Meals</button>
+        <button class="btn-outline"  onclick="location.href='/customers/subscriptions'">View Subscription Plans</button>
       </div>
       <div class="hero-stats">
         <div class="stat">
