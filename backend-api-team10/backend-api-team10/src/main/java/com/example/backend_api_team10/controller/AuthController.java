@@ -1,18 +1,20 @@
 package com.example.backend_api_team10.controller;
 
-import com.example.backend_api_team10.entity.Users;
-import com.example.backend_api_team10.entity.Customer;
-import com.example.backend_api_team10.entity.Provider;
-import com.example.backend_api_team10.service.CustomerService;
-import com.example.backend_api_team10.service.ProviderService;
-import com.example.backend_api_team10.repository.UserRepo;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.backend_api_team10.entity.Customer;
+import com.example.backend_api_team10.entity.Provider;
+import com.example.backend_api_team10.entity.Users;
+import com.example.backend_api_team10.repository.UserRepo;
+import com.example.backend_api_team10.service.CustomerService;
+import com.example.backend_api_team10.service.ProviderService;
 
 @Controller
 public class AuthController {
@@ -137,7 +139,7 @@ public class AuthController {
             }
 
             if ("ROLE_CUSTOMER".equals(auth.getAuthority())) {
-                return "redirect:/customer/home";
+                return "redirect:/customers/index";
             }
         }
 

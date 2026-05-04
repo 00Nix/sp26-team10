@@ -25,10 +25,10 @@
     <a href="/customers/carts" class="nav-cart ${(activePage == 'cart')?then('active', '')}">
       &#128722; <span class="cart-badge">${cartCount!0}</span>
     </a>
-    <a href="/customers/logout" class="nav-login">Logout</a>
+    <a href="/logout" class="nav-login">Logout</a>
   <#else>
-    <a href="/customers/login" class="nav-login">Sign In</a>
-    <a href="/customers/register" class="nav-register">Join Now</a>
+    <a href="/login" class="nav-login">Sign In</a>
+    <a href="/register" class="nav-register">Join Now</a>
   </#if>
   </div>
 </nav>

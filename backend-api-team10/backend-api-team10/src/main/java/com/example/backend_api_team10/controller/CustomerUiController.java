@@ -106,7 +106,7 @@ public class CustomerUiController {
         
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/customers/login";
+            return "redirect:/login";
         }
         System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
         return "redirect:/customers/subscriptions";
@@ -124,7 +124,7 @@ public class CustomerUiController {
     public String showOrdersPage(@RequestParam(defaultValue = "all") String status, Model model, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/customers/login";
+            return "redirect:/login";
         }
         List<Order> userOrders = orderService.getAllOrders().stream()
             .filter(o -> o.getCustomerId().equals(customerId))
@@ -144,7 +144,7 @@ public class CustomerUiController {
     public String processCheckout(HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/customers/login";
+            return "redirect:/login";
         }
         Cart cart = cartService.getCartByCustomer(customerId).orElse(null);
         if (cart == null || cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
@@ -190,7 +190,7 @@ public class CustomerUiController {
     public String toggleFavorite(@RequestParam Long mealId, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/customers/login";
+            return "redirect:/login";
         }
         favoriteService.findSpecific(customerId, mealId).ifPresentOrElse(
             fav -> favoriteService.removeFavorite(fav.getFavoriteId()),
@@ -207,7 +207,7 @@ public class CustomerUiController {
     public String addToCart(@RequestParam Long mealId, @RequestParam int qty, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/customers/login";
+            return "redirect:/login";
         }
         Cart cart = cartService.getCartByCustomer(customerId)
             .orElseGet(() -> {
@@ -228,7 +228,7 @@ public class CustomerUiController {
     public String showCartPage(Model model, HttpSession session) {
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId == null) {
-            return "redirect:/customers/login";
+            return "redirect:/login";
         }
         Cart cart = cartService.getCartByCustomer(customerId).orElse(null);
         if (cart != null && cart.getCartItems() != null) {

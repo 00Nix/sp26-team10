@@ -41,7 +41,7 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(authorize -> authorize
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                .requestMatchers("/", "/home", "/index", "/login", "/register", "/customers/index", "/customers/login", "/styles", "/images", "/403", "/error").permitAll()
+                .requestMatchers("/", "/home", "/login", "/register", "/customers/index", "/styles", "/images", "/403", "/error").permitAll()
                 .requestMatchers("/meals", "/mealplans", "/subscriptions").permitAll()
                 .requestMatchers("/customers/**", "/cart/**", "/orders/**", "/reviews/create/**", "/subscriptions/subscribe/**").hasRole("CUSTOMER")
                 .requestMatchers("/provider/**", "/mealplans/add/**", "/mealplans/edit/**", "/meals/edit/**", "/meals/add/**", "/reviews/reply/**", "/analytics/**").hasRole("PROVIDER")
