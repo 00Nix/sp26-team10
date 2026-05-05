@@ -7,7 +7,6 @@
 </head>
 <body>
 <div class="overlay-page">
-    <div class="overlay-title-top">View Review Overlay</div>
     <h1 class="overlay-center-title">View Review</h1>
 
     <div class="overlay-card review-header-card">
@@ -33,7 +32,6 @@
                             </#if>
                         </#list> 
                     </p>
-                    
                 </span>
             </div>
         </div>
@@ -46,6 +44,24 @@
             ${review.description!}
         </p>
     </div>
+
+    <section class="review-reply-section">
+        <h3>Provider Reply</h3>
+
+        <#if replies?? && replies?size gt 0>
+            <#list replies as reply>
+                <div class="reply-card">
+                    <p class="reply-message">${reply.message!'No reply message provided.'}</p>
+                    <p class="reply-date">
+                        Replied on: ${reply.replyDate!reply.reply_date!'Unknown date'}
+                    </p>
+                </div>
+            </#list>
+        <#else>
+            <p class="muted-text">No provider reply has been posted yet.</p>
+            <a href="/provider/reviews/${review.reviewId}/reply" class="btn btn-primary">Reply to Review</a>
+        </#if>
+    </section>
 
     <div class="overlay-actions">
         <a href="/provider/reviews">Back to Reviews</a>

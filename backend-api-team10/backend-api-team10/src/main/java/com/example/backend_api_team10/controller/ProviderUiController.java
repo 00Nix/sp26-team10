@@ -99,6 +99,8 @@ public class ProviderUiController {
         List<Review> reviews = reviewService.getAllReviews();
 
         long totalReviews = reviews.size();
+        long repliedReviews = reviewReplyService.getAllReviewReplies().stream().map(reply -> reply.getReview().getReviewId()).distinct().count();
+        long newReviews = totalReviews - repliedReviews;
         double avgRating = reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
 
         if (rating != null) {
@@ -114,8 +116,8 @@ public class ProviderUiController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("totalReviews", totalReviews);
         model.addAttribute("avgRating", String.format("%.1f", avgRating));
-        model.addAttribute("newReviews", totalReviews);
-        model.addAttribute("repliedReviews", 0);
+        model.addAttribute("newReviews", newReviews);
+        model.addAttribute("repliedReviews", repliedReviews);
         model.addAttribute("selectedRating", rating);
         model.addAttribute("selectedSort", sort);
         
@@ -145,9 +147,10 @@ public class ProviderUiController {
     @GetMapping("/reviews/{reviewId}")
     public String viewReview(@PathVariable Long reviewId, Model model) {
         Review review = reviewService.getReviewById(reviewId).orElseThrow(() -> new RuntimeException("Review not found."));
+        List <ReviewReply> replies = reviewReplyService.getRepliesByReviewId(reviewId);
 
         model.addAttribute("review", review);
-
+        model.addAttribute("replies", replies);
         return "provider/view-review";
         
     }

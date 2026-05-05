@@ -30,6 +30,10 @@ public class ReviewReplyService {
         
     }
 
+    public List<ReviewReply> getRepliesByReviewId(Long reviewId) {
+        return reviewReplyRepo.findByReviewReviewId(reviewId);
+    }
+
     public List<ReviewReply> getAllReviewReplies() {
         return reviewReplyRepo.findAll();
     }
