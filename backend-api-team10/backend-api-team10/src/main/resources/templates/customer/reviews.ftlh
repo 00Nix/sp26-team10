@@ -97,7 +97,7 @@
             <div class="reviewe-info">
               <div class="name">${(r.customer.name!'Customer')}</div>
               <#if r.date??>
-                <div class="date">${r.date?string('MMMM d, yyyy')}</div>
+                <div class="date">${r.date?string?date("yyyy-MM-dd")?string("MMMM d, yyyy")}</div>
               </#if>
             </div>
           </div>

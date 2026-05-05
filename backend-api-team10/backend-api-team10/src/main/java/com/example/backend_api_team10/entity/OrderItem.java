@@ -28,7 +28,7 @@ public class OrderItem {
     private Meal meal;
 
     @ManyToOne
-    @JoinColumn(name = "plan_id", nullable = false)
+    @JoinColumn(name = "plan_id", nullable = true)
     private SubscriptionPlan plan;
 
     @Column(nullable = false)

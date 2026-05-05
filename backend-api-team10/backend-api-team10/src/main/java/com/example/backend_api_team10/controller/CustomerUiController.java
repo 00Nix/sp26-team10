@@ -149,8 +149,7 @@ public class CustomerUiController {
                                       @RequestParam(required = false) String phone,
                                       HttpSession session, Model model) {
         
-        boolean emailTaken = customerService.getAllCustomers().stream()
-            .anyMatch(c -> c.getUser().getEmail().equalsIgnoreCase(email));
+        boolean emailTaken = userRepo.findByEmail(email).isPresent();
         if (emailTaken) {
             model.addAttribute("error", "Email is already registered");
             model.addAttribute("prefilledName", name);
@@ -158,8 +157,9 @@ public class CustomerUiController {
             return "register";
         }
         Users newUser = new Users();
-        newUser.setEmail(email);
-        newUser.setPasswordHash(password);    
+        newUser.setEmail(email.trim().toLowerCase());
+        newUser.setPasswordHash(passwordEncoder.encode(password));
+        newUser.setRole(com.example.backend_api_team10.entity.Role.CUSTOMER);    
         
         Customer newCustomer = new Customer();
         newCustomer.setName(name);
@@ -171,14 +171,14 @@ public class CustomerUiController {
         Customer savedCustomer = customerService.createCustomer(newCustomer);
         session.setAttribute("LoggedInCustomerId", savedCustomer.getCustomerId());
         session.setAttribute("LoggedInCustomerName", savedCustomer.getName());
-        return "redirect:/index";
+        return "redirect:/customer/index";
 
     }  
     
     @GetMapping("/logout")
     public String logout (HttpSession session) {
         session.invalidate();
-        return "redirect:/index";
+        return "redirect:/customer/index";
     }
 
     @PostMapping("/subscriptions/select")
@@ -424,12 +424,7 @@ public class CustomerUiController {
         userRepo.findByEmail(authentication.getName()).ifPresent(user -> {
             if (user.getCustomer() != null) {
                 Long customerId = user.getCustomer().getCustomerId();
-                Customer customer = customerService.getCustomerById(customerId).orElse(null);
-                model.addAttribute("customer", customer);
-
-                customerSubscriptionRepo.findByCustomerId(customerId).ifPresent(sub -> {
-                    model.addAttribute("subscription", sub);
-                });
+                model.addAttribute("customer", customerService.getCustomerById(customerId).orElse(null));
             }
         });
         return "customer/profile";
