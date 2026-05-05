@@ -73,7 +73,7 @@ public class OrderItem {
     public Integer getQuantity() {
         return quantity;
     }
-    public void setQuantity(Integer Quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
     public BigDecimal getItemTotal() {

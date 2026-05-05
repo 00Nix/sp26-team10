@@ -1,5 +1,6 @@
 package com.example.backend_api_team10.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -28,7 +29,7 @@ public class Order {
     private LocalDateTime timestamp;
 
     @Column(name = "total_price", nullable = false)
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @Column(nullable = false, length = 20)
     private String status;
@@ -39,7 +40,7 @@ public class Order {
     public Order() {}
 
     public Order(Long customer_id, Long cartId, LocalDateTime timestamp, 
-        Double totalPrice, String status, String address) {
+        BigDecimal totalPrice, String status, String address) {
             this.customerId = customer_id;
             this.cartId = cartId;
             this.timestamp = timestamp;
@@ -72,10 +73,10 @@ public class Order {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    public Double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
     public String getStatus() {

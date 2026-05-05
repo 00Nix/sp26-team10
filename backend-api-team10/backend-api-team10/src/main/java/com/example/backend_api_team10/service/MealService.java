@@ -2,13 +2,13 @@ package com.example.backend_api_team10.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.backend_api_team10.entity.Meal;
 import com.example.backend_api_team10.entity.Provider;
 import com.example.backend_api_team10.repository.MealRepo;
 import com.example.backend_api_team10.repository.ProviderRepo;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class MealService {
@@ -24,6 +24,10 @@ public class MealService {
     }
 
     public Meal createMeal(Meal meal) {
+
+        if (meal.getProvider() == null || meal.getProvider().getProviderId() == null) {
+            throw new RuntimeException("A valid Provider Id is required to create a meal");
+        }
 
         Long provider_id = meal.getProvider().getProviderId();
 
@@ -50,6 +54,9 @@ public class MealService {
     public Meal updateMeal(Long meal_id, Meal updatedMeal){
         Meal existingMeal = getMealById(meal_id);
         if (existingMeal != null) {
+            existingMeal.setName(updatedMeal.getName());
+            existingMeal.setDiet(updatedMeal.getDiet());
+            existingMeal.setPortionSize(updatedMeal.getPortionSize());
             existingMeal.setDescription(updatedMeal.getDescription());
             existingMeal.setPrice(updatedMeal.getPrice());
             existingMeal.setImageUrl(updatedMeal.getImageUrl());
