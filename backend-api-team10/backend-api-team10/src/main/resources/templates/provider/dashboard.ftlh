@@ -8,10 +8,16 @@
 </head>
 <body>
     <main class="page-container">
+        <h3>BALANCED<br>BITE</h3>
         <h1>${pageTitle!"Provider Dashboard"}</h1>
         <p>Manage your profile, plans, meals, orders, reviews, and analytics.</p>
 
         <div class="dashboard-grid">
+            <a class="dashboard-card" href="/customer/index">
+                <h2>Home Page</h2>
+                <p>Return to the site.</p>
+            </a>
+            
             <a class="dashboard-card" href="/provider/profile">
                 <h2>Update Profile</h2>
                 <p>Edit your provider details and biography.</p>

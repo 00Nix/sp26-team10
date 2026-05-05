@@ -26,7 +26,7 @@
             <a class="sidebar-link" href="/provider/profile">Profile</a>
         </nav>
         <div class="sidebar-bottom">
-            <a href="/">Back to Home</a>
+            <a href="/customer/index">Back to Home</a>
             <a href="/logout">Log Out</a>
         </div>
     </aside>
@@ -76,7 +76,7 @@
                 <div class="rating-summary">
                     <h3>Average Rating</h3>
                     <div class="big-rating">${avgRating!}</div>
-                    <div class="rating-stars">★★★★☆</div>
+                    <div class="rating-stars"></div>
                 </div>
             </section>
 
@@ -84,12 +84,14 @@
                 <div class="page-content">
                     <div class="search-filter-row">
                         <div class="filter-group">
-                            <button class="btn btn-pill-dark" type="button">All</button>
-                            <button class="btn btn-pill-light" type="button">5</button>
-                            <button class="btn btn-pill-light" type="button">4</button>
-                            <button class="btn btn-pill-light" type="button">3</button>
-                            <button class="btn btn-pill-light" type="button">2</button>
-                            <button class="btn btn-pill-light" type="button">1</button>
+                            <a class="btn btn-pill-dark" href="/provider/reviews">All</a>
+                            <a class="btn btn-pill-light" href="/provider/reviews?rating=5">5</a>
+                            <a class="btn btn-pill-light" href="/provider/reviews?rating=4">4</a>
+                            <a class="btn btn-pill-light" href="/provider/reviews?rating=3">3</a>
+                            <a class="btn btn-pill-light" href="/provider/reviews?rating=2">2</a>
+                            <a class="btn btn-pill-light" href="/provider/reviews?rating=1">1</a>
+                            <a class="btn btn-pill-light" href="/provider/reviews?sort=newest">Newest</a>
+                            <a class="btn btn-pill-light" href="/provider/reviews?sort=oldest">Oldest</a>
                         </div>
 
                         <div class="filter-group">
@@ -117,11 +119,11 @@
                                 </div>
 
                                 <div class="review-action">
-                                    <a href="/provider/reviews/${review.review_id}">View</a>
+                                    <a href="/provider/reviews/${review.reviewId}">View</a>
                                 </div>
 
                                 <div class="review-action">
-                                    <a href="/provider/reviews/${review.review_id}/reply">Reply</a>
+                                    <a href="/provider/reviews/${review.reviewId}/reply">Reply</a>
                                 </div>
                             </div>
                         </#list>

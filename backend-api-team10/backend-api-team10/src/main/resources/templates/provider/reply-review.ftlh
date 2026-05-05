@@ -34,7 +34,8 @@
         <h2 class="form-title-center">Response</h2>
         <hr class="form-divider-small">
 
-        <form action="/provider/reviews/${review.review_id}/reply" method="post">
+        <form action="/provider/reviews/${review.reviewId}/reply" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
             <textarea class="reply-textarea" name="message">${reply.message!''}</textarea>
 
             <div class="reply-submit">

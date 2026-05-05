@@ -10,4 +10,5 @@ public interface ReviewReplyRepo extends JpaRepository<ReviewReply, Long> {
 
     @Query("SELECT rr FROM ReviewReply rr WHERE rr.review.reviewId = :reviewId")
     List<ReviewReply> findByReviewId(Long reviewId);
+    List<ReviewReply> findByReviewReviewId(Long reviewId);
 }
