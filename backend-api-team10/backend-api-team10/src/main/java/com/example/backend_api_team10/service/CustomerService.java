@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.backend_api_team10.entity.Customer;
 import com.example.backend_api_team10.entity.Role;
-import com.example.backend_api_team10.entity.User;
+import com.example.backend_api_team10.entity.Users;
 import com.example.backend_api_team10.repository.CustomerRepo;
 import com.example.backend_api_team10.repository.UserRepo;
 
@@ -27,16 +27,14 @@ public class CustomerService {
 
     public Customer createCustomer(Customer customer) {
 
-        User user = customer.getUser();
+        Users user = customer.getUser();
 
         if (user == null){
             throw new RuntimeException("User details are required!");
         }
         
         user.setRole(Role.CUSTOMER);
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-
-        User savedUser = userRepo.save(user);
+        Users savedUser = userRepo.save(user);
         customer.setUser(savedUser);
 
         return customerRepository.save(customer);
@@ -50,19 +48,22 @@ public class CustomerService {
         return customerRepository.findById(customer_id);
     }
 
+    public boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
+    }
+
     public Customer updateCustomer(Long customer_id, Customer updatedCustomer) {
         return customerRepository.findById(customer_id)
                 .map(customer -> {
-                    customer.setName(updatedCustomer.getName());
                     customer.setPhone(updatedCustomer.getPhone());
                     customer.setSubscribed(updatedCustomer.isSubscribed());
                     customer.setStatus(updatedCustomer.getStatus());
 
-                    User existingUser = customer.getUser();
-                    User updatedUser = updatedCustomer.getUser();
+                    Users existingUser = customer.getUser();
+                    Users updatedUser = updatedCustomer.getUser();
 
                     if (existingUser == null){
-                        existingUser = new User();
+                        existingUser = new Users();
                     }
 
                     if (updatedUser != null){
@@ -74,7 +75,7 @@ public class CustomerService {
                     }
 
                     existingUser.setRole(Role.CUSTOMER);
-                    User savedUser = userRepo.save(existingUser);
+                    Users savedUser = userRepo.save(existingUser);
                     customer.setUser(savedUser);
 
                     return customerRepository.save(customer);
@@ -88,7 +89,7 @@ public class CustomerService {
         Customer customer = customerRepository.findById(customer_id).orElse(null);
 
         if (customer != null){
-            User user = customer.getUser();
+            Users user = customer.getUser();
             customerRepository.delete(customer);
             
             if (user != null){

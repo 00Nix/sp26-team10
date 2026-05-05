@@ -29,7 +29,7 @@ public class FavoriteController {
     public List<Favorite> getAll() {
         return favoriteService.getAllFavorites();
     }
-    @GetMapping("/customer/{customerId}")
+    @GetMapping("/customers/{customerId}")
     public List<Favorite> getByCustomer(@PathVariable Long customerId) {
         return favoriteService.getByCustomer(customerId);
     }

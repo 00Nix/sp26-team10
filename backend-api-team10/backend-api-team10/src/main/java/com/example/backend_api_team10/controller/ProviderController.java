@@ -31,9 +31,16 @@ public class ProviderController {
         return providerService.createProvider(provider);   
     }
 
-    @PutMapping("/{provider_id}")
-    public Provider updateProvider(@PathVariable Long provider_id, @RequestBody Provider provider){
-        return providerService.updateProvider(provider_id, provider);
+    @PostMapping("/profile/{provider_id}/update")
+    public String updateProfile(@PathVariable Long provider_id,
+                            @RequestParam String name,
+                            @RequestParam String email,
+                            @RequestParam String phone,
+                            @RequestParam String biography) {
+
+    providerService.updateProvider(provider_id, name, email, phone, biography);
+
+    return "redirect:/provider/profile/" + provider_id;
     }
 
     @DeleteMapping("/{provider_id}")

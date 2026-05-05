@@ -28,7 +28,7 @@ public class OrderItem {
     private Meal meal;
 
     @ManyToOne
-    @JoinColumn(name = "plan_id", nullable = false)
+    @JoinColumn(name = "plan_id", nullable = true)
     private SubscriptionPlan plan;
 
     @Column(nullable = false)
@@ -73,7 +73,7 @@ public class OrderItem {
     public Integer getQuantity() {
         return quantity;
     }
-    public void setQuantity(Integer Quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
     public BigDecimal getItemTotal() {

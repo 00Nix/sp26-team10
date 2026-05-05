@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "mealPlanMeal")
+@Table(name = "meal_plan_meal")
 public class MealPlanMeal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +32,19 @@ public class MealPlanMeal {
     }
 
     // setters and getters
+    public void setMeal(Meal meal) {
+        this.meal = meal;
+    }
+
+    public Meal getMeal() {
+        return meal;
+    }
 
     public void setMealPlanMealId(Long mealPlan_mealId){
         this.mealPlan_mealId = mealPlan_mealId;
     }
 
-    public Long getMeanPlanMealId(){
+    public Long getMealPlanMealId(){
         return mealPlan_mealId;
     }
 

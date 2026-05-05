@@ -1,5 +1,6 @@
 package com.example.backend_api_team10.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class AnalyticsSummaryDTO {
@@ -8,11 +9,11 @@ public class AnalyticsSummaryDTO {
     private long totalCustomerSubscriptions;
     private long totalMealPlans;
     private long totalOrders;
-    private Double totalRevenue;
+    private BigDecimal totalRevenue;
     private String mostPopularSubscription;
     private List<DietCountDTO> mealPlansByDiet;
 
-    public AnalyticsSummaryDTO(long totalSubscriptionPlans, long totalCustomerSubscriptions, long totalMealPlans, long totalOrders, Double totalRevenue, String mostPopularSubscription, List<DietCountDTO> mealPlansByDiet) {
+    public AnalyticsSummaryDTO(long totalSubscriptionPlans, long totalCustomerSubscriptions, long totalMealPlans, long totalOrders, BigDecimal totalRevenue, String mostPopularSubscription, List<DietCountDTO> mealPlansByDiet) {
         this.totalSubscriptionPlans = totalSubscriptionPlans;
         this.totalCustomerSubscriptions = totalCustomerSubscriptions;
         this.totalMealPlans = totalMealPlans;
@@ -38,7 +39,7 @@ public class AnalyticsSummaryDTO {
         return totalOrders;
     }
 
-    public Double getTotalRevenue() {
+    public BigDecimal getTotalRevenue() {
         return totalRevenue;
     }
 

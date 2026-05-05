@@ -1,19 +1,17 @@
 package com.example.backend_api_team10.service;
 
-import org.springframework.stereotype.Service;
-import java.util.List;
 import java.math.BigDecimal;
+import java.util.List;
 
-import com.example.backend_api_team10.entity.SubscriptionPlan;
-import com.example.backend_api_team10.entity.CustomerSubscription;
-import com.example.backend_api_team10.entity.MealPlan;
-import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.backend_api_team10.dto.AnalyticsSummaryDTO;
+import com.example.backend_api_team10.dto.DietCountDTO;
 import com.example.backend_api_team10.repository.CustomerSubscriptionRepo;
 import com.example.backend_api_team10.repository.MealPlanRepo;
 import com.example.backend_api_team10.repository.OrderRepo;
-import com.example.backend_api_team10.dto.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
 
 @Service
 public class AnalyticsService {
@@ -46,7 +44,7 @@ public class AnalyticsService {
         return orderRepo.count();
     }
 
-    public Double getTotalRevenue() {
+    public BigDecimal getTotalRevenue() {
         return orderRepo.getTotalRevenue();
     }
 
@@ -67,11 +65,11 @@ public class AnalyticsService {
         long totalSubs = customerSubscriptionRepo.count();
         long totalMeals = mealPlanRepo.count();
         long totalOrders = orderRepo.count();
-        Double totalRevenue = orderRepo.getTotalRevenue();
+        BigDecimal totalRevenue = orderRepo.getTotalRevenue();
         String mostPopular = getMostPopularSubscriptionPlan();
         List<DietCountDTO> dietStats = getMealPlansByDiet();
 
-        return new AnalyticsSummaryDTO(totalSubs, totalSubs, totalMeals, totalOrders, totalRevenue, mostPopular, dietStats);
+        return new AnalyticsSummaryDTO(totalPlans, totalSubs, totalMeals, totalOrders, totalRevenue, mostPopular, dietStats);
     }
 
 }

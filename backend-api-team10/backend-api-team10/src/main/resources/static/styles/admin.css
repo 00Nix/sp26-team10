@@ -1,0 +1,1063 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+    --sage: #78966f;
+    --sage-dark: #67845f;
+    --sage-light: #dfe7dd;
+    --sage-pale: #edf2eb;
+    --cream: #c8bea0;
+    --bg: #f6f6f4;
+    --white: #ffffff;
+    --black: #111111;
+    --gray: #777777;
+    --gray-light: #dcdcdc;
+    --line: #9d9d9d;
+    --shadow: 0 8px 18px rgba(0, 0, 0, 0.10);
+    --radius-xl: 22px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-sm: 10px;
+    --border: 1.5px solid #262626;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background: var(--bg);
+    color: var(--black);
+    line-height: 1.4;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* -----------------------------
+   GENERIC PAGE CONTAINER
+----------------------------- */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 42px 24px 60px;
+}
+
+.page-container > a:first-child {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--sage-dark);
+    font-weight: 600;
+}
+
+.page-container h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.page-container > p {
+    color: var(--gray);
+    font-size: 1.05rem;
+    margin-bottom: 24px;
+}
+
+/* -----------------------------
+   SIMPLE DASHBOARD / CARDS
+----------------------------- */
+.dashboard-grid,
+.card-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+    margin-top: 26px;
+}
+
+.dashboard-card,
+.card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid #e7e7e7;
+    padding: 22px;
+    box-shadow: var(--shadow);
+}
+
+.dashboard-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 22px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-card h2,
+.card h2 {
+    font-size: 1.45rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.dashboard-card p,
+.card p {
+    color: #505050;
+    margin-bottom: 10px;
+}
+
+.button-link,
+.form-card button,
+.page-container button {
+    display: inline-block;
+    background: var(--cream);
+    color: var(--black);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-weight: 700;
+    font-style: italic;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.button-link:hover,
+.form-card button:hover,
+.page-container button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+/* -----------------------------
+   SIMPLE FORMS
+----------------------------- */
+.form-card {
+    background: #e4e9e2;
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    max-width: 760px;
+    box-shadow: var(--shadow);
+    margin-top: 20px;
+}
+
+.form-card label {
+    display: block;
+    margin: 18px 0 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.form-card input,
+.form-card textarea,
+.form-card select {
+    width: 100%;
+    border: 1.5px solid #2b2b2b;
+    border-radius: 12px;
+    background: #f8f8f8;
+    padding: 13px 14px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-card textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.form-card button {
+    margin-top: 22px;
+}
+
+/* -----------------------------
+   ADMIN LAYOUT
+----------------------------- */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 248px;
+    background: var(--sage);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    padding: 34px 28px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    flex-shrink: 0;
+}
+
+.sidebar-brand {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.sidebar-brand h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    line-height: 1.1;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-shadow: 0 3px 8px rgba(0,0,0,0.18);
+}
+
+.sidebar-brand p {
+    margin-top: 8px;
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 12px;
+}
+
+.sidebar-nav a,
+.sidebar-bottom a {
+    color: #fff;
+    font-size: 20px;
+    letter-spacing: 0.4px;
+    opacity: 0.95;
+}
+
+.sidebar-nav a.active {
+    font-weight: 700;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 20px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 50px 52px 42px;
+    min-width: 0;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2.4rem, 4vw, 4rem);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.page-subtitle {
+    margin-top: 12px;
+    font-size: 1.15rem;
+    color: var(--gray);
+    font-weight: 300;
+    letter-spacing: 3px;
+}
+
+.page-divider {
+    margin-top: 18px;
+    border: none;
+    border-top: 1px solid var(--line);
+}
+
+/* -----------------------------
+   BUTTONS / FILTERS
+----------------------------- */
+.btn {
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+}
+
+.btn-cream {
+    background: var(--cream);
+    color: var(--black);
+    padding: 13px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.btn-sage {
+    background: var(--sage);
+    color: #fff;
+    padding: 13px 24px;
+    border-radius: 14px;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #1d1d1d;
+    border: 1.5px solid #222;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.btn-pill-dark {
+    background: #171717;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.btn-pill-light {
+    background: #f3f3f3;
+    color: #111;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: 1px solid #d8d8d8;
+    font-weight: 500;
+}
+
+.toggle-group,
+.filter-group,
+.flex-between {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+/* -----------------------------
+   SUBSCRIPTIONS PAGE
+----------------------------- */
+.plan-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    margin: 22px 0 34px;
+    flex-wrap: wrap;
+}
+
+.plan-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(240px, 1fr));
+    gap: 32px;
+}
+
+.plan-card {
+    background: #dfe7dd;
+    border: 1.5px solid #333;
+    border-radius: 16px;
+    padding: 34px 26px 24px;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.plan-card h3 {
+    text-align: center;
+    font-size: 2.4rem;
+    line-height: 1.25;
+    font-weight: 700;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.16);
+}
+
+.plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    margin: 34px 0;
+}
+
+.plan-features li {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.plan-price-wrap,
+.plan-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.plan-actions {
+    margin-top: 16px;
+}
+
+/* -----------------------------
+   FORM-STYLE ADMIN PAGES
+----------------------------- */
+.form-shell {
+    background: #e2e7e1;
+    border-radius: 16px;
+    padding: 34px 38px 38px;
+}
+
+.form-two-col {
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: 44px;
+    align-items: start;
+}
+
+.form-title-center {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 8px;
+    margin-bottom: 14px;
+}
+
+.form-divider-small {
+    width: 72%;
+    margin: 0 auto 24px;
+    border: none;
+    border-top: 1px solid #8d8d8d;
+}
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+    letter-spacing: 6px;
+    font-weight: 500;
+}
+
+.form-input,
+.form-textarea {
+    width: 100%;
+    border: 1.5px solid #1f1f1f;
+    border-radius: 12px;
+    background: #f5f5f5;
+    padding: 14px 16px;
+    font-size: 1rem;
+}
+
+.form-textarea {
+    min-height: 170px;
+    resize: vertical;
+}
+
+.preview-card {
+    padding-top: 24px;
+}
+
+.preview-image {
+    width: 100%;
+    max-width: 340px;
+    height: 290px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 22px;
+}
+
+.preview-meta {
+    padding-left: 10px;
+}
+
+.preview-brand {
+    color: #7f7f7f;
+    font-size: 1rem;
+}
+
+.preview-name {
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.preview-price {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.preview-description {
+    margin-top: 8px;
+    color: #3f3f3f;
+}
+
+/* -----------------------------
+   STATS / ANALYTICS
+----------------------------- */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr)) 300px;
+    gap: 24px;
+    align-items: stretch;
+    margin: 26px 0 34px;
+}
+
+.stat-card {
+    background: #dfe7dd;
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+}
+
+.stat-label {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.stat-change {
+    margin-top: 8px;
+    font-size: 0.95rem;
+    color: #7a7a7a;
+}
+
+.chart-card {
+    background: #fafafa;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    padding: 16px 20px;
+}
+
+.analytics-panel {
+    background: #e2e8e1;
+    border-radius: 14px;
+    padding: 26px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 28px;
+}
+
+.analytics-side-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.analytics-mini-card {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.analytics-chart-box {
+    background: #fbfbfb;
+    border-radius: 10px;
+    padding: 18px;
+    min-height: 320px;
+}
+
+.chart-placeholder {
+    margin-top: 18px;
+    height: 220px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    position: relative;
+    background:
+        repeating-linear-gradient(
+            to right,
+            transparent 0,
+            transparent 108px,
+            rgba(0, 0, 0, 0.05) 108px,
+            rgba(0, 0, 0, 0.05) 110px
+        ),
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 54px,
+            rgba(0, 0, 0, 0.05) 54px,
+            rgba(0, 0, 0, 0.05) 56px
+        );
+}
+
+.chart-placeholder::after {
+    content: "";
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 52%;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #89a0ff, #d494f9, #f0a9c8);
+}
+
+/* -----------------------------
+   MEAL PLANS
+----------------------------- */
+.mealplan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.mealplan-card {
+    background: #ffffff;
+    border: 1px solid #e5e2d8;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.mealplan-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.mealplan-card h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.mealplan-price {
+    background: #d2c7a6;
+    color: #111;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.mealplan-diet {
+    display: inline-block;
+    background: #789b70;
+    color: white;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.mealplan-description {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.mealplan-meals h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.mealplan-meals ul {
+    padding-left: 1.25rem;
+    margin: 0;
+}
+
+.mealplan-meals li {
+    margin-bottom: 0.35rem;
+}
+
+.mealplan-meals span {
+    font-weight: 700;
+}
+
+.mealplan-actions {
+    margin-top: 1.25rem;
+}
+
+/* -----------------------------
+   REVIEWS PAGE
+----------------------------- */
+.reviews-top {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 28px;
+    align-items: start;
+}
+
+.rating-summary {
+    background: #b8ccae;
+    border: 1.5px solid #222;
+    border-radius: 22px;
+    padding: 24px 26px;
+    text-align: center;
+}
+
+.rating-summary h3 {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.big-rating {
+    font-size: 2.2rem;
+    font-style: italic;
+    font-weight: 600;
+    margin: 18px 0 10px;
+}
+
+.search-filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin: 28px 0 18px;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f1f1f1;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.search-box input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+}
+
+.review-list {
+    background: #dfe7dd;
+    border-radius: 14px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.review-row {
+    background: #f8f8f8;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: grid;
+    grid-template-columns: 140px 1fr 150px 110px 110px;
+    gap: 14px;
+    align-items: center;
+}
+
+.review-meta {
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.review-main {
+    border-left: 1px solid #555;
+    padding-left: 14px;
+}
+
+.review-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.review-snippet {
+    margin-top: 6px;
+    color: #666;
+    font-size: 1rem;
+}
+
+.review-stars {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #c7b170;
+}
+
+.review-action {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+/* -----------------------------
+   OVERLAY PAGES
+----------------------------- */
+.overlay-page {
+    min-height: 100vh;
+    background: #b9d0b0;
+    padding: 24px 18px 40px;
+}
+
+.overlay-title-top {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 26px;
+}
+
+.overlay-card {
+    max-width: 1180px;
+    margin: 0 auto 24px;
+    background: #f9f9f9;
+    border: 1.5px solid #222;
+    border-radius: 14px;
+    padding: 20px 28px;
+}
+
+.reply-box {
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.reply-textarea {
+    width: 100%;
+    min-height: 320px;
+    background: #f8f8f8;
+    border: 1.5px solid #222;
+    border-radius: 14px;
+    padding: 24px;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    resize: vertical;
+}
+
+.reply-submit {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+/* -----------------------------
+   TYPOGRAPHY HELPERS
+----------------------------- */
+.section-title-script {
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: 5px;
+}
+
+/* -----------------------------
+   RESPONSIVE
+----------------------------- */
+@media (max-width: 1200px) {
+    .plan-grid,
+    .stats-row,
+    .reviews-top,
+    .form-two-col,
+    .analytics-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .review-row {
+        grid-template-columns: 1fr;
+        text-align: left;
+    }
+
+    .review-main {
+        border-left: none;
+        padding-left: 0;
+    }
+
+    .sidebar {
+        position: relative;
+        height: auto;
+    }
+}
+
+@media (max-width: 900px) {
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
+
+    .main-content {
+        padding: 28px 20px;
+    }
+
+    .plan-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-container {
+        padding: 28px 18px 40px;
+    }
+}
+
+/* =====================================
+   MEALS / ORDERS CARD LAYOUT FIXES
+===================================== */
+.main-shell {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 34px 40px 12px;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.topbar-actions .btn-cream {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+
+.page-content {
+    padding: 18px 40px 48px;
+}
+
+.card-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    gap: 26px;
+    align-items: stretch;
+    margin-top: 18px;
+}
+
+.card {
+    max-width: none;
+    width: 100%;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-list {
+    flex: 1;
+}
+
+.actions-inline {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.actions-inline .btn-cream {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+}
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 40px;
+    margin: 4px 0 10px;
+}
+
+.filter-bar select {
+    width: 180px;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1.5px solid #222;
+    background: #fff;
+}
+
+@media (max-width: 1200px) {
+    .card-list {
+        grid-template-columns: repeat(2, minmax(260px, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .topbar {
+        flex-direction: column;
+        padding: 28px 20px 12px;
+    }
+
+    .page-content,
+    .filter-bar {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .card-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================================
+   ORDER TRACKING BOARD
+===================================== */
+.orders-analytics {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(140px, 1fr));
+    gap: 18px;
+    margin: 24px 0 28px;
+}
+
+.orders-stat-card {
+    background: #ffffff;
+    border: 1px solid #e5e2d8;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+}
+
+.orders-stat-card span {
+    display: block;
+    color: var(--gray);
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.orders-stat-card strong {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--black);
+}
+
+@media (max-width: 1100px) {
+    .orders-analytics {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .orders-analytics {
+        grid-template-columns: 1fr;
+    }
+}

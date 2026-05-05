@@ -18,7 +18,7 @@ public class SubscriptionPlanController {
 
     @GetMapping
     public List<SubscriptionPlan> getAllSubscriptionPlans(){
-        return subscriptionPlanService.getAllSubscriptionPlan();
+        return subscriptionPlanService.getAllSubscriptionPlans();
     }
 
     @GetMapping("/{name}")
@@ -31,9 +31,9 @@ public class SubscriptionPlanController {
         return subscriptionPlanService.createSubscriptionPlan(subscriptionPlan);
     }
 
-    @PutMapping("/{name}")
-    public SubscriptionPlan updateSubscriptionPlan(@PathVariable String name, @RequestBody SubscriptionPlan updatedPlan){
-        return subscriptionPlanService.updateSubscriptionPlan(name, updatedPlan);
+    @PutMapping("/{plan_id}")
+    public SubscriptionPlan updateSubscriptionPlan(@PathVariable Long plan_id, @RequestBody SubscriptionPlan updatedPlan){
+        return subscriptionPlanService.updateSubscriptionPlan(plan_id, updatedPlan);
     }
 
     @DeleteMapping("/{plan_id}")

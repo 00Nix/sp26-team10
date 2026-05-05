@@ -2,15 +2,16 @@ package com.example.backend_api_team10.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long user_id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -23,18 +24,22 @@ public class User {
     protected Role role;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnoreProperties("user")
     private Customer customer;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnoreProperties("user")
     private Provider provider;
 
-    public User(){
+    public Users(){
         
     }
 
-    public User(Long user_id, String email, String password_hash, Role role, Customer customer, Provider provider){
+    public Users(Long user_id, String name, String email, String password_hash, Role role, Customer customer, Provider provider){
         this.user_id = user_id;
+        this.name = name;
         this.email = email;
+        this.name = name;
         this.password_hash = password_hash;
         this.role = role;
         this.customer = customer;
@@ -49,6 +54,14 @@ public class User {
         return user_id;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public void setEmail(String email){
         this.email = email;
     }
@@ -56,7 +69,6 @@ public class User {
     public String getEmail(){
         return email;
     }
-
     public void setPasswordHash(String password_hash){
         this.password_hash = password_hash;
     }
@@ -88,5 +100,6 @@ public class User {
     public Provider getProvider(){
         return provider;
     }
+
 
 }

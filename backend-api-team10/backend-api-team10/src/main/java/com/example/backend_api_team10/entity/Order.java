@@ -1,7 +1,8 @@
 package com.example.backend_api_team10.entity;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +29,7 @@ public class Order {
     private LocalDateTime timestamp;
 
     @Column(name = "total_price", nullable = false)
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @Column(nullable = false, length = 20)
     private String status;
@@ -39,7 +40,7 @@ public class Order {
     public Order() {}
 
     public Order(Long customer_id, Long cartId, LocalDateTime timestamp, 
-        Double totalPrice, String status, String address) {
+        BigDecimal totalPrice, String status, String address) {
             this.customerId = customer_id;
             this.cartId = cartId;
             this.timestamp = timestamp;
@@ -72,10 +73,10 @@ public class Order {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    public Double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
     public String getStatus() {
@@ -90,4 +91,11 @@ public class Order {
     public void setAddress(String address) {
         this.address = address;
     }    
+    public String getFormattedDate() {
+        if (this.timestamp == null) {
+            return "Pending Date";
+        }
+        java.time.format.DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+        return this.timestamp.format(formatter);
+    }
 }

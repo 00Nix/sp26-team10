@@ -1,5 +1,7 @@
 package com.example.backend_api_team10.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import com.example.backend_api_team10.entity.OrderItem;
 import com.example.backend_api_team10.service.OrderItemService;
 
@@ -25,7 +26,7 @@ public class OrderItemController {
     public OrderItem createOrderItem(@RequestBody OrderItem orderItem) {
         return orderItemService.createOrderItem(orderItem);
     }
-    @GetMapping("{orderItemId}")
+    @GetMapping("/{orderItemId}")
     public OrderItem getOrderItemById(@PathVariable Long orderItemId) {
         return orderItemService.getOrderItemById(orderItemId)
             .orElseThrow(() -> new RuntimeException("Order Item not found: " + orderItemId));
@@ -35,12 +36,12 @@ public class OrderItemController {
         return orderItemService.getOrderItemsByOrderId(orderId);
     }
     @GetMapping("/meal/{mealId}")
-    public List<OrderItem> getByMealId(@PathVariable Long meal_id) {
-        return orderItemService.getOrderItemsByMealId(meal_id);
+    public List<OrderItem> getByMealId(@PathVariable Long mealId) {
+        return orderItemService.getOrderItemsByMealId(mealId);
     }
     @GetMapping("/plan/{planId}")
-    public List<OrderItem> getByPlanId(@PathVariable Long plan_id) {
-        return orderItemService.getOrderItemsByPlanId(plan_id);
+    public List<OrderItem> getByPlanId(@PathVariable Long planId) {
+        return orderItemService.getOrderItemsByPlanId(planId);
     }
     @PutMapping("/{orderItemId}")
     public OrderItem updateOrderItem(@PathVariable Long orderItemId, @RequestBody OrderItem orderItem) {

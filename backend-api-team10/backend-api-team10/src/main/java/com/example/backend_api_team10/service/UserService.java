@@ -1,15 +1,15 @@
 package com.example.backend_api_team10.service;
 
-import org.springframework.stereotype.Service;
-import com.example.backend_api_team10.entity.Role;
-import com.example.backend_api_team10.entity.User;
-import com.example.backend_api_team10.repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.example.backend_api_team10.entity.Role;
+import com.example.backend_api_team10.entity.Users;
+import com.example.backend_api_team10.repository.UserRepo;
 
 @Service
 public class UserService {
@@ -20,7 +20,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User createUser(User user){
+    public Users createUser(Users user){
         if (user.getEmail() == null || user.getPasswordHash() == null || user.getRole() == null){
             throw new RuntimeException("User must have an email, password, and role.");
         }
@@ -29,20 +29,20 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    public List<User> getAllUsers(){
+    public List<Users> getAllUsers(){
         return userRepo.findAll();
     }
 
-    public Optional<User> getUserById(Long user_id){
-        return userRepo.findUserById(user_id);
+    public Optional<Users> getUserById(Long user_id){
+        return userRepo.findByUserId(user_id);
     }
 
-    public User saveUser(User user){
+    public Users saveUser(Users user){
         return userRepo.save(user);
     }
 
-    public User updateUser(Long user_id, User updatedUser){
-        return userRepo.findUserById(user_id)
+    public Users updateUser(Long user_id, Users updatedUser){
+        return userRepo.findByUserId(user_id)
                 .map(existingUser -> {
                     existingUser.setEmail(updatedUser.getEmail());
 
@@ -57,10 +57,10 @@ public class UserService {
                 
     }
 
-    public User updateUserRole(Long user_id, Role newRole){
-        Optional<User> optionalUser = userRepo.findUserById(user_id);
+    public Users updateUserRole(Long user_id, Role newRole){
+        Optional<Users> optionalUser = userRepo.findByUserId(user_id);
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+            Users user = optionalUser.get();
             user.setRole(newRole);
             return userRepo.save(user);
         }

@@ -15,53 +15,74 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "customer_id")
     private Long customer_id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    private String name;
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private Users user;
 
     private String phone;
 
     private Boolean subscribed;
 
     private String status;
+    private String name;
 
     // Constructors
     public Customer() {}
 
-    public Customer(User user, String name, String phone, Boolean subscribed, String status) {
+    public Customer(Users user, String phone, String name, Boolean subscribed, String status) {
         this.user = user;
-        this.name = name;
         this.phone = phone;
+        this.name = name;
         this.subscribed = subscribed;
         this.status = status;
     }
 
     // Getters & Setters
 
-    public void setUser(User user){
+    public void setUser(Users user){
         this.user = user;
     }
 
-    public User getUser(){
+    public Users getUser(){
         return user;
     }
 
-    public Long getCustomerId() { return customer_id; }
+    public Long getCustomerId() { 
+        return customer_id; 
+    }
+    public void setCustomerId(Long customer_id) { 
+        this.customer_id = customer_id; 
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    }
 
+    public String getName() { 
+        return name; 
+    }
+    public void setName(String name) { 
+        this.name = name; 
+    }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public String getPhone() { 
+        return phone; 
+    }
+    public void setPhone(String phone) { 
+        this.phone = phone; 
+    }
 
-    public Boolean isSubscribed() { return subscribed; }
-    public void setSubscribed(boolean subscribed) { this.subscribed = subscribed; }
+    public Boolean isSubscribed() { 
+        return subscribed; 
+    }
+    public void setSubscribed(boolean subscribed) { 
+        this.subscribed = subscribed; 
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus() { 
+        return status; 
+    }
+    public void setStatus(String status) { 
+        this.status = status; 
+    }
 }

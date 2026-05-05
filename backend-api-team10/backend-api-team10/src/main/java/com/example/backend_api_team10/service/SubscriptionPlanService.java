@@ -1,13 +1,16 @@
 package com.example.backend_api_team10.service;
 
-import com.example.backend_api_team10.entity.SubscriptionPlan;
-import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
-
 import java.util.List;
+import java.util.Optional;
+
+import javax.management.RuntimeErrorException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import com.example.backend_api_team10.entity.SubscriptionPlan;
+import com.example.backend_api_team10.repository.SubscriptionPlanRepo;
 
 @Service
 public class SubscriptionPlanService {
@@ -22,7 +25,7 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.save(subscriptionPlan);
     }
 
-    public List<SubscriptionPlan> getAllSubscriptionPlan(){
+    public List<SubscriptionPlan> getAllSubscriptionPlans(){
         return subscriptionPlanRepo.findAll();
     }
 
@@ -34,18 +37,18 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.findByName(name);
     }
 
-    public SubscriptionPlan updateSubscriptionPlan(@PathVariable String name, @RequestBody SubscriptionPlan updatedPlan){
-        List<SubscriptionPlan> existing = subscriptionPlanRepo.findByName(updatedPlan.getName());
-        if (existing != null && !existing.isEmpty()) {
-            SubscriptionPlan plan = existing.get(0);
-            plan.setPrice(updatedPlan.getPrice());
-            plan.setDescription(updatedPlan.getDescription());
-            plan.setFeatures(updatedPlan.getFeatures());
-            plan.setDurationWeeks(updatedPlan.getDurationWeeks());
-            return subscriptionPlanRepo.save(plan);
-        } else {
-            return null;
-        }
+    public SubscriptionPlan updateSubscriptionPlan(@PathVariable Long planId, @RequestBody SubscriptionPlan updatedPlan){
+        SubscriptionPlan existing = subscriptionPlanRepo.findById(planId).orElseThrow(() -> new RuntimeException("Subscription plan not found with id: " + planId));
+
+        
+        existing.setName(updatedPlan.getName());
+        existing.setPrice(updatedPlan.getPrice());
+        existing.setDescription(updatedPlan.getDescription());
+        existing.setDurationWeeks(updatedPlan.getDurationWeeks());
+        existing.setFeatures(updatedPlan.getFeatures());
+
+    return subscriptionPlanRepo.save(existing);
+            
     }
 
     public void deleteSubscriptionPlan(Long plan_id){

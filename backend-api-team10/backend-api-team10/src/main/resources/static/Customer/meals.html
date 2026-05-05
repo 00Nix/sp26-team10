@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balanced Bite - Meals</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/backend-api-team10/backend-api-team10/src/main/resources/static/css/styles.css">
+</head>
+<body>
+
+<nav id="main-nav">
+  <a class="nav-logo" href="index.html">Balance<span>Bite</span></a>
+  <ul class="nav-links">
+    <li><a href="meals.html" class="active">Meals</a></li>
+    <li><a href="subscription.html">Plans</a></li>
+    <li><a href="orders.html">My Orders</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon-btn" onclick="location.href='cart.html'" title="Cart" aria-label="Cart">
+      🛒<span class="badge" id="cart-badge" style="display:none"></span>
+    </button>
+  </div>
+</nav>
+
+<main class="page-wrap">
+  <div class="inner-header">
+    <h1 class="page-title">Menu</h1>
+    <p class="page-sub" id="meal-count-label">Loading meals...</p>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterMeals(this, 'all')">All</button>
+      <button class="filter-btn" onclick="filterMeals(this, 'vegan')">Vegan</button>
+      <button class="filter-btn" onclick="filterMeals(this, 'vegetarian')">Vegetarian</button>
+      <button class="filter-btn" onclick="filterMeals(this, 'keto')">Keto</button>
+      <button class="filter-btn" onclick="filterMeals(this, 'gluten-free')">Gluten-Free</button>
+    </div>
+  </div>
+
+  <div class="meals-grid" id="meals-grid">
+    <div class="loading">Loading meals...</div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="nav-logo" href="index.html">Balance<span style="color:var(--sage)">Bite</span></a>
+      <p>Balanced meals, thoughtfully prepared and delivered to you every week.</p>
+    </div>
+    <div><h4>Explore</h4><ul>
+      <li><a href="meals.html">All Meals</a></li>
+      <li><a href="subscription.html">Plans</a></li>
+      <li><a href="cart.html">Cart</a></li>
+    </ul></div>
+    <div><h4>Account</h4><ul>
+      <li><a href="orders.html">My Orders</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul></div>
+    <div><h4>Company</h4><ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2025 Balanced Bite. All rights reserved.</span>
+    <span>Privacy &middot; Terms &middot; Accessibility</span>
+  </div>
+</footer>
+
+<div class="toast" id="_toast"></div>
+
+<script>
+  let allMeals = [];
+  let favorites = new Set();
+  const customerId = localStorage.getItem('customerId');
+
+  // Meal emoji map based on name keywords
+  function getMealEmoji(name) {
+    const n = (name || '').toLowerCase();
+    if (n.includes('salad') || n.includes('bowl')) return '🥗';
+    if (n.includes('chicken')) return '🍗';
+    if (n.includes('salmon') || n.includes('fish')) return '🐟';
+    if (n.includes('beef') || n.includes('steak')) return '🥩';
+    if (n.includes('pasta') || n.includes('noodle') || n.includes('ramen')) return '🍜';
+    if (n.includes('wrap') || n.includes('falafel')) return '🥙';
+    if (n.includes('soup')) return '🍲';
+    if (n.includes('burger')) return '🍔';
+    if (n.includes('rice')) return '🍚';
+    if (n.includes('veg')) return '🥦';
+    return '🍽️';
+  }
+
+  // Load favorites for current customer
+  function loadFavorites() {
+    if (!customerId) return Promise.resolve();
+    return fetch(`/api/favorites/customer/${customerId}`)
+      .then(r => r.json())
+      .then(favs => { favorites = new Set(favs.map(f => f.mealId || f.meal?.id)); })
+      .catch(() => {});
+  }
+
+  // Fetch all meals from API
+  function loadMeals() {
+    fetch('/api/meals')
+      .then(r => r.json())
+      .then(meals => {
+        allMeals = meals;
+        document.getElementById('meal-count-label').textContent =
+          `${meals.length} fresh meals · Updated every month`;
+        renderMeals('all');
+      })
+      .catch(() => {
+        document.getElementById('meals-grid').innerHTML =
+          `<div class="empty-state" style="grid-column:1/-1">
+            <div class="empty-icon">⚠️</div>
+            <h3>Could not load meals</h3>
+            <p>Please make sure the server is running.</p>
+          </div>`;
+      });
+  }
+
+  function filterMeals(btn, filter) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMeals(filter);
+  }
+
+  function renderMeals(filter) {
+    const list = filter === 'all'
+      ? allMeals
+      : allMeals.filter(m => (m.category || m.tag || '').toLowerCase() === filter);
+
+    const grid = document.getElementById('meals-grid');
+    if (list.length === 0) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🍽️</div>
+        <h3>No meals found</h3>
+        <p>Try a different filter or check back later.</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(m => `
+      <div class="meal-card">
+        <div class="meal-img">
+          <span>${getMealEmoji(m.name)}</span>
+          <button class="fav-btn-overlay ${favorites.has(m.id) ? 'active' : ''}"
+                  onclick="toggleFav(${m.id}, this)"
+                  title="Save to favorites">&#9825;</button>
+        </div>
+        <div class="meal-info">
+          <h3>${m.name || 'Unnamed Meal'}</h3>
+          <div class="meal-meta">
+            <span>${m.calories || m.cal || '—'} cal</span>
+            <span>${m.protein || '—'}g protein</span>
+          </div>
+          <div class="meal-footer">
+            <span class="meal-price">$${parseFloat(m.price || 0).toFixed(2)}</span>
+            <button class="add-btn" onclick="addToCart(${m.id}, '${(m.name||'').replace(/'/g,"\\'")}', ${m.price || 0})">+ Add</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleFav(mealId, btn) {
+    if (!customerId) { showToast('Please log in to save favorites'); return; }
+    if (favorites.has(mealId)) {
+      // Remove favorite - find the favorite id first
+      fetch(`/api/favorites/customer/${customerId}`)
+        .then(r => r.json())
+        .then(favs => {
+          const fav = favs.find(f => (f.mealId || f.meal?.id) === mealId);
+          if (fav) return fetch(`/api/favorites/${fav.id}`, { method: 'DELETE' });
+        })
+        .then(() => {
+          favorites.delete(mealId);
+          btn.classList.remove('active');
+          showToast('Removed from favorites');
+        })
+        .catch(() => showToast('Could not update favorites'));
+    } else {
+      fetch('/api/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customerId: parseInt(customerId), mealId })
+      })
+        .then(r => r.json())
+        .then(() => {
+          favorites.add(mealId);
+          btn.classList.add('active');
+          showToast('Saved to favorites!');
+        })
+        .catch(() => showToast('Could not save favorite'));
+    }
+  }
+
+  function addToCart(mealId, mealName, price) {
+    if (!customerId) { showToast('Please log in to add to cart'); return; }
+    // Get or create cart, then add item
+    fetch(`/api/carts/customer/${customerId}`)
+      .then(r => r.ok ? r.json() : fetch('/api/carts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ customerId: parseInt(customerId) })
+        }).then(r => r.json()))
+      .then(cart => fetch('/api/cart-items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cartId: cart.id, mealId, quantity: 1, price })
+        }))
+      .then(r => r.json())
+      .then(() => {
+        showToast(`${mealName} added to cart!`);
+        updateCartBadge();
+      })
+      .catch(() => showToast('Could not add to cart'));
+  }
+
+  function updateCartBadge() {
+    if (!customerId) return;
+    fetch(`/api/carts/customer/${customerId}`)
+      .then(r => r.json())
+      .then(cart => fetch(`/api/cart-items/carts/${cart.id}`))
+      .then(r => r.json())
+      .then(items => {
+        const count = items.reduce((sum, i) => sum + (i.quantity || 1), 0);
+        const badge = document.getElementById('cart-badge');
+        badge.textContent = count;
+        badge.style.display = count > 0 ? 'flex' : 'none';
+      })
+      .catch(() => {});
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('_toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  loadFavorites().then(loadMeals);
+  updateCartBadge();
+</script>
+</body>
+</html>

@@ -23,8 +23,8 @@ public class OrderService {
 	public List<Order> getAllOrders() {
 		return orderRepo.findAll();
 	}
-	public Optional<Order> getOrderById(Long orderId) {
-		return orderRepo.findById(orderId);
+	public Order getOrderById(Long orderId) {
+		return orderRepo.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
 	}
 	public Order updateOrder(Long orderId, Order orderDetails) {
 		
@@ -33,14 +33,20 @@ public class OrderService {
 		existingOrder.setCartId(orderDetails.getCartId());
 		existingOrder.setTimestamp(orderDetails.getTimestamp());
 		existingOrder.setTotalPrice(orderDetails.getTotalPrice());
-		existingOrder.setStatus(orderDetails.getStatus());
 		existingOrder.setAddress(orderDetails.getAddress());
 		return orderRepo.save(existingOrder);
 	})
 
 	.orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
 	}
-
+	public Order updateOrderStatus(Long orderId, String status) {
+		return orderRepo.findById(orderId)
+		.map(existingOrder -> {
+		existingOrder.setStatus(status);
+		return orderRepo.save(existingOrder);
+	})
+	.orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+	}
 	public void deleteOrder(Long orderId) {
 		orderRepo.deleteById(orderId);		
 	}

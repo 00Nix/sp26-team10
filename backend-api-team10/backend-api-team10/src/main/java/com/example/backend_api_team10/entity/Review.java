@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "review")
+@Table(name = "reviews")
 public class Review {
  
     @Id
@@ -21,7 +21,7 @@ public class Review {
     @Column(name = "review_id")
     private Long reviewId;
  
-    @Column(name = "order_id", nullable = false)
+    @Column(name = "order_id")
     private Long orderId;
  
     @ManyToOne
@@ -36,7 +36,11 @@ public class Review {
  
     @Column(name = "description", length = 1000)
     private String description;
- 
+
+    @ManyToOne
+    @JoinColumn(name = "meal_id", nullable = false)
+    private Meal meal;
+
     public Review() {
     }
  
@@ -67,4 +71,7 @@ public class Review {
  
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public Meal getMeal() { return meal; }
+    public void setMeal(Meal meal) { this.meal = meal; }
 }

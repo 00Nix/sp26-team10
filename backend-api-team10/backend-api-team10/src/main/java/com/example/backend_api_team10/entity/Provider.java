@@ -13,12 +13,8 @@ public class Provider {
     private Long provider_id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-
-    @Column(nullable = false)
-    private String name;
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private Users user;
 
     private String phone;
 
@@ -40,20 +36,19 @@ public class Provider {
     public Provider() {
     }
 
-    public Provider(User user, String name, String phone, String biography) {
+    public Provider(Users user, String phone, String biography) {
         this.user = user;
-        this.name = name;
         this.phone = phone;
         this.biography = biography;
     }
 
     // setters and getters
 
-    public void setUser(User user){
+    public void setUser(Users user){
         this.user = user;
     }
 
-    public User getUser(){
+    public Users getUser(){
         return user;
     }
 
@@ -63,14 +58,6 @@ public class Provider {
 
     public Long getProviderId(){
         return provider_id;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public String getName(){
-        return name;
     }
 
     public void setPhone(String phone){

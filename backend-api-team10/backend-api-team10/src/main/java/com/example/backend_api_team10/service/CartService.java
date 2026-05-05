@@ -29,7 +29,7 @@ public class CartService {
     }
 
     public Optional<Cart> getCartByCustomer(Long customer_id) {
-        return cartRepository.findByCustomer_CustomerId(customer_id);
+        return cartRepository.findByCustomerId(customer_id);
     }
 
     public Cart updateCart(Long cartId, Cart updatedCart) {
