@@ -14,10 +14,8 @@
         <h2 class="form-title-center">Edit Profile</h2>
         <hr class="form-divider-small">
 
-        <form action="/customer/profile/update" method="post">
-            <#if _csrf??>
+        <form action="/customer/profile/edit" method="post">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-            </#if>
 
             <div class="form-group">
                 <label class="form-label" for="name">Name</label>
@@ -28,15 +26,15 @@
                 <label class="form-label" for="email">Email</label>
                 <input class="form-input" type="email" id="email" name="email" value="${customer.user.email!''}" required>
             </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">New Password (leave blank to keep current)</label>
+                <input class="form-input" type="password" id="password" name="password" placeholder="********" autocomplete="new-password">
+            </div>
 
             <div class="form-group">
                 <label class="form-label" for="phone">Phone</label>
                 <input class="form-input" type="text" id="phone" name="phone" value="${customer.phone!''}">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="biography">Biography</label>
-                <textarea class="form-textarea" id="biography" name="biography">${customer.biography!''}</textarea>
             </div>
 
             <button class="btn btn-cream" type="submit">Update Profile</button>

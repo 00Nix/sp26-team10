@@ -23,7 +23,9 @@ import com.example.backend_api_team10.entity.Order;
 import com.example.backend_api_team10.entity.Review;
 import com.example.backend_api_team10.entity.SubscriptionPlan;
 import com.example.backend_api_team10.entity.Users;
+import com.example.backend_api_team10.repository.CustomerRepo;
 import com.example.backend_api_team10.repository.CustomerSubscriptionRepo;
+import com.example.backend_api_team10.repository.UserRepo;
 import com.example.backend_api_team10.service.CartItemService;
 import com.example.backend_api_team10.service.CartService;
 import com.example.backend_api_team10.service.CustomerService;
@@ -61,9 +63,11 @@ public class CustomerUiController {
     @Autowired
     private CustomerSubscriptionRepo customerSubscriptionRepo;
     @Autowired
-    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private UserRepo userRepo;
     @Autowired
-    private com.example.backend_api_team10.repository.UserRepo userRepo;
+    private CustomerRepo customerRepo;
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     
     private Long getLoggedInCustomerId(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
@@ -209,8 +213,8 @@ public class CustomerUiController {
 
             customerSubscriptionRepo.save(activeSub);
             customer.setSubscribed(true);
-            customerService.updateCustomer(customerId, customer);
-        System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
+            customerRepo.save(customer);
+            System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
         return "redirect:/customer/subscriptions";
     }
 
@@ -447,33 +451,29 @@ public class CustomerUiController {
     public String processEditProfile(@RequestParam String name,
                                      @RequestParam String email,
                                      @RequestParam String phone,
-                                     @RequestParam String Biography,
                                      @RequestParam(required = false) String password, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-        Users currentUser = userRepo.findByEmail(authentication.getName()).orElse(null);
-        if (currentUser == null || currentUser.getCustomer() == null) {
+        Users existingUser = userRepo.findByEmail(authentication.getName()).orElse(null);
+        if (existingUser == null || existingUser.getCustomer() == null) {
             return "redirect:/login";
         }
-        Long customerId = currentUser.getCustomer().getCustomerId();
+        Long customerId = existingUser.getCustomer().getCustomerId();
         Customer existingCustomer = customerService.getCustomerById(customerId).orElseThrow();
 
-        Customer updateData = new Customer();
-        updateData.setName(name);
-        updateData.setPhone(phone);
-        updateData.setStatus(existingCustomer.getStatus());
-        updateData.setSubscribed(existingCustomer.isSubscribed());
+        existingCustomer.setName(name);
+        existingCustomer.setPhone(phone);
 
-        Users updatedUser = new Users();
-        updatedUser.setEmail(email.trim().toLowerCase());
+        existingUser.setEmail(email.trim().toLowerCase());
+
         if (password != null && !password.isBlank()) {
-            updatedUser.setPasswordHash(password);
+            existingUser.setPasswordHash(passwordEncoder.encode(password));
         } 
-        updateData.setUser(updatedUser);
-        customerService.updateCustomer(customerId, updateData);
-        
-        if (!currentUser.getEmail().equalsIgnoreCase(email) || (password!= null && !password.isBlank())) {
+      
+        customerService.updateCustomer(customerId, existingCustomer);
+
+        if (!authentication.getName().equalsIgnoreCase(email) || (password!= null && !password.isBlank())) {
             return "redirect:/logout";
         }
         return "redirect:/customer/profile?success=true";
