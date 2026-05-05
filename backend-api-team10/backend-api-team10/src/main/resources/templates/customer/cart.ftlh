@@ -9,11 +9,22 @@
       <#if cartItems?has_content>
         <#list cartItems as item>
           <div class="cart-item">
-            <div class="cart-item-img">&#127869;</div>
-            <div class="cart-item-info">
-              <h4>${(item.meal.name)!'Meal'}</h4>
-              <p>$${(item.meal.price!0)?string('0.00')} each</p>
-            </div>
+            
+            <#if item.meal??>
+              <div class="cart-item-img">&#127869;</div>
+              <div class="cart-item-info">
+                <h4>${(item.meal.name)!'Meal'}</h4>
+                <p>$${(item.meal.price!0)?string('0.00')} each</p>
+              </div>
+              
+            <#elseif item.plan??>
+              <div class="cart-item-img">&#127857;</div>
+              <div class="cart-item-info">
+                <h4>${(item.plan.name)!'Bundle'} <span style="font-size: 0.8em; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; margin-left: 5px;">Bundle</span></h4>
+                <p>$${(item.plan.price!0)?string('0.00')} each</p>
+              </div>
+            </#if>
+
             <div class="qty-control">
               <form method="post" action="/customer/carts/update" style="display:inline">
                 <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
@@ -29,13 +40,19 @@
                 <button type="submit" class="qty-btn" aria-label="Increase">+</button>
               </form>
             </div>
+            
             <div class="cart-item-price" style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px;">
-              $${((item.meal.price!0)?number * item.quantity?number)?string('0.00')}
+              
+              <#if item.meal??>
+                $${((item.meal.price!0)?number * item.quantity?number)?string('0.00')}
+              <#elseif item.plan??>
+                $${((item.plan.price!0)?number * item.quantity?number)?string('0.00')}
+              </#if>
+              
               <form method="post" action="/customer/carts/remove" style="margin: 0;">
                 <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
                 <input type="hidden" name="itemId" value="${item.itemId?c}">
-                <button type="submit" style="background: transparent; border: none; color: #dc3545; font-size: 0.85 rem; 
-                              font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">Remove</button> 
+                <button type="submit" style="background: transparent; border: none; color: #dc3545; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0;">Remove</button> 
               </form>
             </div>
           </div>
