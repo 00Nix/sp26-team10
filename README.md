@@ -23,3 +23,118 @@
     2. Create services - Add and update meals, prices, and descriptions. Create and update dietary search filters.
     3. View customer statistics - Can see customer order totals, preferred filters and meals, subscription status, and when the customer joined.
     4. Reply to reviews - Provider can view and reply to customer reviews.
+
+## Running the Project
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- **Java 21+** (or your project’s required Java version)
+- **Maven**
+- **PostgreSQL / Neon Database**
+- IDE such as IntelliJ or VS Code
+
+---
+
+### 1. Clone the Repository
+
+```bash
+git clone <your-repo-url>
+cd backend-api-team10
+```
+
+---
+
+### 2. Configure Database Connection
+
+Open:
+
+```
+src/main/resources/application.properties
+```
+
+Add your database connection string:
+
+```
+spring.datasource.url=YOUR_NEON_CONNECTION_STRING
+spring.datasource.username=YOUR_DB_USERNAME
+spring.datasource.password=YOUR_DB_PASSWORD
+
+spring.jpa.hibernate.ddl-auto=update
+```
+
+> Do **NOT** commit your real connection string/password to GitHub.
+> 
+
+---
+
+### 3. Install Dependencies
+
+```bash
+mvn clean install
+```
+
+---
+
+### 4. Run the Application
+
+```bash
+mvn spring-boot:run
+```
+
+Or run the main Spring Boot application class from your IDE.
+
+---
+
+### 5. Access the Application
+
+Open your browser and navigate to:
+
+```
+http://localhost:8080
+```
+
+---
+
+### 6. Default Login / Test Accounts (Optional)
+
+If your project has seeded users:
+
+```
+Provider:
+email: provider@test.com
+password: password
+
+Customer:
+email: customer@test.com
+password: password
+```
+
+*(Remove this section if not applicable.)*
+
+---
+
+### Troubleshooting
+
+### Port Already in Use
+
+Change the port in `application.properties`:
+
+```
+server.port=8081
+```
+
+### Maven Not Recognized
+
+Use Maven Wrapper instead:
+
+```bash
+./mvnw spring-boot:run
+```
+
+(Windows)
+
+```bash
+mvnw.cmd spring-boot:run
+```
