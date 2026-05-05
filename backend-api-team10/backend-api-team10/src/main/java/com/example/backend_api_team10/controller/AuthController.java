@@ -142,7 +142,7 @@ public class AuthController {
             }
 
             if ("ROLE_CUSTOMER".equals(auth.getAuthority())) {
-                return "redirect:/customers/index";
+                return "redirect:/index";
             }
         }
 

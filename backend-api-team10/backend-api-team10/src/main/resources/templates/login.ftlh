@@ -13,13 +13,13 @@
         <h1 class="logo">Balanced Bite</h1>
         <p class="subtitle">Sign in to your account</p>
 
-        <#if error??>
+        <#if RequestParameters.error??>
             <div class="error-message">
                 Invalid username or password
             </div>
         </#if>
 
-        <#if logout??>
+        <#if RequestParameters.logout??>
             <div class="success-message">
                 You have been logged out
             </div>

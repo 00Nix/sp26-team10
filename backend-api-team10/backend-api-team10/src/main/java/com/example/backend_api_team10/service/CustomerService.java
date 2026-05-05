@@ -34,8 +34,6 @@ public class CustomerService {
         }
         
         user.setRole(Role.CUSTOMER);
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-
         Users savedUser = userRepo.save(user);
         customer.setUser(savedUser);
 

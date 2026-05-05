@@ -1,10 +1,10 @@
 package com.example.backend_api_team10.controller;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,7 @@ import com.example.backend_api_team10.service.SubscriptionPlanService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping("/customer")
 public class CustomerUiController {
 
     @Autowired
@@ -58,16 +58,24 @@ public class CustomerUiController {
     @Autowired
     private com.example.backend_api_team10.repository.UserRepo userRepo;
     
+    private Long getLoggedInCustomerId(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
+            return null;
+        }
+        return userRepo.findByEmail(authentication.getName())
+            .map(user -> user.getCustomer() != null ? user.getCustomer().getCustomerId() : null)
+            .orElse(null);
+    }
 
     @ModelAttribute
-    public void addGlobalAttributes(Model model, Principal principal) {
-        if (principal != null) {
-            String email = principal.getName();
-            Users user = userRepo.findByEmail(email).orElse(null);
-            if (user != null && user.getCustomer() != null) {
-                model.addAttribute("customerId", user.getCustomer().getCustomerId());
-                model.addAttribute("customerName", user.getCustomer().getName());
-            }
+    public void addGlobalAttributes(Model model, Authentication authentication) {
+        Long customerId = getLoggedInCustomerId(authentication);
+        if (customerId != null) {
+            model.addAttribute("customerId", customerId);
+
+            Cart cart = cartService.getCartByCustomer(customerId).orElse(null);
+            int cartCount = (cart != null && cart.getCartItems() != null) ? cart.getCartItems().stream().mapToInt(CartItem::getQuantity).sum() : 0;
+            model.addAttribute("cartCount", cartCount);
         }
     }
 
@@ -76,7 +84,7 @@ public class CustomerUiController {
         List<Review> reviews = reviewService.getAllReviews();
         double avg = reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
         model.addAttribute("averageRating", avg);
-        return "customers/index";
+        return "index";
     }
 
     @GetMapping("/meals")
@@ -99,8 +107,73 @@ public class CustomerUiController {
                 .collect(Collectors.toList());
             model.addAttribute("favMealIds", favMealIds);
         }
-        return "customers/meals";
+        return "customer/meals";
     }
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";
+    }
+   @PostMapping("/login")
+    public String processLogin(@RequestParam String email, @RequestParam String password, HttpSession session,   Model model) {
+        Users user = userRepo.findByEmail(email).orElse(null);
+        if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
+            if (user.getCustomer() != null) {
+                session.setAttribute("LoggedInCustomerId", user.getCustomer().getCustomerId());
+                session.setAttribute("LoggedInCustomerName", user.getCustomer().getName());
+                return "redirect:/index";
+            } else {
+                model.addAttribute("error", "User is not a customer");
+                return "login";
+            }
+        } else {
+            model.addAttribute("error", "Invalid email or password");
+            model.addAttribute("prefilledEmail", email);
+            return "login";
+        }
+    }
+    @GetMapping("/register")
+    public String showRegistrationPage() {
+        return "register";
+    }
+    @PostMapping("/register")
+        public String processRegister(@RequestParam String name,
+                                      @RequestParam String email,
+                                      @RequestParam String password,
+                                      @RequestParam(required = false) String phone,
+                                      HttpSession session, Model model) {
+        
+        boolean emailTaken = customerService.getAllCustomers().stream()
+            .anyMatch(c -> c.getUser().getEmail().equalsIgnoreCase(email));
+        if (emailTaken) {
+            model.addAttribute("error", "Email is already registered");
+            model.addAttribute("prefilledName", name);
+            model.addAttribute("prefilledEmail", email);
+            return "register";
+        }
+        Users newUser = new Users();
+        newUser.setEmail(email);
+        newUser.setPasswordHash(password);    
+        
+        Customer newCustomer = new Customer();
+        newCustomer.setName(name);
+        newCustomer.setPhone(phone);
+        newCustomer.setUser(newUser);
+        newCustomer.setSubscribed(false);
+        newCustomer.setStatus("active");
+
+        Customer savedCustomer = customerService.createCustomer(newCustomer);
+        session.setAttribute("LoggedInCustomerId", savedCustomer.getCustomerId());
+        session.setAttribute("LoggedInCustomerName", savedCustomer.getName());
+        return "redirect:/index";
+
+    }  
+    
+    @GetMapping("/logout")
+    public String logout (HttpSession session) {
+        session.invalidate();
+        return "redirect:/index";
+    }
+
     @PostMapping("/subscriptions/select")
     public String selectSubscription(@RequestParam("planName") String planName, HttpSession session) {
         
@@ -109,7 +182,7 @@ public class CustomerUiController {
             return "redirect:/login";
         }
         System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
-        return "redirect:/customers/subscriptions";
+        return "redirect:/customer/subscriptions";
     }
 
     @GetMapping("/subscriptions")
@@ -118,7 +191,7 @@ public class CustomerUiController {
         model.addAttribute("plans", plans);
 
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
-        return "customers/subscriptions";
+        return "customer/subscriptions";
     }
     @GetMapping("/orders")
     public String showOrdersPage(@RequestParam(defaultValue = "all") String status, Model model, HttpSession session) {
@@ -137,7 +210,7 @@ public class CustomerUiController {
         }
         model.addAttribute("orders", userOrders);
         model.addAttribute("activeFilter", status);
-        return "customers/orders";
+        return "customer/orders";
 
     }
     @PostMapping("/orders/checkout")
@@ -148,7 +221,7 @@ public class CustomerUiController {
         }
         Cart cart = cartService.getCartByCustomer(customerId).orElse(null);
         if (cart == null || cart.getCartItems() == null || cart.getCartItems().isEmpty()) {
-            return "redirect:/customers/carts";
+            return "redirect:/customer/carts";
         }
         Order newOrder = new Order();
         newOrder.setCustomerId(customerId);
@@ -167,7 +240,7 @@ public class CustomerUiController {
         }
         cart.setSubtotal(java.math.BigDecimal.ZERO);
         cartService.updateCart(cart.getCartId(), cart);
-        return "customers/checkout";
+        return "customer/checkout";
     }
 
     @GetMapping("/reviews")
@@ -177,6 +250,8 @@ public class CustomerUiController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("averageRating", avg);
         model.addAttribute("totalReviews", reviews.size());
+        model.addAttribute("meals", mealService.getAllMeals());
+
         model.addAttribute("ratingBars", List.of(
             java.util.Map.of("stars", 5, "pct", 75), 
             java.util.Map.of("stars", 4, "pct", 15),
@@ -184,7 +259,7 @@ public class CustomerUiController {
             java.util.Map.of("stars", 2, "pct", 3),
             java.util.Map.of("stars", 1, "pct", 2)        
         ));
-        return "customers/reviews";
+        return "customer/reviews";
     }
     @PostMapping("/favorites/toggle")
     public String toggleFavorite(@RequestParam Long mealId, HttpSession session) {
@@ -201,7 +276,7 @@ public class CustomerUiController {
                 favoriteService.addFavorite(new Favorite(customer, meal));
             }
         );
-        return "redirect:/customers/meals";
+        return "redirect:/customer/meals";
     }
     @PostMapping("/carts/add")
     public String addToCart(@RequestParam Long mealId, @RequestParam int qty, HttpSession session) {
@@ -221,7 +296,7 @@ public class CustomerUiController {
         item.setMeal(meal);
         item.setQuantity(qty);
         cartItemService.createItem(item);
-        return "redirect:/customers/meals";
+        return "redirect:/customer/meals";
             }
 
     @GetMapping("/carts")
@@ -248,7 +323,7 @@ public class CustomerUiController {
                 model.addAttribute("discount", 0);
                 model.addAttribute("total", 0);
             }
-            return "customers/cart";
+            return "customer/cart";
        
     }
     @PostMapping("/carts/update")
@@ -263,10 +338,93 @@ public class CustomerUiController {
                 cartItemService.createItem(item);
             }
         }
-        return "redirect:/customers/carts";
+        return "redirect:/customer/carts";
+    }
+     @GetMapping("/profile")
+    public String showCustomerProfile(Authentication authentication, Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+
+        }
+        userRepo.findByEmail(authentication.getName()).ifPresent(user -> {
+            if (user.getCustomer() != null) {
+                Long customerId = user.getCustomer().getCustomerId();
+                model.addAttribute("customer", customerService.getCustomerById(customerId).orElse(null));
+            }
+        });
+        return "customer/profile";
     }
 
-}
+    @GetMapping("/profile/edit")
+    public String showEditProfilePage(Authentication authentication, Model model) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+        userRepo.findByEmail(authentication.getName()).ifPresent(user -> {
+            if (user.getCustomer() != null) {
+                Long customerId = user.getCustomer().getCustomerId();
+                model.addAttribute("customer", customerService.getCustomerById(customerId).orElse(null));
+            }
+        });
+        return "customer/edit-profile";
+    }
+    @PostMapping("/profile/edit")
+    public String processEditProfile(@RequestParam String name,
+                                     @RequestParam String email,
+                                     @RequestParam String phone,
+                                     @RequestParam String Biography,
+                                     @RequestParam(required = false) String password, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
+        }
+        Users currentUser = userRepo.findByEmail(authentication.getName()).orElse(null);
+        if (currentUser == null || currentUser.getCustomer() == null) {
+            return "redirect:/login";
+        }
+        Long customerId = currentUser.getCustomer().getCustomerId();
+        Customer existingCustomer = customerService.getCustomerById(customerId).orElseThrow();
+
+        Customer updateData = new Customer();
+        updateData.setName(name);
+        updateData.setPhone(phone);
+        updateData.setStatus(existingCustomer.getStatus());
+        updateData.setSubscribed(existingCustomer.isSubscribed());
+
+        Users updatedUser = new Users();
+        updatedUser.setEmail(email.trim().toLowerCase());
+        if (password != null && !password.isBlank()) {
+            updatedUser.setPasswordHash(password);
+        } 
+        updateData.setUser(updatedUser);
+        customerService.updateCustomer(customerId, updateData);
+        
+        if (!currentUser.getEmail().equalsIgnoreCase(email) || (password!= null && !password.isBlank())) {
+            return "redirect:/logout";
+        }
+        return "redirect:/customer/profile?success=true";
+    }
+    @PostMapping("/reviews/add")
+    public String submitReview(@RequestParam int rating, @RequestParam Long mealId, @RequestParam String description, Authentication authentication) {
+        Long customerId = getLoggedInCustomerId(authentication);
+        if (customerId == null) 
+            return "redirect:/login";
+
+        Customer customer = customerService.getCustomerById(customerId).orElseThrow();
+        Meal meal = mealService.getMealById(mealId);
+        Review newReview = new Review();
+        newReview.setRating(rating);
+        newReview.setDescription(description);
+        newReview.setCustomer(customer);
+        newReview.setDate(java.time.LocalDate.now());
+
+        reviewService.createReview(newReview);
+        return "redirect:/customer/reviews";
+        }
+        
+    }
+
+
+
 
 
     

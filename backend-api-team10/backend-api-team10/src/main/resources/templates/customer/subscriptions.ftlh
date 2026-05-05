@@ -8,7 +8,6 @@
     <p class="page-sub">Flexible subscriptions with the best prices for you</p>
   </div>
 
-  <#-- Current plan banner -->
   <#if currentSubscription??>
     <div style="max-width:700px;margin:0 auto 24px;background:var(--light-sage);border-radius:14px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
       <div>
@@ -19,7 +18,7 @@
           &mdash; $${(currentSubscription.subscriptionPlan.price!0)?string('0.00')}/month
         </p>
       </div>
-      <form method="post" action="/customers/subscriptions/cancel">
+      <form method="post" action="/customer/subscriptions/cancel">
         <input type="hidden" name="subscriptionId" value="${currentSubscription.customerSubId?c}">
         <button type="submit" class="btn-outline"
                 style="font-size:.78rem;padding:6px 14px">Cancel Plan</button>
@@ -30,7 +29,6 @@
   <div class="plans-grid">
     <#if plans?has_content>
       <#list plans as plan>
-        <#-- Mark the middle plan as featured -->
         <#assign featured = (plan?index == (plans?size / 2)?floor)>
         <#-- CustomerSubscription.getSubscriptionPlan().getPlanId() for comparison -->
         <#assign isCurrent = (currentSubscription?? &&
@@ -66,7 +64,7 @@
             <button class="plan-btn ${featured?then('','light')}"
                     disabled style="opacity:.6;cursor:default">Current Plan</button>
           <#else>
-            <form method="post" action="/customers/subscriptions/select">
+            <form method="post" action="/customer/subscriptions/select">
               <input type="hidden" name="planName" value="${plan.name}">
               <button type="submit"
                       class="plan-btn ${featured?then('','light')}">Get Started</button>

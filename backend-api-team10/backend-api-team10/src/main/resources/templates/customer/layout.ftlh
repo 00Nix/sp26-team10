@@ -13,16 +13,17 @@
 
 <#macro nav activePage="">
 <nav id="main-nav">
-  <a class="nav-logo" href="/customers/index">Balanced<span>Bite</span></a>
+  <a class="nav-logo" href="/index">Balanced<span>Bite</span></a>
   <ul class="nav-links">
-    <li><a href="/customers/meals"        class="${(activePage == 'meals')?then('active', '')}">Meals</a></li>
-    <li><a href="/customers/subscriptions" class="${(activePage == 'subscription')?then('active', '')}">Plans</a></li>
-    <li><a href="/customers/orders"       class="${(activePage == 'orders')?then('active', '')}">My Orders</a></li>
-    <li><a href="/customers/reviews"      class="${(activePage == 'reviews')?then('active', '')}">Reviews</a></li>
+    <li><a href="/customer/meals"        class="${(activePage == 'meals')?then('active', '')}">Meals</a></li>
+    <li><a href="/customer/subscriptions" class="${(activePage == 'subscription')?then('active', '')}">Plans</a></li>
+    <li><a href="/customer/orders"       class="${(activePage == 'orders')?then('active', '')}">My Orders</a></li>
+    <li><a href="/customer/reviews"      class="${(activePage == 'reviews')?then('active', '')}">Reviews</a></li>
+    <li><a href="/customer/profile"      class="${(activePage == 'profile')?then('active', '')}">Profile</a></li>
   </ul>
   <div class="nav-right">
   <#if customerId??>
-    <a href="/customers/carts" class="nav-cart ${(activePage == 'cart')?then('active', '')}">
+    <a href="/customer/carts" class="nav-cart ${(activePage == 'cart')?then('active', '')}">
       &#128722; <span class="cart-badge">${cartCount!0}</span>
     </a>
     <a href="/logout" class="nav-login">Logout</a>
@@ -50,17 +51,17 @@
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <a class="nav-logo" href="/customers/index">Balanced<span style="color:var(--sage)">Bite</span></a>
+      <a class="nav-logo" href="/index">Balanced<span style="color:var(--sage)">Bite</span></a>
       <p>Balanced meals, thoughtfully prepared and delivered to you.</p>
     </div>
     <div><h4>Explore</h4><ul>
-      <li><a href="/customers/meals">All Meals</a></li>
-      <li><a href="/customers/subscriptions">Plans</a></li>
-      <li><a href="/customers/carts">Cart</a></li>
+      <li><a href="/customer/meals">All Meals</a></li>
+      <li><a href="/customer/subscriptions">Plans</a></li>
+      <li><a href="/customer/carts">Cart</a></li>
     </ul></div>
     <div><h4>Account</h4><ul>
-      <li><a href="/customers/orders">My Orders</a></li>
-      <li><a href="/customers/reviews">Reviews</a></li>
+      <li><a href="/customer/orders">My Orders</a></li>
+      <li><a href="/customer/reviews">Reviews</a></li>
     </ul></div>
     <div><h4>Company</h4><ul>
       <li><a href="#">About Us</a></li>

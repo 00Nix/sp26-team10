@@ -8,7 +8,7 @@
     <p class="page-sub">${(meals?size)!0} fresh meals &middot; Updated every month</p>
     <div class="filter-bar">
       <#list ["all","vegan","vegetarian","keto","gluten-free"] as f>
-        <a href="/customers/meals<#if f != 'all'>?filter=${f}</#if>"
+        <a href="/customer/meals<#if f != 'all'>?filter=${f}</#if>"
            class="filter-btn <#if (activeFilter!'all') == f>active</#if>">
           ${f?cap_first}
         </a>
@@ -23,10 +23,10 @@
         <div class="meal-card">
           <div class="meal-img">
             <span class="meal-emoji">&#127837;</span>
-            <form method="post" action="/customers/favorites/toggle" style="display:inline">
+            <form method="post" action="/customer/favorites/toggle" style="display:inline">
               <input type="hidden" name="mealId"    value="${m.mealId?c}">
               <input type="hidden" name="returnUrl"
-                     value="/customers/meals<#if (activeFilter!'all') != 'all'>?filter=${activeFilter}</#if>">
+                     value="/customer/meals<#if (activeFilter!'all') != 'all'>?filter=${activeFilter}</#if>">
               <button type="submit"
                       class="fav-btn-overlay ${isFav?then('active','')}"
                       title="Save to favorites">&#9825;</button>
@@ -40,7 +40,7 @@
             </div>
             <div class="meal-footer">
               <span class="meal-price">$${m.price?string('0.00')}</span>
-              <form method="post" action="/customers/carts/add" style="display:inline">
+              <form method="post" action="/customer/carts/add" style="display:inline">
                 <input type="hidden" name="mealId" value="${m.mealId?c}">
                 <input type="hidden" name="qty"    value="1">
                 <button type="submit" class="add-btn">+ Add</button>
@@ -54,7 +54,7 @@
         <div class="empty-icon">&#127869;</div>
         <h3>No meals found</h3>
         <p>Try a different filter or check back later.</p>
-        <a href="/customers/meals" class="btn-primary">View All Meals</a>
+        <a href="/customer/meals" class="btn-primary">View All Meals</a>
       </div>
     </#if>
   </div>

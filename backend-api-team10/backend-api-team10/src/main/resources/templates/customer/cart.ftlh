@@ -15,13 +15,13 @@
               <p>$${(item.meal.price!0)?string('0.00')} each</p>
             </div>
             <div class="qty-control">
-              <form method="post" action="/customers/carts/update" style="display:inline">
+              <form method="post" action="/customer/carts/update" style="display:inline">
                 <input type="hidden" name="itemId" value="${item.itemId?c}">
                 <input type="hidden" name="delta"  value="-1">
                 <button type="submit" class="qty-btn" aria-label="Decrease">&#8722;</button>
               </form>
               <span class="qty">${item.quantity?c}</span>
-              <form method="post" action="/customers/carts/update" style="display:inline">
+              <form method="post" action="/customer/carts/update" style="display:inline">
                 <input type="hidden" name="itemId" value="${item.itemId?c}">
                 <input type="hidden" name="delta"  value="1">
                 <button type="submit" class="qty-btn" aria-label="Increase">+</button>
@@ -37,7 +37,7 @@
           <div class="empty-icon">&#128722;</div>
           <h3>Your cart is empty</h3>
           <p>Add a meal to get started</p>
-          <a href="/customers/meals" class="btn-primary">Browse Meals</a>
+          <a href="/customer/meals" class="btn-primary">Browse Meals</a>
         </div>
       </#if>
     </div>
@@ -56,13 +56,13 @@
         <span>Total</span><span>$${total?string('0.00')}</span>
       </div>
 
-      <form method="post" action="/customers/orders/checkout">
+      <form method="post" action="/customer/orders/checkout">
         <button type="submit" class="checkout-btn" <#if !cartItems?has_content>disabled</#if>>
           Checkout
         </button>
       </form>        
 
-      <form method="post" action="/customers/carts/promo" class="promo-row">
+      <form method="post" action="/customer/carts/promo" class="promo-row">
         <input type="text" name="promoCode" placeholder="Promo code"
                value="${(promoCodeInput!'')}">
         <button type="submit" class="promo-apply">Apply</button>
