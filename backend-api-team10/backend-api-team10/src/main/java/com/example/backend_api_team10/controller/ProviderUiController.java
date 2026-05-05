@@ -11,6 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/provider")
@@ -92,27 +95,63 @@ public class ProviderUiController {
 
     // review management
     @GetMapping("/reviews")
-    public String showReviews(Model model) {
+    public String showReviews(@RequestParam(required = false) Integer rating, @RequestParam(required = false) String sort, Model model) {
         List<Review> reviews = reviewService.getAllReviews();
+
+        long totalReviews = reviews.size();
+        double avgRating = reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
+
+        if (rating != null) {
+            reviews = reviews.stream().filter(review -> review.getRating() == rating).toList();
+        }
+
+        if ("oldest".equalsIgnoreCase(sort)) {
+            reviews = reviews.stream().sorted((r1, r2) -> r1.getDate().compareTo(r2.getDate())).toList();
+        } else if ("newest".equalsIgnoreCase(sort)) {
+            reviews = reviews.stream().sorted((r1, r2) -> r2.getDate().compareTo(r1.getDate())).toList();
+        }
+
         model.addAttribute("reviews", reviews);
+        model.addAttribute("totalReviews", totalReviews);
+        model.addAttribute("avgRating", String.format("%.1f", avgRating));
+        model.addAttribute("newReviews", totalReviews);
+        model.addAttribute("repliedReviews", 0);
+        model.addAttribute("selectedRating", rating);
+        model.addAttribute("selectedSort", sort);
         
         return "provider/reviews";
     }
 
     @GetMapping("/reviews/{reviewId}/reply")
     public String showReplyForm(@PathVariable Long reviewId, Model model) {
-        Optional<Review> review = reviewService.getReviewById(reviewId);
+        Review review = reviewService.getReviewById(reviewId).orElseThrow(() -> new RuntimeException("Review not found."));
+       
         model.addAttribute("review", review);
+        model.addAttribute("reply", new ReviewReply());
        
         return "provider/reply-review";
     }
 
     @PostMapping("/reviews/{reviewId}/reply")
-    public String replyToReview(@PathVariable Review review, @PathVariable Provider provider, @RequestParam("message") String message) {
+    public String replyToReview(@PathVariable Long reviewId, Authentication authentication, @RequestParam("message") String message) {
+        Review review = reviewService.getReviewById(reviewId).orElseThrow(() -> new RuntimeException("Review not found"));
+        Provider provider = providerService.getProviderByUserEmail(authentication.getName());
+
         reviewReplyService.createReviewReply(review, provider, message);
       
         return "redirect:/provider/reviews";
     }
+
+    @GetMapping("/reviews/{reviewId}")
+    public String viewReview(@PathVariable Long reviewId, Model model) {
+        Review review = reviewService.getReviewById(reviewId).orElseThrow(() -> new RuntimeException("Review not found."));
+
+        model.addAttribute("review", review);
+
+        return "provider/view-review";
+        
+    }
+    
 
     // meal management
     @GetMapping("/meals")

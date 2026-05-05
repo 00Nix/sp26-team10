@@ -26,7 +26,7 @@
                 <a class="sidebar-link" href="/provider/profile">Profile</a>
             </nav>
             <div class="sidebar-bottom">
-                <a href="/">Back to Home</a>
+                <a href="/customer/index">Back to Home</a>
                 <a href="/logout">Log Out</a>
             </div>
         </aside>

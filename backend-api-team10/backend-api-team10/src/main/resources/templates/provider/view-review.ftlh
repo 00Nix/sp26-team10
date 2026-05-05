@@ -17,16 +17,23 @@
         </div>
 
         <div style="text-align:center;">
-            <div style="font-size:38px; font-weight:600;">${review.title}</div>
+            <div style="font-size:38px; font-weight:600;">${review.meal.name!'Review'}</div>
             <hr class="page-divider" style="width: 220px; margin: 10px auto;">
-            <div>Submitted by: ${review.customerName}</div>
+            <div>Submitted by: ${review.customer.user.name!''}</div>
         </div>
 
         <div style="text-align:center;">
             <div style="font-size:20px; font-style:italic;">Rating:
                 <span style="color:#c9b16d; font-size:28px;">
-                    <#assign r = review.rating!5>
-                    <#list 1..5 as i><#if i <= r>★<#else>☆</#if></#list>
+                    <#assign r = review.rating!>
+                    <p>
+                        <#list 1..5 as i>
+                            <#if i <= r>★
+                            <#else>☆
+                            </#if>
+                        </#list> 
+                    </p>
+                    
                 </span>
             </div>
         </div>
@@ -42,7 +49,7 @@
 
     <div class="overlay-actions">
         <a href="/provider/reviews">Back to Reviews</a>
-        <a href="/provider/reviews/${review.review_id}/reply">Reply</a>
+        <a href="/provider/reviews/${review.reviewId}/reply">Reply</a>
     </div>
 </div>
 </body>

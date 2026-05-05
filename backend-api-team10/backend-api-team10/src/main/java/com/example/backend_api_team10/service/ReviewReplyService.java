@@ -6,6 +6,7 @@ import com.example.backend_api_team10.entity.Provider;
 import com.example.backend_api_team10.repository.ReviewReplyRepo;
 
 import java.util.List;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,11 @@ public class ReviewReplyService {
 
     public ReviewReply createReviewReply(Review review, Provider provider, String message) {
         ReviewReply reply = new ReviewReply();
+
         reply.setReview(review);
         reply.setProvider(provider);
         reply.setMessage(message);
+        reply.setReply_date(LocalDate.now());
         return reviewReplyRepo.save(reply);
         
     }
@@ -40,6 +43,7 @@ public class ReviewReplyService {
         if (existing != null) {
             existing.setMessage(updatedReply.getMessage());
             existing.setReview(updatedReply.getReview());
+            existing.setReply_date(LocalDate.now());
             return reviewReplyRepo.save(existing);
         } else {
             return null;
