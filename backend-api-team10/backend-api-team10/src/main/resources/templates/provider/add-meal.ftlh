@@ -80,6 +80,11 @@
                                 <input class="form-input" type="number" id="price" name="price" step="0.01" required>
                             </div>
 
+                            <div class="form-group">
+                                <label for="imageUrl">Image URL</label>
+                                <input type="text" id="imageUrl" name="imageUrl" value="${meal.imageUrl!''}" placeholder="/images/example.png">
+                            </div>
+
                             <button class="btn btn-cream" type="submit">Save Meal</button>
                         </form>
                     </div>

@@ -36,7 +36,6 @@
     <div class="main-shell">
         <header class="topbar">
             <div class="topbar-left">
-                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
                 <div>
                     <h1 class="topbar-title">Reviews</h1>
                     <p class="topbar-subtitle">Read customer feedback and respond quickly.</p>
@@ -47,7 +46,8 @@
                     <span>⌕</span>
                     <input type="text" placeholder="Search reviews">
                 </div>
-                <div class="avatar-badge">BB</div>
+
+                <a class="utility-back" href="/provider/dashboard">← Back to Dashboard</a>
             </div>
         </header>
 

@@ -36,7 +36,7 @@
     <div class="main-shell">
         <header class="topbar">
             <div class="topbar-left">
-                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
+                <a class="utility-back" href="/provider/dashboard">← Back to Dashboard</a>
                 <div>
                     <h1 class="topbar-title">Meals</h1>
                     <p class="topbar-subtitle">Keep your menu fresh and organized.</p>
@@ -44,7 +44,6 @@
             </div>
             <div class="topbar-actions">
                 <a class="btn btn-cream" href="/provider/meals/add">+ Add Meal</a>
-                <div class="avatar-badge">BB</div>
             </div>
         </header>
 

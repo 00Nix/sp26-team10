@@ -36,7 +36,7 @@
     <div class="main-shell">
         <header class="topbar">
             <div class="topbar-left">
-                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
+                <a class="utility-back" href="/provider/dashboard">← Back to Dashboard</a>
                 <div>
                     <h1 class="topbar-title">Subscription Plans</h1>
                     <p class="topbar-subtitle">Manage your plan lineup and pricing.</p>

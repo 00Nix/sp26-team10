@@ -36,14 +36,13 @@
     <div class="main-shell">
         <header class="topbar">
             <div class="topbar-left">
-                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
                 <div>
                     <h1 class="topbar-title">Orders</h1>
                     <p class="topbar-subtitle">View incoming orders and update statuses.</p>
                 </div>
             </div>
             <div class="topbar-actions">
-                <div class="avatar-badge">BB</div>
+                <a class="utility-back" href="/provider/dashboard">← Back to Dashboard</a>
             </div>
         </header>
 
