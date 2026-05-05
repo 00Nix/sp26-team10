@@ -31,8 +31,8 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="duration_weeks">Duration</label>
-                <input class="form-input" type="number" id="duration" name="duration_weeks" value="${subscription.duration!0}" required>
+                <label class="form-label" for="durationWeeks">Duration</label>
+                <input class="form-input" type="number" id="durationWeeks" name="durationWeeks" value="${subscription.durationWeeks!0}" required>
             </div>
 
             <div class="form-group">
