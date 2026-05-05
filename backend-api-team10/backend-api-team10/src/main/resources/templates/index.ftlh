@@ -1,4 +1,4 @@
-<#include "layout.ftlh">
+<#include "customer/layout.ftlh">
 <@head title="Home" />
 <@nav activePage="home" />
 

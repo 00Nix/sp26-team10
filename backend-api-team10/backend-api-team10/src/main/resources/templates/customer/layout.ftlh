@@ -13,7 +13,7 @@
 
 <#macro nav activePage="">
 <nav id="main-nav">
-  <a class="nav-logo" href="/index">Balanced<span>Bite</span></a>
+  <a class="nav-logo" href="/customer/index">Balanced<span>Bite</span></a>
   <ul class="nav-links">
     <li><a href="/customer/meals"        class="${(activePage == 'meals')?then('active', '')}">Meals</a></li>
     <li><a href="/customer/subscriptions" class="${(activePage == 'subscription')?then('active', '')}">Plans</a></li>

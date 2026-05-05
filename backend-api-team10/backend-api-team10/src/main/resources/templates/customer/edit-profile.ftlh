@@ -8,7 +8,7 @@
 </head>
 <body>
 <main class="page-container">
-    <a class="utility-back" href="/customer/dashboard">← Back to Dashboard</a>
+    <a class="utility-back" href="/customer/index">← Back to Dashboard</a>
 
     <div class="form-shell">
         <h2 class="form-title-center">Edit Profile</h2>
