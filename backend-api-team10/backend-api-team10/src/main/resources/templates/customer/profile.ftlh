@@ -21,17 +21,17 @@
 
             <div class="form-group">
                 <label class="form-label">Email</label>
-                <p class="form-input">${customer.email!''}</p>
+                <p class="form-input">${customer.user.email!''}</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <p class="form-input">********</p>
             </div>
 
             <div class="form-group">
                 <label class="form-label">Phone</label>
                 <p class="form-input">${customer.phone!''}</p>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Biography</label>
-                <p class="form-textarea">${customer.biography!''}</p>
             </div>
 
             <a class="btn btn-cream" href="/customer/profile/edit">

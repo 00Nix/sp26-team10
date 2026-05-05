@@ -19,15 +19,19 @@ import com.example.backend_api_team10.entity.Customer;
 import com.example.backend_api_team10.entity.CustomerSubscription;
 import com.example.backend_api_team10.entity.Favorite;
 import com.example.backend_api_team10.entity.Meal;
+import com.example.backend_api_team10.entity.MealPlan;
 import com.example.backend_api_team10.entity.Order;
 import com.example.backend_api_team10.entity.Review;
 import com.example.backend_api_team10.entity.SubscriptionPlan;
 import com.example.backend_api_team10.entity.Users;
+import com.example.backend_api_team10.repository.CustomerRepo;
 import com.example.backend_api_team10.repository.CustomerSubscriptionRepo;
+import com.example.backend_api_team10.repository.UserRepo;
 import com.example.backend_api_team10.service.CartItemService;
 import com.example.backend_api_team10.service.CartService;
 import com.example.backend_api_team10.service.CustomerService;
 import com.example.backend_api_team10.service.FavoriteService;
+import com.example.backend_api_team10.service.MealPlanService;
 import com.example.backend_api_team10.service.MealService;
 import com.example.backend_api_team10.service.OrderItemService;
 import com.example.backend_api_team10.service.OrderService;
@@ -61,9 +65,13 @@ public class CustomerUiController {
     @Autowired
     private CustomerSubscriptionRepo customerSubscriptionRepo;
     @Autowired
-    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private UserRepo userRepo;
     @Autowired
-    private com.example.backend_api_team10.repository.UserRepo userRepo;
+    private CustomerRepo customerRepo;
+    @Autowired
+    private MealPlanService mealPlanService;
+    @Autowired
+    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     
     private Long getLoggedInCustomerId(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
@@ -107,6 +115,11 @@ public class CustomerUiController {
         model.addAttribute("meals", meals);
         model.addAttribute("activefilter", filter);
 
+        List<MealPlan> premadePlans = mealPlanService.getAllMealPlans().stream()
+            .filter(plan -> plan.getIsPremade() != null && plan.getIsPremade())
+            .collect(Collectors.toList());
+        model.addAttribute("premadePlans", premadePlans);
+
         Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
         if (customerId != null) {
             List<Long> favMealIds = favoriteService.getByCustomer(customerId).stream()
@@ -116,27 +129,53 @@ public class CustomerUiController {
         }
         return "customer/meals";
     }
+    @PostMapping("/carts/addPlan")
+    public String addPlanToCart(@RequestParam Long planId, @RequestParam int qty, HttpSession session, Authentication authentication) {
+        Long customerId = getLoggedInCustomerId(authentication);
+            if (customerId == null) {
+            return "redirect:/login";
+    }
+    Cart cart = cartService.getCartByCustomer(customerId)
+            .orElseGet(() -> {
+                Customer customer = customerService.getCustomerById(customerId).orElse(null);
+                Cart newCart = new Cart(customer, java.math.BigDecimal.ZERO);
+                return cartService.createCart(newCart);
+            });
+    
+        com.example.backend_api_team10.entity.MealPlan plan = mealPlanService.getMealPlanById(planId);
+        CartItem item = new CartItem();
+        item.setCart(cart);
+        item.setMealPlan(plan);
+        item.setQuantity(qty);
+
+        cartItemService.createItem(item);
+        return "redirect:/customer/meals";
+    }
+
     @GetMapping("/login")
     public String showLoginPage() {
         return "login";
     }
-   @PostMapping("/login")
-    public String processLogin(@RequestParam String email, @RequestParam String password, HttpSession session,   Model model) {
-        Users user = userRepo.findByEmail(email).orElse(null);
-        if (user != null && passwordEncoder.matches(password, user.getPasswordHash())) {
-            if (user.getCustomer() != null) {
-                session.setAttribute("LoggedInCustomerId", user.getCustomer().getCustomerId());
-                session.setAttribute("LoggedInCustomerName", user.getCustomer().getName());
-                return "redirect:/index";
-            } else {
-                model.addAttribute("error", "User is not a customer");
-                return "login";
-            }
-        } else {
-            model.addAttribute("error", "Invalid email or password");
-            model.addAttribute("prefilledEmail", email);
-            return "login";
+   @GetMapping("/login-success")
+    public String setupSessionAfterLogin(Authentication authentication, HttpSession session) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return "redirect:/login";
         }
+        
+        // Fetch the user that Spring Security just logged in
+        Users user = userRepo.findByEmail(authentication.getName()).orElse(null);
+        
+        if (user != null && user.getCustomer() != null) {
+            // Set up all your required session variables!
+            session.setAttribute("LoggedInCustomerId", user.getCustomer().getCustomerId());
+            session.setAttribute("LoggedInCustomerName", user.getCustomer().getName());
+            
+            // Send them safely to the dashboard
+            return "redirect:/customer/index";
+        }
+        
+        // If they aren't a customer, log them back out
+        return "redirect:/logout";
     }
     @GetMapping("/register")
     public String showRegistrationPage() {
@@ -209,8 +248,8 @@ public class CustomerUiController {
 
             customerSubscriptionRepo.save(activeSub);
             customer.setSubscribed(true);
-            customerService.updateCustomer(customerId, customer);
-        System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
+            customerRepo.save(customer);
+            System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
         return "redirect:/customer/subscriptions";
     }
 
@@ -367,7 +406,14 @@ public class CustomerUiController {
                 model.addAttribute("cartItems", cart.getCartItems());
 
                 double subtotal = cart.getCartItems().stream()
-                    .mapToDouble(item -> item.getMeal().getPrice().doubleValue() * item.getQuantity())
+                    .mapToDouble(item -> {
+                        if (item.getMeal() != null) {
+                            return item.getMeal().getPrice().doubleValue() * item.getQuantity();
+                        } else if (item.getMealPlan() != null) {
+                            return item.getMealPlan().getPrice().doubleValue() * item.getQuantity();
+                        }
+                        return 0.0; // Fallback just in case
+                    })
                     .sum();
 
                 model.addAttribute("subtotal", subtotal);
@@ -447,33 +493,29 @@ public class CustomerUiController {
     public String processEditProfile(@RequestParam String name,
                                      @RequestParam String email,
                                      @RequestParam String phone,
-                                     @RequestParam String Biography,
                                      @RequestParam(required = false) String password, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
         }
-        Users currentUser = userRepo.findByEmail(authentication.getName()).orElse(null);
-        if (currentUser == null || currentUser.getCustomer() == null) {
+        Users existingUser = userRepo.findByEmail(authentication.getName()).orElse(null);
+        if (existingUser == null || existingUser.getCustomer() == null) {
             return "redirect:/login";
         }
-        Long customerId = currentUser.getCustomer().getCustomerId();
+        Long customerId = existingUser.getCustomer().getCustomerId();
         Customer existingCustomer = customerService.getCustomerById(customerId).orElseThrow();
 
-        Customer updateData = new Customer();
-        updateData.setName(name);
-        updateData.setPhone(phone);
-        updateData.setStatus(existingCustomer.getStatus());
-        updateData.setSubscribed(existingCustomer.isSubscribed());
+        existingCustomer.setName(name);
+        existingCustomer.setPhone(phone);
 
-        Users updatedUser = new Users();
-        updatedUser.setEmail(email.trim().toLowerCase());
+        existingUser.setEmail(email.trim().toLowerCase());
+
         if (password != null && !password.isBlank()) {
-            updatedUser.setPasswordHash(password);
+            existingUser.setPasswordHash(passwordEncoder.encode(password));
         } 
-        updateData.setUser(updatedUser);
-        customerService.updateCustomer(customerId, updateData);
-        
-        if (!currentUser.getEmail().equalsIgnoreCase(email) || (password!= null && !password.isBlank())) {
+      
+        customerService.updateCustomer(customerId, existingCustomer);
+
+        if (!authentication.getName().equalsIgnoreCase(email) || (password!= null && !password.isBlank())) {
             return "redirect:/logout";
         }
         return "redirect:/customer/profile?success=true";
