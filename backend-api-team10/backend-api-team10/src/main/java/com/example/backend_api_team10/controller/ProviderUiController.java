@@ -238,7 +238,7 @@ public class ProviderUiController {
     }
 
     @GetMapping("/subscriptions/{plan_id}/edit")
-    public String showEditSubscriptionForm(@PathVariable Long plan_id, Model model) {
+    public String showEditSubscriptionForm(@PathVariable("plan_id") Long plan_id, Model model) {
         SubscriptionPlan plan = subscriptionPlanService.getSubscriptionPlanById(plan_id);
         model.addAttribute("subscription", plan);
 
@@ -246,7 +246,7 @@ public class ProviderUiController {
     }
 
     @PostMapping("/subscriptions/{plan_id}/update")
-    public String updateSubscription(@PathVariable Long plan_id,
+    public String updateSubscription(@PathVariable("plan_id") Long plan_id,
                                     @ModelAttribute SubscriptionPlan updatedPlan) {
 
         subscriptionPlanService.updateSubscriptionPlan(plan_id, updatedPlan);

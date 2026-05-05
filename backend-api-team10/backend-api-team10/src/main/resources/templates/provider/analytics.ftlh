@@ -61,19 +61,19 @@
 
                 <div class="stat-card">
                     <div class="stat-label">Total Orders</div>
-                    <div class="stat-value">${analytics.totalOrders!0}</div>
+                    <div class="stat-value">${analytics.totalOrders!}</div>
                     <div class="stat-change">All-time provider orders</div>
                 </div>
 
                 <div class="stat-card">
                     <div class="stat-label">Active Subscribers</div>
-                    <div class="stat-value">${analytics.activeSubscribers!0}</div>
+                    <div class="stat-value">${analytics.activeSubscribers!}</div>
                     <div class="stat-change">Current paying customers</div>
                 </div>
 
                 <div class="chart-card">
                     <div class="stat-label">Orders This Month</div>
-                    <div class="stat-value">${analytics.monthlyOrders!182}</div>
+                    <div class="stat-value">${analytics.monthlyOrders!}</div>
                     <div class="chart-placeholder"></div>
                 </div>
             </section>
