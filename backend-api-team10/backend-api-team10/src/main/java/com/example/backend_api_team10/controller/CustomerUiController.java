@@ -16,17 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.backend_api_team10.entity.Cart;
 import com.example.backend_api_team10.entity.CartItem;
 import com.example.backend_api_team10.entity.Customer;
+import com.example.backend_api_team10.entity.CustomerSubscription;
 import com.example.backend_api_team10.entity.Favorite;
 import com.example.backend_api_team10.entity.Meal;
 import com.example.backend_api_team10.entity.Order;
 import com.example.backend_api_team10.entity.Review;
 import com.example.backend_api_team10.entity.SubscriptionPlan;
 import com.example.backend_api_team10.entity.Users;
+import com.example.backend_api_team10.repository.CustomerSubscriptionRepo;
 import com.example.backend_api_team10.service.CartItemService;
 import com.example.backend_api_team10.service.CartService;
 import com.example.backend_api_team10.service.CustomerService;
 import com.example.backend_api_team10.service.FavoriteService;
 import com.example.backend_api_team10.service.MealService;
+import com.example.backend_api_team10.service.OrderItemService;
 import com.example.backend_api_team10.service.OrderService;
 import com.example.backend_api_team10.service.ReviewService;
 import com.example.backend_api_team10.service.SubscriptionPlanService;
@@ -54,6 +57,10 @@ public class CustomerUiController {
     @Autowired
     private CartItemService cartItemService;
     @Autowired
+    private OrderItemService orderItemService;
+    @Autowired
+    private CustomerSubscriptionRepo customerSubscriptionRepo;
+    @Autowired
     private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     @Autowired
     private com.example.backend_api_team10.repository.UserRepo userRepo;
@@ -68,7 +75,7 @@ public class CustomerUiController {
     }
 
     @ModelAttribute
-    public void addGlobalAttributes(Model model, Authentication authentication) {
+    public void addGlobalAttributes(Model model, HttpSession session, Authentication authentication) {
         Long customerId = getLoggedInCustomerId(authentication);
         if (customerId != null) {
             model.addAttribute("customerId", customerId);
@@ -175,12 +182,34 @@ public class CustomerUiController {
     }
 
     @PostMapping("/subscriptions/select")
-    public String selectSubscription(@RequestParam("planName") String planName, HttpSession session) {
+    public String selectSubscription(@RequestParam("planName") String planName, HttpSession session, Authentication authentication) {
         
-        Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
+        Long customerId = getLoggedInCustomerId(authentication);
         if (customerId == null) {
             return "redirect:/login";
         }
+        SubscriptionPlan plan = subscriptionPlanService.getAllSubscriptionPlans().stream()
+            .filter(p -> p.getName().equalsIgnoreCase(planName))
+            .findFirst()
+            .orElse(null);
+
+        if (plan == null) {
+            return "redirect:/customer/subscriptions?error=planNotFound";
+        }
+        Customer customer = customerService.getCustomerById(customerId).orElseThrow();
+        CustomerSubscription activeSub = customerSubscriptionRepo.findByCustomerId(customerId)
+            .orElse(new CustomerSubscription());
+
+            activeSub.setCustomer(customer);
+            activeSub.setSubscriptionPlan(plan);
+            java.time.LocalDate today = java.time.LocalDate.now();
+            activeSub.setStartDate(today);
+            activeSub.setEndDate(today.plusMonths(1));
+            activeSub.setStatus("Active");
+
+            customerSubscriptionRepo.save(activeSub);
+            customer.setSubscribed(true);
+            customerService.updateCustomer(customerId, customer);
         System.out.println("Customer " + customerId + " selected the " + planName + " subscription plan.");
         return "redirect:/customer/subscriptions";
     }
@@ -214,8 +243,8 @@ public class CustomerUiController {
 
     }
     @PostMapping("/orders/checkout")
-    public String processCheckout(HttpSession session) {
-        Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
+    public String processCheckout(HttpSession session, Authentication authentication) {
+        Long customerId = getLoggedInCustomerId(authentication);
         if (customerId == null) {
             return "redirect:/login";
         }
@@ -228,23 +257,33 @@ public class CustomerUiController {
         newOrder.setCartId(cart.getCartId());
         newOrder.setTimestamp(java.time.LocalDateTime.now());
         newOrder.setStatus("Pending");
-        double calculatedTotal = cart.getCartItems().stream()
-            .mapToDouble(item -> item.getMeal().getPrice().doubleValue() * item.getQuantity())
-            .sum();
+
+        java.math.BigDecimal calculatedTotal = cart.getCartItems().stream()
+            .map(item -> item.getMeal().getPrice().multiply(java.math.BigDecimal.valueOf(item.getQuantity())))
+            .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
         newOrder.setTotalPrice(calculatedTotal);
         newOrder.setAddress("Pending Address");
 
         orderService.createOrder(newOrder);
         for (CartItem item : cart.getCartItems()) {
+            com.example.backend_api_team10.entity.OrderItem orderItem = new com.example.backend_api_team10.entity.OrderItem();
+            orderItem.setOrderId(newOrder.getOrderId());
+            orderItem.setMeal(item.getMeal());
+            orderItem.setQuantity(item.getQuantity());
+            java.math.BigDecimal itemTotal = item.getMeal().getPrice().multiply(java.math.BigDecimal.valueOf(item.getQuantity()));
+            orderItem.setItemTotal(itemTotal);
+
+            orderItemService.createOrderItem(orderItem);
+
             cartItemService.deleteItem(item.getItemId());
         }
         cart.setSubtotal(java.math.BigDecimal.ZERO);
         cartService.updateCart(cart.getCartId(), cart);
-        return "customer/checkout";
+        return "redirect:/customer/orders";
     }
 
     @GetMapping("/reviews")
-    public String showReviewsPage(Model model) {
+    public String showReviewsPage(Model model, Authentication authentication) {
         List<Review> reviews = reviewService.getAllReviews();
         double avg = reviews.stream().mapToInt(Review::getRating).average().orElse(0.0);
         model.addAttribute("reviews", reviews);
@@ -252,6 +291,24 @@ public class CustomerUiController {
         model.addAttribute("totalReviews", reviews.size());
         model.addAttribute("meals", mealService.getAllMeals());
 
+        Long customerId = getLoggedInCustomerId(authentication);
+        java.util.List<Meal> eligibleMeals = new java.util.ArrayList<>();
+
+        if (customerId != null) {
+            List<Order> orders = orderService.getAllOrders().stream()
+                .filter(o -> o.getCustomerId().equals(customerId))
+                .collect(Collectors.toList());
+
+                for (Order order : orders) {
+                    List<com.example.backend_api_team10.entity.OrderItem> items = orderItemService.getOrderItemsByOrderId(order.getOrderId());
+                    for (com.example.backend_api_team10.entity.OrderItem item : items) {
+                        if (item.getMeal() != null && !eligibleMeals.contains(item.getMeal())) {
+                            eligibleMeals.add(item.getMeal());
+                        }
+                    }
+                }
+        }
+        model.addAttribute("meals", eligibleMeals);
         model.addAttribute("ratingBars", List.of(
             java.util.Map.of("stars", 5, "pct", 75), 
             java.util.Map.of("stars", 4, "pct", 15),
@@ -279,8 +336,8 @@ public class CustomerUiController {
         return "redirect:/customer/meals";
     }
     @PostMapping("/carts/add")
-    public String addToCart(@RequestParam Long mealId, @RequestParam int qty, HttpSession session) {
-        Long customerId = (Long) session.getAttribute("LoggedInCustomerId");
+    public String addToCart(@RequestParam Long mealId, @RequestParam int qty, HttpSession session, Authentication authentication) {
+        Long customerId = getLoggedInCustomerId(authentication);
         if (customerId == null) {
             return "redirect:/login";
         }
@@ -332,6 +389,10 @@ public class CustomerUiController {
         if (item != null) {
             int newQuantity = item.getQuantity() + delta;
             if (newQuantity <= 0) {
+                Cart cart = item.getCart();
+                if(cart != null && cart.getCartItems() != null) {
+                    cart.getCartItems().remove(item);
+                }
                 cartItemService.deleteItem(itemId);
             } else {
                 item.setQuantity(newQuantity);
@@ -340,7 +401,21 @@ public class CustomerUiController {
         }
         return "redirect:/customer/carts";
     }
-     @GetMapping("/profile")
+
+    @PostMapping("/carts/remove")
+    public String removeCartItem(@RequestParam("itemId")Long itemId) {
+        CartItem item = cartItemService.getById(itemId).orElse(null);
+        if (item != null) {
+            Cart cart = item.getCart();
+            if (cart != null && cart.getCartItems() != null) {
+                cart.getCartItems().remove(item);
+            }
+            cartItemService.deleteItem(itemId);
+        }
+        return "redirect:/customer/carts";
+    }
+    
+    @GetMapping("/profile")
     public String showCustomerProfile(Authentication authentication, Model model) {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/login";
@@ -349,7 +424,12 @@ public class CustomerUiController {
         userRepo.findByEmail(authentication.getName()).ifPresent(user -> {
             if (user.getCustomer() != null) {
                 Long customerId = user.getCustomer().getCustomerId();
-                model.addAttribute("customer", customerService.getCustomerById(customerId).orElse(null));
+                Customer customer = customerService.getCustomerById(customerId).orElse(null);
+                model.addAttribute("customer", customer);
+
+                customerSubscriptionRepo.findByCustomerId(customerId).ifPresent(sub -> {
+                    model.addAttribute("subscription", sub);
+                });
             }
         });
         return "customer/profile";
@@ -404,10 +484,26 @@ public class CustomerUiController {
         return "redirect:/customer/profile?success=true";
     }
     @PostMapping("/reviews/add")
-    public String submitReview(@RequestParam int rating, @RequestParam Long mealId, @RequestParam String description, Authentication authentication) {
+    public String submitReview(@RequestParam int rating, @RequestParam Long mealId, @RequestParam String description, HttpSession session, Authentication authentication) {
         Long customerId = getLoggedInCustomerId(authentication);
-        if (customerId == null) 
+        if (customerId == null) {
             return "redirect:/login";
+        }
+        boolean hasOrdered = false;
+        List<Order> userOrders = orderService.getAllOrders().stream()
+            .filter(o -> o.getCustomerId().equals(customerId))
+            .collect(Collectors.toList());
+
+        for (Order order : userOrders) {
+            List<com.example.backend_api_team10.entity.OrderItem> items = orderItemService.getOrderItemsByOrderId(order.getOrderId());
+            if (items.stream().anyMatch(i -> i.getMeal() !=null && i.getMeal().getMealId().equals(mealId))) {
+                hasOrdered = true;
+                break;
+            }
+        }
+        if (!hasOrdered) {
+            return "redirect:/customer/reviews?error=notordered";
+        }
 
         Customer customer = customerService.getCustomerById(customerId).orElseThrow();
         Meal meal = mealService.getMealById(mealId);
@@ -415,13 +511,15 @@ public class CustomerUiController {
         newReview.setRating(rating);
         newReview.setDescription(description);
         newReview.setCustomer(customer);
+        newReview.setMeal(meal);
         newReview.setDate(java.time.LocalDate.now());
 
         reviewService.createReview(newReview);
         return "redirect:/customer/reviews";
-        }
-        
     }
+}
+        
+    
 
 
 

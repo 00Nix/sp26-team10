@@ -24,6 +24,7 @@
           <div class="meal-img">
             <span class="meal-emoji">&#127837;</span>
             <form method="post" action="/customer/favorites/toggle" style="display:inline">
+              <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
               <input type="hidden" name="mealId"    value="${m.mealId?c}">
               <input type="hidden" name="returnUrl"
                      value="/customer/meals<#if (activeFilter!'all') != 'all'>?filter=${activeFilter}</#if>">
@@ -41,6 +42,7 @@
             <div class="meal-footer">
               <span class="meal-price">$${m.price?string('0.00')}</span>
               <form method="post" action="/customer/carts/add" style="display:inline">
+                <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
                 <input type="hidden" name="mealId" value="${m.mealId?c}">
                 <input type="hidden" name="qty"    value="1">
                 <button type="submit" class="add-btn">+ Add</button>

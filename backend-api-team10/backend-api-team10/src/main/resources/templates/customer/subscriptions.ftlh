@@ -19,6 +19,7 @@
         </p>
       </div>
       <form method="post" action="/customer/subscriptions/cancel">
+        <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
         <input type="hidden" name="subscriptionId" value="${currentSubscription.customerSubId?c}">
         <button type="submit" class="btn-outline"
                 style="font-size:.78rem;padding:6px 14px">Cancel Plan</button>
@@ -65,6 +66,7 @@
                     disabled style="opacity:.6;cursor:default">Current Plan</button>
           <#else>
             <form method="post" action="/customer/subscriptions/select">
+              <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
               <input type="hidden" name="planName" value="${plan.name}">
               <button type="submit"
                       class="plan-btn ${featured?then('','light')}">Get Started</button>

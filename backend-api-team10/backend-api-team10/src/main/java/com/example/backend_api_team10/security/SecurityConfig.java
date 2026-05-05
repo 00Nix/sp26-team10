@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 import jakarta.servlet.DispatcherType;
 
@@ -33,17 +34,19 @@ public class SecurityConfig {
         return provider;
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+            .csrf(csrf -> csrf
+                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+            )
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(authorize -> authorize
                 .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                .requestMatchers("/", "/login", "/register", "/index", "/styles", "/images", "/403", "/error").permitAll()
-                .requestMatchers("/meals", "/mealplans", "/subscriptions").permitAll()
-                .requestMatchers("/customer/**", "/cart/**", "/orders/**", "/reviews/create/**", "/subscriptions/subscribe/**").hasRole("CUSTOMER")
+                .requestMatchers("/", "/login", "/register", "/styles/**", "/images/**", "/403", "/error").permitAll()
+                .requestMatchers("/customer/", "/customer/index", "/customer/meals", "/mealplans", "/customer/subscriptions", "/customer/reviews").permitAll()
+                .requestMatchers("/customer/**", "/customer/cart/**", "/customer/orders/**", "/customer/profile", "/customer/favorites/**", "/reviews/create/**", "/subscriptions/subscribe/**").hasRole("CUSTOMER")
                 .requestMatchers("/provider/**", "/mealplans/add/**", "/mealplans/edit/**", "/meals/edit/**", "/meals/add/**", "/reviews/reply/**", "/analytics/**").hasRole("PROVIDER")
                 .anyRequest().authenticated()
             )
@@ -60,6 +63,8 @@ public class SecurityConfig {
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
                 .permitAll()
             )
             .exceptionHandling(ex -> ex.accessDeniedPage("/403"));

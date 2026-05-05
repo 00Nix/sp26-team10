@@ -16,6 +16,8 @@ import com.example.backend_api_team10.repository.UserRepo;
 import com.example.backend_api_team10.service.CustomerService;
 import com.example.backend_api_team10.service.ProviderService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class AuthController {
     
@@ -129,11 +131,19 @@ public class AuthController {
     }
 
     @GetMapping("/")
-    public String homeRedirect(Authentication authentication) {
+    public String homeRedirect(Authentication authentication, HttpSession session) {
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return "redirect:/login";
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")){
+            return "redirect:/customer/index";
         }
+
+        userRepo.findByEmail(authentication.getName()).ifPresent(user -> {
+            if (user.getCustomer() != null) {
+                session.setAttribute("LoggedInCustomerId", user.getCustomer().getCustomerId());
+                session.setAttribute("LoggedInCustomerName", user.getCustomer().getName());
+            }
+        });
+
 
         for (GrantedAuthority auth : authentication.getAuthorities()) {
             
@@ -142,7 +152,7 @@ public class AuthController {
             }
 
             if ("ROLE_CUSTOMER".equals(auth.getAuthority())) {
-                return "redirect:/index";
+                return "redirect:/customer/index";
             }
         }
 

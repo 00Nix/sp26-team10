@@ -26,8 +26,13 @@
     <a href="/customer/carts" class="nav-cart ${(activePage == 'cart')?then('active', '')}">
       &#128722; <span class="cart-badge">${cartCount!0}</span>
     </a>
-    <a href="/logout" class="nav-login">Logout</a>
-  <#else>
+
+    <form action="/logout" method="post" style="display: inline; margin: 0; padding: 0;">
+      <input type="hidden" name="${(_csrf.parameterName)!'_csrf'}" value="${(_csrf.token)!''}">
+      <button type="submit" class="nav-logout" style="background: transparent; cursor: pointer; font-family: inherit;">Logout</button>
+    </form>
+
+    <#else>
     <a href="/login" class="nav-login">Sign In</a>
     <a href="/register" class="nav-register">Join Now</a>
   </#if>
