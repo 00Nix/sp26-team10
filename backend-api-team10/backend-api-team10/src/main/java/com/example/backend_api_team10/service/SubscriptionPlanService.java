@@ -3,6 +3,8 @@ package com.example.backend_api_team10.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,18 +37,18 @@ public class SubscriptionPlanService {
         return subscriptionPlanRepo.findByName(name);
     }
 
-    public SubscriptionPlan updateSubscriptionPlan(@PathVariable Long plan_id, @RequestBody SubscriptionPlan updatedPlan){
-        Optional<SubscriptionPlan> existing = subscriptionPlanRepo.findById(updatedPlan.getPlanId());
-        if (existing.isPresent()) {
-            SubscriptionPlan plan = existing.get();
-            plan.setPrice(updatedPlan.getPrice());
-            plan.setDescription(updatedPlan.getDescription());
-            plan.setFeatures(updatedPlan.getFeatures());
-            plan.setDurationWeeks(updatedPlan.getDurationWeeks());
-            return subscriptionPlanRepo.save(plan);
-        } else {
-            return null;
-        }
+    public SubscriptionPlan updateSubscriptionPlan(@PathVariable Long planId, @RequestBody SubscriptionPlan updatedPlan){
+        SubscriptionPlan existing = subscriptionPlanRepo.findById(planId).orElseThrow(() -> new RuntimeException("Subscription plan not found with id: " + planId));
+
+        
+        existing.setName(updatedPlan.getName());
+        existing.setPrice(updatedPlan.getPrice());
+        existing.setDescription(updatedPlan.getDescription());
+        existing.setDurationWeeks(updatedPlan.getDurationWeeks());
+        existing.setFeatures(updatedPlan.getFeatures());
+
+    return subscriptionPlanRepo.save(existing);
+            
     }
 
     public void deleteSubscriptionPlan(Long plan_id){

@@ -47,7 +47,6 @@
                     <span>⌕</span>
                     <input type="text" placeholder="Search analytics">
                 </div>
-                <div class="avatar-badge">BB</div>
             </div>
         </header>
 
@@ -87,9 +86,17 @@
                         </div>
 
                         <div class="filter-group">
-                            <button class="btn btn-pill-dark" type="button">Essential</button>
-                            <button class="btn btn-pill-light" type="button">Balanced Pro</button>
-                            <button class="btn btn-pill-light" type="button">Elite Custom</button>
+                            <a href="/provider/analytics?selectedPlan=Essential" class="btn <#if selectedPlan == 'Essential'>btn-pill-dark<#else>btn-pill-light</#if>">
+                                Essential
+                            </a>
+
+                            <a href="/provider/analytics?selectedPlan=Balanced Pro" class="btn <#if selectedPlan == 'Balanced Pro'>btn-pill-dark<#else>btn-pill-light</#if>">
+                                Balanced Pro
+                            </a>
+
+                            <a href="/provider/analytics?selectedPlan=Elite Custom" class="btn <#if selectedPlan == 'Elite Custom'>btn-pill-dark<#else>btn-pill-light</#if>">
+                                Elite Custom
+                            </a>
                         </div>
                     </div>
 
@@ -97,7 +104,7 @@
                         <div class="analytics-side-cards">
                             <div class="stat-card">
                                 <div class="stat-label">Selected Plan</div>
-                                <div class="stat-value">${selectedPlan!"Essential"}</div>
+                                <div class="stat-value">${selectedPlan}</div>
                                 <div class="stat-change">Current plan view</div>
                             </div>
 

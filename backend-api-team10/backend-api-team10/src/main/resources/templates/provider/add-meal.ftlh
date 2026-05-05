@@ -36,15 +36,13 @@
     <div class="main-shell">
         <header class="topbar">
             <div class="topbar-left">
-                <label for="sidebar-toggle" class="mobile-menu-btn">☰</label>
+                <a class="utility-back" href="/provider/dashboard">← Back to Dashboard</a>
                 <div>
                     <h1 class="topbar-title">Add Meal</h1>
                     <p class="topbar-subtitle">Create a new menu item for your storefront.</p>
                 </div>
             </div>
-            <div class="topbar-actions">
-                <div class="avatar-badge">BB</div>
-            </div>
+        
         </header>
 
         <main class="page-content">
@@ -55,6 +53,8 @@
                         <hr class="form-divider-small">
 
                         <form action="/provider/meals/add" method="post">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
                             <div class="form-group">
                                 <label class="form-label" for="name">Meal Name</label>
                                 <input class="form-input" type="text" id="name" name="name" required>

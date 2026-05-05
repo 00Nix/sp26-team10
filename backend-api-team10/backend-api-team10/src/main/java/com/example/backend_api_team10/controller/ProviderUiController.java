@@ -181,7 +181,10 @@ public class ProviderUiController {
     }
 
     @PostMapping("/meals/add")
-    public String addMeal(@ModelAttribute Meal meal) {
+    public String addMeal(@ModelAttribute Meal meal, Authentication authentication) {
+        Provider provider = providerService.getProviderByUserEmail(authentication.getName());
+
+        meal.setProvider(provider);
         mealService.createMeal(meal);
 
         return "redirect:/provider/meals";
@@ -288,21 +291,23 @@ public class ProviderUiController {
     }
 
     @PostMapping("/subscriptions/{plan_id}/update")
-    public String updateSubscription(@PathVariable("plan_id") Long plan_id,
+    public String updateSubscription(@PathVariable("plan_id") Long planId,
                                     @ModelAttribute SubscriptionPlan updatedPlan) {
 
-        subscriptionPlanService.updateSubscriptionPlan(plan_id, updatedPlan);
+        subscriptionPlanService.updateSubscriptionPlan(planId, updatedPlan);
 
         return "redirect:/provider/subscriptions";
     }
 
     // analytics dashboard
     @GetMapping("/analytics")
-    public String showAnalytics(Model model) {
+    public String showAnalytics(@RequestParam(defaultValue = "Essential") String selectedPlan,
+                                Model model) {
         AnalyticsSummaryDTO analytics = analyticsService.getAnalyticsSummary();
 
         model.addAttribute("analytics", analytics);
         model.addAttribute("dietStats", analytics.getMealPlansByDiet());
+        model.addAttribute("selectedPlan", selectedPlan);
 
         return "provider/analytics";
     }

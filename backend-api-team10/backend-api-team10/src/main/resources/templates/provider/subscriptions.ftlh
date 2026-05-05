@@ -42,10 +42,6 @@
                     <p class="topbar-subtitle">Manage your plan lineup and pricing.</p>
                 </div>
             </div>
-            <div class="topbar-actions">
-                <a href="/provider/subscriptions/add" class="btn btn-cream">+ Create New Plan</a>
-                <div class="avatar-badge">BB</div>
-            </div>
         </header>
 
         <main class="page-content section-stack">

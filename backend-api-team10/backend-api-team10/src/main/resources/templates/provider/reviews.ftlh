@@ -36,6 +36,7 @@
     <div class="main-shell">
         <header class="topbar">
             <div class="topbar-left">
+                <a class="utility-back" href="/provider/dashboard">← Back to Dashboard</a>
                 <div>
                     <h1 class="topbar-title">Reviews</h1>
                     <p class="topbar-subtitle">Read customer feedback and respond quickly.</p>
@@ -46,8 +47,6 @@
                     <span>⌕</span>
                     <input type="text" placeholder="Search reviews">
                 </div>
-
-                <a class="utility-back" href="/provider/dashboard">← Back to Dashboard</a>
             </div>
         </header>
 
@@ -92,11 +91,6 @@
                             <a class="btn btn-pill-light" href="/provider/reviews?rating=1">1</a>
                             <a class="btn btn-pill-light" href="/provider/reviews?sort=newest">Newest</a>
                             <a class="btn btn-pill-light" href="/provider/reviews?sort=oldest">Oldest</a>
-                        </div>
-
-                        <div class="filter-group">
-                            <button class="btn btn-pill-light" type="button">Date Range</button>
-                            <button class="btn btn-pill-light" type="button">Status</button>
                         </div>
                     </div>
 

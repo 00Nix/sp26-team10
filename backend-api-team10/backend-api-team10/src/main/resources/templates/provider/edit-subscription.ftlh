@@ -15,6 +15,8 @@
         <hr class="form-divider-small">
 
         <form action="/provider/subscriptions/${subscription.planId}/update" method="post" class="section-stack">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            
             <div class="form-group">
                 <label class="form-label" for="name">Plan Name</label>
                 <input class="form-input" type="text" id="name" name="name" value="${subscription.name!''}" required>
