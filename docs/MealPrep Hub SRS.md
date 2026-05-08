@@ -203,8 +203,42 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
 - **Usability:** The app will support many browsers/devices. A new user will be able to subscribe within 4 minutes.
 
 ---
+## 4. Functional Requirements (Implemented Use-Cases)
+### Customer Use-Cases
 
-## 4. Assumptions, Constraints, and Policies
+### Provider Use-Cases
+**US-PROV-001 — Register & Manage Provider Profile**
+Providers can create and update provider profiles including biography and contact information.
+**US-PROV-002 — Create & Manage Meals**
+Providers can:
+- Add meals
+- Edit meals
+- Delete meals
+- Assign dietary categories
+**US-PROV-003 — Create & Manage Meal Plans**
+Providers can:
+- Create meal plans
+- Add meals to meal plans
+- Edit pricing/details
+- Publish meal plans
+**US-PROV-004 — Manage Subscription Plans**
+Providers can create and update subscription plans with duration and pricing.
+**US-PROV-005 — Manage Orders**
+Providers can:
+- View customer orders
+- Update order statuses
+**US-PROV-006 — View Reviews & Reply**
+Providers can:
+- View customer reviews
+- Submit replies to reviews
+**US-PROV-007 — View Analytics Dashboard**
+Providers can view:
+- Total orders
+- Orders by status
+- Subscription metrics
+- Review statistics
+---
+## 5. Assumptions, Constraints, and Policies
 - Stable internet connection
 - Users provide accurate personal information
 - Modern Browsers/devices 
@@ -213,7 +247,7 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
 - Protection of user data
 ---
 
-## 5. Milestones (course‑aligned)
+## 6. Milestones (course‑aligned)
 - **M2 Requirements** — this file + stories opened as issues. 
 - **M3 High‑fidelity prototype** — core customer/provider flows fully interactive. 
 - **M4 Design** — architecture, schema, API outline. 
@@ -223,6 +257,6 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
 
 ---
 
-## 6. Change Management
+## 7. Change Management
 - Stories are living artifacts; changes are tracked via repository issues and linked pull requests.  
 - Major changes should update this SRS.
