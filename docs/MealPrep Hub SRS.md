@@ -184,7 +184,7 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
     Then  the customer is notified and the reply is visible beneath the review.
   ```
 
-  - **US‑PROV‑005 — View engagement & customer statistics**  
+  - **US‑PROV‑005 — View analytics dashboard**  
   _Story:_ As a provider, I want view active subscribers, churn rate, average rating, and reviews so that I can improve quality of service.  
   _Acceptance:_
   ```gherkin
@@ -194,6 +194,18 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
     Then  I select a date range
     And   I can see the active subscriber count, churn rate, and average rating for the target date range.
   ```
+  - **US‑PROV‑005 — Manage order statuses**  
+  _Story:_ As a provider, I want update order statuses so maintain a fluid tracking system.  
+  _Acceptance:_
+  ```gherkin
+  Scenario: Order status management
+    Given I am logged in as an admin
+    When  I open the app orders dashboard
+    Then  I select an order
+    And   I can update the order status, alerting the customer to changes.
+  ```
+
+  
 ---
 
 ## 3. Non‑Functional Requirements (make them measurable)
@@ -201,44 +213,9 @@ Write each story as: **As a `<role>`, I want `<capability>`, so that `<benefit>`
 - **Availability/Reliability:** The app will maintain 99.5% uptime per month.
 - **Security/Privacy:** Secure authentication, passwords being stored using hashing, and data protection.
 - **Usability:** The app will support many browsers/devices. A new user will be able to subscribe within 4 minutes.
-
+  
 ---
-## 4. Functional Requirements (Implemented Use-Cases)
-### Customer Use-Cases
-
-### Provider Use-Cases
-**US-PROV-001 — Register & Manage Provider Profile**
-Providers can create and update provider profiles including biography and contact information.
-**US-PROV-002 — Create & Manage Meals**
-Providers can:
-- Add meals
-- Edit meals
-- Delete meals
-- Assign dietary categories
-**US-PROV-003 — Create & Manage Meal Plans**
-Providers can:
-- Create meal plans
-- Add meals to meal plans
-- Edit pricing/details
-- Publish meal plans
-**US-PROV-004 — Manage Subscription Plans**
-Providers can create and update subscription plans with duration and pricing.
-**US-PROV-005 — Manage Orders**
-Providers can:
-- View customer orders
-- Update order statuses
-**US-PROV-006 — View Reviews & Reply**
-Providers can:
-- View customer reviews
-- Submit replies to reviews
-**US-PROV-007 — View Analytics Dashboard**
-Providers can view:
-- Total orders
-- Orders by status
-- Subscription metrics
-- Review statistics
----
-## 5. Assumptions, Constraints, and Policies
+## 4. Assumptions, Constraints, and Policies
 - Stable internet connection
 - Users provide accurate personal information
 - Modern Browsers/devices 
@@ -247,7 +224,7 @@ Providers can view:
 - Protection of user data
 ---
 
-## 6. Milestones (course‑aligned)
+## 5. Milestones (course‑aligned)
 - **M2 Requirements** — this file + stories opened as issues. 
 - **M3 High‑fidelity prototype** — core customer/provider flows fully interactive. 
 - **M4 Design** — architecture, schema, API outline. 
@@ -257,6 +234,6 @@ Providers can view:
 
 ---
 
-## 7. Change Management
+## 6. Change Management
 - Stories are living artifacts; changes are tracked via repository issues and linked pull requests.  
 - Major changes should update this SRS.
