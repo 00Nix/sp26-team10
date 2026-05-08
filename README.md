@@ -1,16 +1,20 @@
 # csc340-project
 
 ## Title
-> Balanced Bite
+Balanced Bite
 
 ## Team Members
-> Caleb Nix 
-> Jasmine Butts
+Jasmine Butts
+Caleb Nix 
 
 ## Description 
-> A meal prepping service that offers its customers with time-saving options, so they can enjoy healthy, nutritious meals without the hassle.
-> This service is to help people who don't have the time or ability to make their own meals. The goal of this is to help alleviate the stress of planning, shopping, and cooking meals every day. 
->
+A meal prepping service that offers its customers with time-saving options, so they can enjoy healthy, nutritious meals without the hassle.
+This service is to help people who don't have the time or ability to make their own meals. The goal of this is to help alleviate the stress of planning, shopping, and cooking meals every day. 
+
+## Project Summary
+Balanced Bite is a full-stack meal preparation and subscription managment platform built with Java, Spring Boot, PostgresSQL, JPA/Hibernate, Spring Security, and FreeMarker MVC.
+The platform connects customers with meal providers by allowing customers to browse meals and meal plans, select a suscription plan, place orders, and leave reviews; while providers manage meals, meal plans, subscriptions, analytics, and customer feedback.
+
 ## App Functions
 1. Customer:
     1. Create/modify customer profile - Register an account with their email or number.
@@ -19,10 +23,95 @@
     4. Subscribe to available services - Select a subscription option (e.g., weekly, monthly, or yearly).  
     5. Write reviews for subscribed services - Customers will be able to leave reviews on meals they have tried.
 2. Provider:
-    1. Create/modify/remove provider profile - Can register as an admin (meal provider)
-    2. Create services - Add and update meals, prices, and descriptions. Create and update dietary search filters.
-    3. View customer statistics - Can see customer order totals, preferred filters and meals, subscription status, and when the customer joined.
-    4. Reply to reviews - Provider can view and reply to customer reviews.
+    1. Register and manager provider profile - Create, edit, or delet provider profile
+    2. Create and manage meals
+    3. Create and manage meal plans
+    4. Create and manage subscription plans
+    5. View analytics - Total orders, active subscriptions, review statistics, and order metrix
+    6. Update customer order status
+    7. View customer reviews
+    8. Reply to customer reviews - Provider can view and reply to customer reviews.
+
+# Technology Stack
+## Backend
+- Java
+- Spring Boot
+- Spring MVC
+- Spring Security
+- Spring Data JPA
+- Hibernate
+## Frontend
+- FreeMarker Templates -> .ftlh
+- HTML5
+- CSS3
+## Database
+- PostgresSQL - Neon Tech
+## Build Tools
+- Maven
+  
+---
+
+# Project Architecture
+This project follows the MVC (Model-View-Controller) architecture pattern.
+## Model Layer
+Contains all JPA entities and database relationships:
+- Users
+- Customer
+- Provider
+- Meal
+- MealPlan
+- MealPlanMeal
+- SubscriptionPlan
+- CustomerSubscription
+- Review
+- ReviewReply
+- Order
+- OrderItem
+- Cart
+- CartItem
+- Favorites
+## Repository Layer
+Handles database operations using Spring Data JPA repositories.
+## Service Layer
+Contains business logic such as:
+- Authentication
+- Meal management
+- Subscription management
+- Analytics calculations
+- Review reply handling
+- Order processing
+
+## Controller Layer
+## REST Controllers
+Provide backend API endpoints for CRUD functionality.
+## MVC/UI Controllers
+Render FreeMarker templates and handle:
+- Login/registration
+- Provider dashboard
+- Meal management pages
+- Meal plan management pages
+- Analytics pages
+- Review pages
+- Subscription management pages
+## Security Layer 
+Spring Security handles:
+- Authentication
+- Password hashing
+- Role-based authorization
+- Login/logout handling
+- Provider/customer access control
+
+---
+## Project Compartmentalization
+The project is separated into independent functional modules:
+- Authentication Module | Login, registration, role handling 
+- Customer Module       | Customer profiles, subscriptions, favorites 
+- Provider Module       | Provider profiles, meals, meal plans 
+- Order Module          | Orders, order items, order status 
+- Review Module         | Reviews and provider replies 
+- Analytics Module      | Dashboard metrics and statistics 
+- Security Module       | Spring Security configuration and authentication
+- MVC/UI Module         | FreeMarker templates and frontend rendering 
 
 ## Running the Project
 
