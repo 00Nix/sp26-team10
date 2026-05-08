@@ -401,10 +401,13 @@ public class CustomerUiController {
         if (customerId == null) {
             return "redirect:/login";
         }
+        
         Cart cart = cartService.getCartByCustomer(customerId).orElse(null);
+        
         if (cart != null && cart.getCartItems() != null) {
                 model.addAttribute("cartItems", cart.getCartItems());
 
+                // THE FIX: The updated stream logic that safely checks for nulls!
                 double subtotal = cart.getCartItems().stream()
                     .mapToDouble(item -> {
                         if (item.getMeal() != null) {
@@ -412,22 +415,21 @@ public class CustomerUiController {
                         } else if (item.getMealPlan() != null) {
                             return item.getMealPlan().getPrice().doubleValue() * item.getQuantity();
                         }
-                        return 0.0; // Fallback just in case
+                        return 0.0; // Safe fallback
                     })
                     .sum();
 
                 model.addAttribute("subtotal", subtotal);
                 model.addAttribute("discount", 0);
                 model.addAttribute("total", subtotal); 
-        } else 
-            {
+        } else {
                 model.addAttribute("cartItems", java.util.Collections.emptyList());
                 model.addAttribute("subtotal", 0);
                 model.addAttribute("discount", 0);
                 model.addAttribute("total", 0);
-            }
-            return "customer/cart";
-       
+        }
+        
+        return "customer/cart";
     }
     @PostMapping("/carts/update")
     public String updateCartQuantity(@RequestParam("itemId") Long itemId, @RequestParam("delta") int delta) {
